@@ -1,11 +1,10 @@
 import pytest
 from django.urls import reverse
 from faker import Faker
-from knox import views as auth_views
-from rest_framework.test import (APIRequestFactory, RequestsClient,
-                                 force_authenticate)
+from rest_framework.test import (APIRequestFactory, force_authenticate)
 
 from v1.accounts import views as account_views
+from v1.accounts.constants import CHANGELOG_TERMINOLOGY as DEFAULT_CHANGELOG_TERMINOLOGY
 
 factory = APIRequestFactory()
 
@@ -38,6 +37,18 @@ def test_create_company(company_data):
     assert response.status_code == 201
     response_data = response.data
     assert response_data['admin'] == company_data['email']
+    assert response_data[
+               'changelog_terminology'] == DEFAULT_CHANGELOG_TERMINOLOGY  # default when no terminology provided
+
+    changelog_terminology = "Blog"
+    company_data['email'] = original_email + "com"
+    company_data['website'] = "https://www.adhithyan.cm"
+    company_data["changelog_terminology"] = changelog_terminology
+    request = factory.post(url, company_data)
+    response = account_views.create_company(request)
+    assert response.status_code == 201
+    assert response.data['changelog_terminology'] == changelog_terminology  # override default when provided
+
 
 @pytest.mark.django_db
 def test_create_user(admin, user_data, company_data):
