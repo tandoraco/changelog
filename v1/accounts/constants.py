@@ -11,3 +11,5 @@ PASSWORD_LENGTH_VALIDATION_FAILED = _("Password length should be between {}-{} c
 PASSWORD_CONSTRAINS_NOT_MET = _("""Password should contain atleast one uppercase, one lowercase,
  one digit and one special character.""")
 EMAIL_OR_PASSWORD_INVALID = _("Email or Password is invalid.")
+
+CHANGELOG_TERMINOLOGY = _("Changelog")
