@@ -1,10 +1,12 @@
-from v1.accounts.validators import password_validator
-from v1.accounts.constants import (PASSWORD_CONSTRAINS_NOT_MET,
-                                   PASSWORD_LENGTH_VALIDATION_FAILED, MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH)
-
 import pytest
 from rest_framework.serializers import ValidationError
 
+from v1.accounts.constants import (PASSWORD_CONSTRAINS_NOT_MET,
+                                   PASSWORD_LENGTH_VALIDATION_FAILED, MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH)
+from v1.accounts.validators import password_validator
+
+
+@pytest.mark.unit
 def test_password_validator():
     password = "a" * (MIN_PASSWORD_LENGTH - 1)
 

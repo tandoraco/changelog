@@ -4,6 +4,7 @@ from v1.accounts.utils import hash_password, verify_password
 
 
 @pytest.mark.django_db
+@pytest.mark.unit
 def test_verify_password(admin, company_data):
     assert verify_password(admin, company_data['password'])
 
