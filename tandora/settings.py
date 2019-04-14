@@ -29,7 +29,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '4r&ns-8mjg_s_^fh9z&7*up8n3w1jgbvj(yc(z12cay12&$+(i'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(os.environ["DEBUG"])
+DEBUG = bool(os.environ.get("DEBUG", False))
 
 HOSTNAME = "localhost" if DEBUG else socket.gethostname()
 
@@ -90,10 +90,10 @@ WSGI_APPLICATION = 'tandora.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ['DB_NAME'],
-        'USER': os.environ['DB_USER'],
-        'PASSWORD': os.environ['DB_PASSWORD'],
-        'HOST': os.environ['DB_HOST'],
+        'NAME': os.environ.get('DB_NAME', 'tandora'),
+        'USER': os.environ.get('DB_USER', 'tandorauser'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', 'somepassword'),
+        'HOST': os.environ.get('DB_HOST', 'localhost'),
         'PORT': '',
     }
 }
@@ -152,8 +152,8 @@ REST_FRAMEWORK = {
 
 
 AUTH_USER_MODEL = 'v1.User'
-EMAIL_HOST = os.environ['EMAIL_HOST']
-EMAIL_PORT = os.environ['EMAIL_PORT']
+EMAIL_HOST = os.environ.get('EMAIL_HOST', "")
+EMAIL_PORT = os.environ.get('EMAIL_PORT', "")
 
 REST_KNOX = {
     'SECURE_HASH_ALGORITHM': 'cryptography.hazmat.primitives.hashes.SHA512',
