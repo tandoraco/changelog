@@ -1,7 +1,11 @@
-from v1.accounts.serializer import CompanySerializer, UserSerializer
-from v1.accounts.models import User
+import random
 
 import pytest
+from faker import Faker
+
+from v1.accounts.constants import MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH
+from v1.accounts.models import User
+from v1.accounts.serializer import CompanySerializer, UserSerializer
 
 
 @pytest.fixture
@@ -50,3 +54,44 @@ def create_user(user_data):
 @pytest.fixture
 def user(create_user, user_data):
     return User.objects.get(email=user_data.get('email'))
+
+
+@pytest.fixture
+def valid_password():
+    return "Fixture12@"
+
+
+@pytest.fixture
+def invalid_password():
+    invalid_passwords = ["Hello12", "1" * (MIN_PASSWORD_LENGTH - 1), "2" * (MAX_PASSWORD_LENGTH + 1)]
+    return random.choice(invalid_passwords)
+
+
+@pytest.fixture
+def valid_company_data(valid_password):
+    fake = Faker()
+    data = []
+    for i in range(5):
+        data.append({
+            'email': fake.email(),
+            'name': fake.name(),
+            'password': valid_password,
+            'company_name': fake.company(),
+            'website': fake.url()
+        })
+    return data
+
+
+@pytest.fixture
+def invalid_company_data(invalid_password):
+    fake = Faker()
+    data = []
+    for i in range(5):
+        data.append({
+            'email': fake.name(),
+            'name': fake.name(),
+            'password': invalid_password,
+            'company_name': fake.company(),
+            'website': fake.url()
+        })
+    return data
