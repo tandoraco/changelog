@@ -5,6 +5,7 @@ from rest_framework.decorators import (api_view, authentication_classes,
                                        permission_classes)
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+
 from v1.accounts import serializer as accounts_serializers
 from v1.accounts.authentication import BasicAuthentication
 from v1.accounts.permissions import IsAdmin
@@ -36,7 +37,8 @@ def create_company(request):
         return Response(status=status.HTTP_201_CREATED, data={
             'id': company.id,
             'admin': company.admin.email,
-            'company_name': company.company_name
+            'company_name': company.company_name,
+            'changelog_terminology': company.changelog_terminology
         })
 
     return serializer_error_response(serializer)

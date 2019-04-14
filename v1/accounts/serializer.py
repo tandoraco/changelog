@@ -4,7 +4,7 @@ from rest_framework.serializers import ValidationError
 from rest_framework.validators import UniqueValidator
 
 from v1.accounts import models as account_models
-from v1.accounts.constants import PASSWORD_INCORRECT
+from v1.accounts.constants import PASSWORD_INCORRECT, CHANGELOG_TERMINOLOGY
 from v1.accounts.utils import hash_password, verify_password
 from v1.accounts.validators import password_validator
 
@@ -29,13 +29,16 @@ class CompanySerializer(UserSerializer):
     website = serializers.URLField(max_length=200, required=True, validators=[
         UniqueValidator(account_models.Company.objects.all())
     ])
+    changelog_terminology = serializers.CharField(max_length=50, required=False)
 
     def create(self, validated_data):
         company_name = validated_data.pop("company_name")
         website = validated_data.pop("website")
+        changelog_terminology = validated_data.pop("changelog_terminology", CHANGELOG_TERMINOLOGY)
         user = super(CompanySerializer, self).create(validated_data)
         if user.pk:
-            admin = account_models.Company.objects.create(admin=user, company_name=company_name, website=website)
+            admin = account_models.Company.objects.create(admin=user, company_name=company_name, website=website,
+                                                          changelog_terminology=changelog_terminology)
             return admin
 
 
