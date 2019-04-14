@@ -9,3 +9,6 @@ class Category(models.Model):
 
     class Meta:
         unique_together = ('name', 'color')
+
+    def __str__(self):
+        return self.name
