@@ -6,7 +6,7 @@ from rest_framework.decorators import (api_view, authentication_classes,
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from v1.accounts import serializer as accounts_serializers
+from v1.accounts import serializers as accounts_serializers
 from v1.accounts.authentication import BasicAuthentication
 from v1.accounts.permissions import IsAdmin
 from v1.utils import serializer_error_response
