@@ -1,0 +1,54 @@
+from faker import Faker
+
+from v1.accounts.serializer import LoginSerializer, CompanySerializer, UserSerializer
+from v1.utils.test_base import SerializerTestData
+from v1.utils.test_base.serializer_test_base import SerializerTestBase
+
+
+class TestLoginSerializer(SerializerTestBase):
+    serializer_class = LoginSerializer
+
+    def test_login_serializer(self, company_data, user_data, create_admin, create_user, invalid_password):
+        fake = Faker()
+        fake_email = fake.email()
+        data = list()
+        data.append(SerializerTestData(data={'email': company_data['email'], 'password': company_data['password']},
+                                       is_valid=True))
+        data.append(
+            SerializerTestData(data={'email': user_data['email'], 'password': user_data['password']}, is_valid=True))
+        data.append(SerializerTestData(data={'email': fake_email, 'password': "Hello123"},
+                                       is_valid=False))  # email does not exist in db
+        data.append(
+            SerializerTestData(data={'email': user_data['email'], 'password': invalid_password}, is_valid=False))
+        data.append(
+            SerializerTestData(data={'email': company_data['email'], 'password': invalid_password}, is_valid=False))
+
+        self.run_data_assertions(test_data=data)
+
+
+class TestUserSerializer(SerializerTestBase):
+    serializer_class = UserSerializer
+
+    def test_user_serializer(self, company_data, user_data, admin, valid_password, invalid_password):
+        fake = Faker()
+        data = list()
+        data.append(
+            SerializerTestData(data={'email': company_data['email'], 'name': 'Test', 'password': valid_password},
+                               is_valid=False))  # already exisitng email so not valid
+        data.append(SerializerTestData(data={'email': fake.email(), 'name': fake.name(), 'password': valid_password},
+                                       is_valid=True))
+        data.append(SerializerTestData(data={'email': fake.email()}, is_valid=False))  # password and name missing
+        data.append(SerializerTestData(data={'name': fake.name()}, is_valid=False))  # email and password missing
+        data.append(SerializerTestData(data={'email': fake.email(), 'name': fake.name()},
+                                       is_valid=False))  # password is missing
+        self.run_data_assertions(test_data=data)
+
+
+class TestCompanySerializer(SerializerTestBase):
+    serializer_class = CompanySerializer
+
+    def test_company_serializer(self, valid_company_data, invalid_company_data):
+        data = list()
+        data.extend([SerializerTestData(data=d, is_valid=True) for d in valid_company_data])
+        data.extend([SerializerTestData(data=d, is_valid=False) for d in invalid_company_data])
+        self.run_data_assertions(test_data=data)
