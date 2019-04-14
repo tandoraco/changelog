@@ -5,7 +5,7 @@ from faker import Faker
 
 from v1.accounts.constants import MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH
 from v1.accounts.models import User
-from v1.accounts.serializer import CompanySerializer, UserSerializer
+from v1.accounts.serializers import CompanySerializer, UserSerializer
 
 
 @pytest.fixture

@@ -3,7 +3,7 @@ from rest_framework.exceptions import AuthenticationFailed
 
 from v1.accounts.constants import EMAIL_OR_PASSWORD_INVALID
 from v1.accounts.models import User
-from v1.accounts.serializer import LoginSerializer
+from v1.accounts.serializers import LoginSerializer
 
 
 class BasicAuthentication(BaseAuthentication):

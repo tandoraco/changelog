@@ -1,6 +1,6 @@
 from faker import Faker
 
-from v1.accounts.serializer import LoginSerializer, CompanySerializer, UserSerializer
+from v1.accounts.serializers import LoginSerializer, CompanySerializer, UserSerializer
 from v1.utils.test_base import SerializerTestData
 from v1.utils.test_base.serializer_test_base import SerializerTestBase
 
