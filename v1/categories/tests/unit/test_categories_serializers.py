@@ -6,6 +6,7 @@ from v1.utils.test_base.serializer_test_base import SerializerTestBase
 
 
 @pytest.mark.django_db
+@pytest.mark.unit
 class TestCategoriesSerializer(SerializerTestBase):
     serializer_class = CategorySerializer
 

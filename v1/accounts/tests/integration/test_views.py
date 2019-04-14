@@ -10,6 +10,7 @@ factory = APIRequestFactory()
 
 
 @pytest.mark.django_db
+@pytest.mark.integration
 def test_create_company(company_data):
     # this password meets our constraints, so saving it for testing down the line
     original_password = company_data['password']
@@ -51,6 +52,7 @@ def test_create_company(company_data):
 
 
 @pytest.mark.django_db
+@pytest.mark.integration
 def test_create_user(admin, user_data, company_data):
     url = reverse('v1-create-user')
 
@@ -65,6 +67,7 @@ def test_create_user(admin, user_data, company_data):
 
 
 @pytest.mark.django_db
+@pytest.mark.integration
 def test_create_user_non_admin(user, user_data):
     fake_email = Faker().email()
     user_data['email'] = fake_email

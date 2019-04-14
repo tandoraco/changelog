@@ -7,9 +7,25 @@ image: python:3.7.2
 
 pipelines:
   default:
-    - step:
-        caches:
-          - pip
-        script: # Modify the commands below to build your repository.
-          - pip install -r requirements_dev.txt
-          - pytest
+    - parallel:
+      - step:
+          name: Run Unit tests
+          caches:
+            - pip
+          script: # Modify the commands below to build your repository.
+            - pip install -r requirements_dev.txt
+            - pytest -m unit
+      - step:
+          name: Run Integration tests
+          caches:
+            - pip
+          script:
+            - pip install -r requirements_dev.txt
+            - pytest -m integration
+      - step:
+          name: Style checks (flake8)
+          caches:
+            - pip
+          script:
+            - pip install flake8
+            - flake8 .

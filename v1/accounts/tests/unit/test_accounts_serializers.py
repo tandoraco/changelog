@@ -1,3 +1,4 @@
+import pytest
 from faker import Faker
 
 from v1.accounts.serializers import LoginSerializer, CompanySerializer, UserSerializer
@@ -5,6 +6,7 @@ from v1.utils.test_base import SerializerTestData
 from v1.utils.test_base.serializer_test_base import SerializerTestBase
 
 
+@pytest.mark.unit
 class TestLoginSerializer(SerializerTestBase):
     serializer_class = LoginSerializer
 
@@ -26,6 +28,7 @@ class TestLoginSerializer(SerializerTestBase):
         self.run_data_assertions(test_data=data)
 
 
+@pytest.mark.unit
 class TestUserSerializer(SerializerTestBase):
     serializer_class = UserSerializer
 
@@ -44,6 +47,7 @@ class TestUserSerializer(SerializerTestBase):
         self.run_data_assertions(test_data=data)
 
 
+@pytest.mark.unit
 class TestCompanySerializer(SerializerTestBase):
     serializer_class = CompanySerializer
 

@@ -1,3 +1,4 @@
+import pytest
 from faker import Faker
 
 from v1.categories.models import Category
@@ -5,6 +6,7 @@ from v1.categories.views import CategoriesViewset
 from v1.utils.test_base.integration_test_base import ModelViewsetTestBase
 
 
+@pytest.mark.integration
 class TestCategoriesViewset(ModelViewsetTestBase):
     viewset = CategoriesViewset
     url = "/api/v1/categories"
