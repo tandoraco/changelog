@@ -8,18 +8,25 @@ class ChangelogViewset(TandoraModelViewset):
     serializer_class = ChangelogSerializer
 
     def create(self, request, *args, **kwargs):
-        request.data['last_edited_by'] = request.user.pk
+        if not self._is_test(kwargs):
+            request.data["last_edited_by"] = request.user.pk
         return super(ChangelogViewset, self).create(request, *args, **kwargs)
 
     def update(self, request, *args, **kwargs):
-        request.data['last_edited_by'] = request.user.pk
+        if not self._is_test(kwargs):
+            request.data["last_edited_by"] = request.user.pk
+
         return super(ChangelogViewset, self).update(request, *args, **kwargs)
 
     def partial_update(self, request, *args, **kwargs):
-        request.data['last_edited_by'] = request.user.pk
+        if not self._is_test(kwargs):
+            request.data["last_edited_by"] = request.user.pk
+
         return super(ChangelogViewset, self).partial_update(request, *args, **kwargs)
 
     def destroy(self, request, *args, **kwargs):
-        request.data['last_edited_by'] = request.user.pk
-        request.data['deleted'] = True
+        if not self._is_test(kwargs):
+            request.data["last_edited_by"] = request.user.pk
+            request.data["deleted"] = True
+
         return super(ChangelogViewset, self).destroy(request, *args, **kwargs)

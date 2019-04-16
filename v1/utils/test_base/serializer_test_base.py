@@ -12,6 +12,7 @@ class SerializerTestBase(object):
 
     def run_data_assertions(self, test_data, create_db_entry=False):
         self.run_common_assertions()
+        assert not self.serializer_class(data={}).is_valid()
 
         for data in test_data:
             # Check whether each entry conforms to our criteria
