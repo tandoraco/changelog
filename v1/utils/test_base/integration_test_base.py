@@ -1,6 +1,7 @@
 import random
 
 import pytest
+from django.db.models.base import ModelBase
 from rest_framework import status
 from rest_framework.test import APIRequestFactory, force_authenticate
 
@@ -54,7 +55,7 @@ class ModelViewsetTestBase(object):
         self._run_unauthorized_assertion(request, view)
 
         request = self._authenticate_request(user, request, token=token)
-        response = view(request)
+        response = view(request, test=True)
         assert response.status_code == status.HTTP_200_OK
         assert response.data
         assert len(response.data) == len(self.queryset)
@@ -71,16 +72,22 @@ class ModelViewsetTestBase(object):
         request = self._authenticate_request(user, request, token=token)
 
         request_data = random.choice(self.queryset)
-        response = view(request, pk=request_data.pk)
+        response = view(request, pk=request_data.pk, test=True)
         assert response.status_code == status.HTTP_200_OK
         assert response.data
         response_data = response.data
         assert request_data.id == response_data["id"]
         if keys:
             for key in keys:
+                print(key)
                 assert key in response_data
                 assert hasattr(request_data, key)
-                assert getattr(request_data, key) == response_data[key]
+                try:
+                    assert getattr(request_data, key) == response_data[key]
+                except AssertionError:
+                    value = getattr(request_data, key)
+                    if isinstance(value, ModelBase):
+                        assert value.pk == response_data[key]
 
     def run_assertions_for_partial_update(self, user, update_data, token=None):
         self._run_cr_assertion(update_data)
@@ -98,7 +105,7 @@ class ModelViewsetTestBase(object):
 
         request_data = random.choice(self.queryset)
         request = self._authenticate_request(user, request, token=token)
-        response = view(request, pk=request_data.pk)
+        response = view(request, pk=request_data.pk, test=True)
         assert response.status_code == status.HTTP_200_OK
         assert response.data
         response_data = response.data
@@ -109,7 +116,7 @@ class ModelViewsetTestBase(object):
 
         request = self.factory.patch(self.url, invalid_data)
         request = self._authenticate_request(user, request, token=token)
-        response = view(request, pk=request_data.pk)
+        response = view(request, pk=request_data.pk, test=True)
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
     def run_assertions_for_create(self, user, create_data, token=None):
@@ -127,7 +134,7 @@ class ModelViewsetTestBase(object):
         self._run_unauthorized_assertion(request, view)
 
         request = self._authenticate_request(user, request, token=token)
-        response = view(request)
+        response = view(request, test=True)
         assert response.status_code == status.HTTP_201_CREATED
         assert response.data
         response_data = response.data
@@ -137,7 +144,7 @@ class ModelViewsetTestBase(object):
 
         request = self.factory.post(self.url, invalid_data)
         request = self._authenticate_request(user, request, token=token)
-        response = view(request)
+        response = view(request, test=True)
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
     def run_assertions_for_destroy(self, user, token=None):
@@ -147,10 +154,10 @@ class ModelViewsetTestBase(object):
 
         request = self._authenticate_request(user, request, token=token)
         request_data = random.choice(self.queryset)
-        response = view(request, pk=request_data.pk)
+        response = view(request, pk=request_data.pk, test=True)
         assert response.status_code == status.HTTP_204_NO_CONTENT
 
-        response = view(request, pk=request_data.pk)
+        response = view(request, pk=request_data.pk, test=True)
         assert response.status_code == status.HTTP_404_NOT_FOUND
 
         with pytest.raises(self.model.DoesNotExist):

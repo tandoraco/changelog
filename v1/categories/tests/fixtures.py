@@ -1,3 +1,5 @@
+import random
+
 import pytest
 
 from v1.categories.models import Category
@@ -22,3 +24,8 @@ def categories(category_data):
             serializer.save()
 
     return Category.objects.all()
+
+
+@pytest.fixture
+def category(categories):
+    return random.choice(categories)
