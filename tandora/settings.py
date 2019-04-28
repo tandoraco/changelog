@@ -90,11 +90,10 @@ WSGI_APPLICATION = 'tandora.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ.get('DB_NAME', 'tandora'),
-        'USER': os.environ.get('DB_USER', 'tandorauser'),
-        'PASSWORD': os.environ.get('DB_PASSWORD', 'somepassword'),
-        'HOST': os.environ.get('DB_HOST', 'localhost'),
-        'PORT': '',
+        'NAME': os.environ.get('DB_NAME', 'postgres'),
+        'USER': os.environ.get('DB_USER', 'postgres'),
+        'HOST': os.environ.get('DB_HOST', 'tandora-backend_db_1'),
+        'PORT': 5432,
     }
 }
 
