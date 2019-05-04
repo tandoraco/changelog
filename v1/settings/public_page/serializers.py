@@ -8,6 +8,7 @@ class PublicPageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PublicPage
+        fields = '__all__'
 
     def validate_color(self, color):
         return validators.validate_color(color)

@@ -6,3 +6,7 @@ class PublicPage(models.Model):
     hide_from_crawlers = models.BooleanField(default=False)
     show_authors = models.BooleanField(default=False)
     private_mode = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.color}, show_authors:{self.show_authors}," \
+            f" hide_from_crawlers:{self.hide_from_crawlers}, private:{self.private_mode}"
