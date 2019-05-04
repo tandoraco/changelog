@@ -1,0 +1,13 @@
+from rest_framework import serializers
+
+from v1.settings.public_page.models import PublicPage
+from v1.utils import validators
+
+
+class PublicPageSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = PublicPage
+
+    def validate_color(self, color):
+        return validators.validate_color(color)
