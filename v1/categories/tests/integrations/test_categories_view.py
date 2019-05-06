@@ -26,4 +26,4 @@ class TestCategoriesViewset(ModelViewsetTestBase):
         update_data["invalid_data"] = {"color": "12345565"}
 
         keys = ["name", "color"]
-        self.run_assertions(user, create_data, update_data, get_keys=keys)
+        self.run_all_assertions(user, create_data, update_data, get_keys=keys)
