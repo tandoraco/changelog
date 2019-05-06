@@ -12,3 +12,11 @@ class PublicPageSerializer(serializers.ModelSerializer):
 
     def validate_color(self, color):
         return validators.validate_color(color)
+
+    def to_representation(self, instance):
+        return {
+            "color": instance.color,
+            "hide_from_crawlers": instance.hide_from_crawlers,
+            "private_mode": instance.private_mode,
+            "show_authors": instance.show_authors
+        }

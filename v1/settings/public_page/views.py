@@ -1,4 +1,4 @@
-from rest_framework.exceptions import PermissionDenied
+from rest_framework.exceptions import MethodNotAllowed
 
 from v1.settings.public_page.models import PublicPage
 from v1.settings.public_page.serializers import PublicPageSerializer
@@ -10,7 +10,10 @@ class PublicPageViewset(TandoraModelViewset):
     serializer_class = PublicPageSerializer
 
     def create(self, request, *args, **kwargs):
-        raise PermissionDenied
+        raise MethodNotAllowed(request.method)
 
     def destroy(self, request, *args, **kwargs):
-        raise PermissionDenied
+        raise MethodNotAllowed(request.method)
+
+    def retrieve(self, request, *args, **kwargs):
+        raise MethodNotAllowed(request.method)
