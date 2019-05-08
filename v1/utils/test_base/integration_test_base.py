@@ -1,4 +1,5 @@
 import random
+from collections import namedtuple
 
 import pytest
 from django.db.models.base import ModelBase
@@ -9,6 +10,14 @@ VIEWSET_IS_NONE = "View class is None."
 URL_IS_NONE = "Url is None."
 QUERYSET_IS_NONE = "Queryset is None."
 MODEL_IS_NONE = "Model is None."
+
+method = namedtuple("method", "shorthand action")
+GET = method(shorthand="g", action={"get": "list"})
+RETRIEVE = method(shorthand="r", action={"get": "retrieve"})
+CREATE = method(shorthand="c", action={"post": "create"})
+UPDATE = method(shorthand="u", action={"patch": "update"})
+PARTIAL_UPDATE = method(shorthand="p", action={"patch": "partial_update"})
+DELETE = method(shorthand="d", action={"delete": "destroy"})
 
 
 @pytest.mark.django_db
@@ -48,8 +57,18 @@ class ModelViewsetTestBase(object):
         assert "valid_data" in data
         assert "invalid_data" in data
 
+    def _get_factory_methods(self):
+        return {
+            "g": self.factory.get,
+            "r": self.factory.get,
+            "c": self.factory.post,
+            "u": self.factory.patch,
+            "p": self.factory.patch,
+            "d": self.factory.delete
+        }
+
     def run_assertions_for_get(self, user, token=None, keys=None):
-        view = self.viewset.as_view({'get': 'list'})
+        view = self.viewset.as_view(GET.action)
         request = self.factory.get(self.url)
 
         self._run_unauthorized_assertion(request, view)
@@ -65,7 +84,7 @@ class ModelViewsetTestBase(object):
                 assert key in response_data_keys
 
     def run_assertions_for_retrieve(self, user, token=None, keys=None):
-        view = self.viewset.as_view({'get': 'retrieve'})
+        view = self.viewset.as_view(RETRIEVE.action)
         request = self.factory.get(self.url)
         self._run_unauthorized_assertion(request, view)
 
@@ -92,7 +111,7 @@ class ModelViewsetTestBase(object):
     def run_assertions_for_partial_update(self, user, update_data, token=None):
         self._run_cr_assertion(update_data)
 
-        view = self.viewset.as_view({'patch': 'partial_update'})
+        view = self.viewset.as_view(PARTIAL_UPDATE.action)
         request = self.factory.patch(self.url)
         self._run_unauthorized_assertion(request, view)
 
@@ -109,7 +128,8 @@ class ModelViewsetTestBase(object):
         assert response.status_code == status.HTTP_200_OK
         assert response.data
         response_data = response.data
-        assert response_data["id"] == request_data.id
+        if "id" in response_data:
+            assert response_data["id"] == request_data.id
         for key in valid_data.keys():
             assert key in response_data
             assert response_data[key] == valid_data[key]
@@ -122,7 +142,7 @@ class ModelViewsetTestBase(object):
     def run_assertions_for_create(self, user, create_data, token=None):
         self._run_cr_assertion(create_data)
 
-        view = self.viewset.as_view({'post': 'create'})
+        view = self.viewset.as_view(CREATE.action)
         request = self.factory.post(self.url)
         self._run_unauthorized_assertion(request, view)
 
@@ -148,7 +168,7 @@ class ModelViewsetTestBase(object):
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
     def run_assertions_for_destroy(self, user, token=None):
-        view = self.viewset.as_view({'delete': 'destroy'})
+        view = self.viewset.as_view(DELETE.action)
         request = self.factory.delete(self.url)
         self._run_unauthorized_assertion(request, view)
 
@@ -163,10 +183,22 @@ class ModelViewsetTestBase(object):
         with pytest.raises(self.model.DoesNotExist):
             self.model.objects.get(pk=request_data.pk)
 
-    def run_assertions(self, user, create_data, update_data, token=None, get_keys=None):
+    def run_all_assertions(self, user, create_data, update_data, token=None, get_keys=None):
         self.run_common_assertions()
         self.run_assertions_for_get(user, keys=get_keys, token=token)
         self.run_assertions_for_create(user, create_data, token=token)
         self.run_assertions_for_retrieve(user, keys=get_keys, token=token)
         self.run_assertions_for_partial_update(user, update_data, token=token)
         self.run_assertions_for_destroy(user, token=token)
+
+    def run_not_allowed_methods_assertions(self, user, not_allowed_methods, token=None):
+        factory_methods = self._get_factory_methods()
+
+        for method in not_allowed_methods:
+            view = self.viewset.as_view(method.action)
+            request = factory_methods[method.shorthand](self.url)
+            self._run_unauthorized_assertion(request, view)
+
+            request = self._authenticate_request(user, request, token=token)
+            response = view(request)
+            assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
