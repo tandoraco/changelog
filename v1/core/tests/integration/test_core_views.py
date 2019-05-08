@@ -27,4 +27,4 @@ class TestChangelogViewset(ModelViewsetTestBase):
         update_data["invalid_data"] = {"category": 100}  # category does not exists
 
         keys = ["title", "content", "category", "created_by", "last_edited_by"]
-        self.run_assertions(admin, create_data, update_data, get_keys=keys)
+        self.run_all_assertions(admin, create_data, update_data, get_keys=keys)

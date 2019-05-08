@@ -23,7 +23,14 @@ class SerializerTestBase(object):
 
             # Actual validations
             serializer = self.serializer_class(data=data.data)
-            assert serializer.is_valid() == data.is_valid
+            try:
+                assert serializer.is_valid() == data.is_valid
+            except AssertionError:
+                if not serializer.errors:
+                    print("Actual serializer.is_valid does not match expected is_valid")
+                else:
+                    print(serializer.errors)
+                raise
 
             if data.is_valid and create_db_entry:
                 serializer.save()
