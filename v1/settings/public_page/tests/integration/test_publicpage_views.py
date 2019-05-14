@@ -1,13 +1,13 @@
 import pytest
 
 from v1.settings.public_page.models import PublicPage
-from v1.settings.public_page.views import PublicPageViewset
-from v1.utils.test_base.integration_test_base import ModelViewsetTestBase, CREATE, RETRIEVE, DELETE
+from v1.settings.public_page.views import PublicPageViewSet
+from v1.utils.test_base.integration_test_base import ModelViewSetTestBase, CREATE, RETRIEVE, DELETE
 
 
 @pytest.mark.integration
-class TestPublicPageViewset(ModelViewsetTestBase):
-    viewset = PublicPageViewset
+class TestPublicPageViewSet(ModelViewSetTestBase):
+    viewset = PublicPageViewSet
     url = "/api/v1/settings/public-page/"
 
     def test_not_allowed_method(self, user):
