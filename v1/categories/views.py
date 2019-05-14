@@ -9,7 +9,7 @@ from v1.categories.serializers import CategorySerializer
 ValidationError.status_code = 422
 
 
-class CategoriesViewset(viewsets.ModelViewSet):
+class CategoriesViewSet(viewsets.ModelViewSet):
     authentication_classes = (TokenAuthentication,)
     serializer_class = CategorySerializer
     queryset = Category.objects.all()

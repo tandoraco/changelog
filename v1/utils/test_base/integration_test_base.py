@@ -21,7 +21,7 @@ DELETE = method(shorthand="d", action={"delete": "destroy"})
 
 
 @pytest.mark.django_db
-class ModelViewsetTestBase(object):
+class ModelViewSetTestBase(object):
     viewset = None
     factory = APIRequestFactory()
     url = None

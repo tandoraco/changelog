@@ -7,7 +7,7 @@ from rest_framework.permissions import IsAuthenticated
 ValidationError.status_code = 422
 
 
-class TandoraModelViewset(viewsets.ModelViewSet):
+class TandoraModelViewSet(viewsets.ModelViewSet):
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
     pagination_class = LimitOffsetPagination

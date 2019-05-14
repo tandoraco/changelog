@@ -3,13 +3,13 @@ import copy
 import pytest
 
 from v1.core.models import Changelog
-from v1.core.views import ChangelogViewset
-from v1.utils.test_base.integration_test_base import ModelViewsetTestBase
+from v1.core.views import ChangelogViewSet
+from v1.utils.test_base.integration_test_base import ModelViewSetTestBase
 
 
 @pytest.mark.integration
-class TestChangelogViewset(ModelViewsetTestBase):
-    viewset = ChangelogViewset
+class TestChangelogViewSet(ModelViewSetTestBase):
+    viewset = ChangelogViewSet
     url = "/api/v1/changelogs"
     model = Changelog
 
