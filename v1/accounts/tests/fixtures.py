@@ -1,10 +1,11 @@
 import random
+import uuid
 
 import pytest
 from faker import Faker
 
 from v1.accounts.constants import MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH
-from v1.accounts.models import User
+from v1.accounts.models import User, ForgotPassword
 from v1.accounts.serializers import CompanySerializer, UserSerializer
 
 
@@ -95,3 +96,8 @@ def invalid_company_data(invalid_password):
             'website': fake.url()
         })
     return data
+
+
+@pytest.fixture
+def forgot_password(user, user_data):
+    return ForgotPassword.objects.create(email=user_data['email'], token=str(uuid.uuid4()))

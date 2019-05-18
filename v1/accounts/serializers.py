@@ -4,7 +4,8 @@ from rest_framework.serializers import ValidationError
 from rest_framework.validators import UniqueValidator
 
 from v1.accounts import models as account_models
-from v1.accounts.constants import PASSWORD_INCORRECT, CHANGELOG_TERMINOLOGY
+from v1.accounts.constants import PASSWORD_INCORRECT, CHANGELOG_TERMINOLOGY, EMAIL_NOT_FOUND, RESET_TOKEN_INVALID
+from v1.accounts.models import ForgotPassword, User
 from v1.accounts.utils import hash_password, verify_password
 from v1.accounts.validators import password_validator
 
@@ -55,3 +56,47 @@ class LoginSerializer(serializers.Serializer):
             raise ValidationError(PASSWORD_INCORRECT)
 
         return data
+
+
+class ForgotPasswordSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ForgotPassword
+        fields = '__all__'
+
+    def validate(self, data):
+        email = data.get('email')
+        try:
+            User.objects.get(email=email)
+        except User.DoesNotExist:
+            raise serializers.ValidationError(EMAIL_NOT_FOUND)
+
+        return data
+
+
+class ResetPasswordSerializer(serializers.Serializer):
+    token = serializers.UUIDField()
+    password = serializers.CharField(required=True, validators=[password_validator])
+
+    def validate(self, data):
+        token = data.get('token')
+
+        try:
+            ForgotPassword.objects.get(token=token)
+        except ForgotPassword.DoesNotExist:
+            raise serializers.ValidationError(RESET_TOKEN_INVALID)
+
+        return data
+
+    def create(self, validated_data):
+        token = validated_data.pop('token')
+        password_hash = hash_password(validated_data.pop('password'))
+
+        forgot_password = ForgotPassword.objects.get(token=token)
+        user = User.objects.get(email=forgot_password.email)
+        user.password_hash = password_hash
+        user.save()
+
+        # after successful reset of password, delete the token
+        forgot_password.delete()
+        return user
