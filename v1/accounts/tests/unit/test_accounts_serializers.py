@@ -1,7 +1,10 @@
+import uuid
+
 import pytest
 from faker import Faker
 
-from v1.accounts.serializers import LoginSerializer, CompanySerializer, UserSerializer
+from v1.accounts.serializers import LoginSerializer, CompanySerializer, UserSerializer, ForgotPasswordSerializer, \
+    ResetPasswordSerializer
 from v1.utils.test_base import SerializerTestData
 from v1.utils.test_base.serializer_test_base import SerializerTestBase
 
@@ -56,3 +59,31 @@ class TestCompanySerializer(SerializerTestBase):
         data.extend([SerializerTestData(data=d, is_valid=True) for d in valid_company_data])
         data.extend([SerializerTestData(data=d, is_valid=False) for d in invalid_company_data])
         self.run_data_assertions(test_data=data)
+
+
+@pytest.mark.unit
+class TestForgotPasswordSerializer(SerializerTestBase):
+    serializer_class = ForgotPasswordSerializer
+    fake = Faker()
+
+    def test_forgot_password_serializer(self, user):
+        data = [
+            SerializerTestData(data={'email': user.email, 'token': str(uuid.uuid4())}, is_valid=True),
+            SerializerTestData(data={'email': user.email, 'token': "12345"}, is_valid=False),
+            SerializerTestData(data={'email': self.fake.email(), 'token': str(uuid.uuid4())}, is_valid=False)
+        ]
+        self.run_data_assertions(data)
+
+
+@pytest.mark.unit
+class TestResetPasswordSerializer(SerializerTestBase):
+    serializer_class = ResetPasswordSerializer
+
+    def test_reset_password_serializer(self, forgot_password, valid_password, invalid_password):
+        data = [
+            SerializerTestData(data={'token': str(uuid.uuid4()), 'password': invalid_password}, is_valid=False),
+            SerializerTestData(data={'token': str(uuid.uuid4()), 'password': valid_password}, is_valid=False),
+            SerializerTestData(data={'token': forgot_password.token, 'password': invalid_password}, is_valid=False),
+            SerializerTestData(data={'token': forgot_password.token, 'password': valid_password}, is_valid=True)
+        ]
+        self.run_data_assertions(data)
