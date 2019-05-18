@@ -1,12 +1,12 @@
 from django.contrib.auth.models import AbstractBaseUser
 from django.db import models
 
-from v1.accounts.constants import CHANGELOG_TERMINOLOGY
+from v1.accounts.constants import CHANGELOG_TERMINOLOGY, MAX_EMAIL_LENGTH
 
 
 class User(AbstractBaseUser):
     name = models.CharField(max_length=100)
-    email = models.EmailField(max_length=200, db_index=True, unique=True)
+    email = models.EmailField(max_length=MAX_EMAIL_LENGTH, db_index=True, unique=True)
     password_hash = models.CharField(
         max_length=100)
     is_locked = models.BooleanField(default=False)
@@ -29,3 +29,11 @@ class Company(models.Model):
 
     def __repr__(self):
         return str(self.admin)
+
+
+class ForgotPassword(models.Model):
+    token = models.UUIDField(db_index=True)
+    email = models.EmailField(MAX_EMAIL_LENGTH, unique=True)
+
+    def __str__(self):
+        return f"{self.email}, {self.token}"

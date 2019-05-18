@@ -1,3 +1,5 @@
+import uuid
+
 from knox.auth import TokenAuthentication
 from knox.views import LoginView as KnoxLoginView
 from rest_framework import status
@@ -46,3 +48,29 @@ def create_company(request):
 
 class LoginView(KnoxLoginView):
     authentication_classes = [BasicAuthentication]
+
+
+@api_view(['POST'])
+@authentication_classes([])
+def forgot_password(request):
+    data = dict(request.data)
+    data['token'] = str(uuid.uuid4())
+    serializer = accounts_serializers.ForgotPasswordSerializer(data=data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(status=status.HTTP_201_CREATED, data=data)
+
+    return serializer_error_response(serializer)
+
+
+@api_view(['POST'])
+@authentication_classes([])
+def reset_password(request, token):
+    data = dict(request.data)
+    data['token'] = token
+    serializer = accounts_serializers.ResetPasswordSerializer(data=data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(status=status.HTTP_200_OK)
+
+    return serializer_error_response(serializer)
