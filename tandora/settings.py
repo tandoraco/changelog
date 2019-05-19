@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'knox',
     'v1',
+    'frontend'
 ]
 
 MIDDLEWARE = [
