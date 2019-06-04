@@ -7,3 +7,4 @@ RUN pip install cryptography==2.2.2
 COPY . /code/
 WORKDIR /code
 RUN pip install -r requirements_dev.txt
+ENV PYTHONUNBUFFERED=1
