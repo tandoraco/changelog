@@ -6,8 +6,8 @@ MAX_PASSWORD_LENGTH = 15
 
 MAX_EMAIL_LENGTH = 254
 
-EMAIL_NOT_FOUND = _("Email id is invalid.")
-PASSWORD_INCORRECT = _("Incorrect passoword.")
+EMAIL_NOT_FOUND_ERROR = _("Email id is invalid.")
+PASSWORD_INCORRECT_ERROR = _("Incorrect password.")
 PASSWORD_LENGTH_VALIDATION_FAILED = _("Password length should be between {}-{} characters.".format(
     MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH))
 PASSWORD_CONSTRAINS_NOT_MET = _("""Password should contain atleast one uppercase, one lowercase,
