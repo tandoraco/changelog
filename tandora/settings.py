@@ -51,7 +51,8 @@ INSTALLED_APPS = [
     'django_extensions',
     'knox',
     'v1',
-    'frontend'
+    'frontend',
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -161,3 +162,5 @@ REST_KNOX = {
     'AUTO_REFRESH': False,
     'AUTH_TOKEN_CHARACTER_LENGTH': 64,
 }
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
