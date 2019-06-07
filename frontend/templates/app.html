@@ -1,14 +1,8 @@
 <script>
-var authToken = localStorage.getItem("auth-token");
-if(!authToken) {
-var token = '{{ token }}';
-var isLoggedIn = '{{ is_logged_in }}';
-var email = '{{ email }};
-localStorage.setItem("auth-token", token);
-localStorage.setItem("email", email);
-}
-
+    let token = localStorage.getItem("auth-token");
+    if(!token) {
+        window.location.href="/login";
+    }
 </script>
-Email: {{ email }}
-Token: {{ token }}
 
+App
