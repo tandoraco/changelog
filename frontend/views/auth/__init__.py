@@ -13,7 +13,7 @@ def login(request):
             user = User.objects.get(email=form.data['email'])
             token = str(uuid.uuid4())
             ClientToken.objects.create(token=token, user=user)
-            return render(request, 'app.html', {'token': token, 'is_logged_in': True, 'email': user.email})
+            return render(request, 'login.html', {'token': token, 'is_logged_in': True, 'email': user.email})
     else:
         form = LoginForm()
 
@@ -21,4 +21,4 @@ def login(request):
 
 
 def logout(request):
-    pass
+    return render(request, 'logout.html')
