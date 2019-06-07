@@ -1,5 +1,8 @@
+{% extends "base.html" %}
+{% block content %}
 <script>
     localStorage.removeItem("auth-token");
     localStorage.removeItem("email");
     window.location.href = "/login";
 </script>
+{% endblock %}

@@ -1,3 +1,5 @@
+{% extends "base.html" %}
+{% block content %}
 <script>
     let token = localStorage.getItem("auth-token");
     if(!token) {
@@ -5,4 +7,5 @@
     }
 </script>
 
-App
+Tandora
+{% endblock %}
