@@ -49,8 +49,12 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'drfpasswordless',
     'django_extensions',
+    'crispy_forms',
+    'ckeditor',
+    'ckeditor_uploader',
     'knox',
     'v1',
+    'frontend',
 ]
 
 MIDDLEWARE = [
@@ -159,4 +163,21 @@ REST_KNOX = {
     'TOKEN_TTL': timedelta(days=30),
     'AUTO_REFRESH': False,
     'AUTH_TOKEN_CHARACTER_LENGTH': 64,
+}
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+SITE_ID = 1
+
+CKEDITOR_JQUERY_URL = 'https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js'
+
+CKEDITOR_UPLOAD_PATH = 'uploads/'
+CKEDITOR_IMAGE_BACKEND = "pillow"
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': None,
+    },
 }

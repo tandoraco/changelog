@@ -16,6 +16,7 @@ class BasicAuthentication(BaseAuthentication):
     """
 
     def authenticate(self, request):
+
         serializer = LoginSerializer(data=request.data)
         if serializer.is_valid():
             user = User.objects.get(email=serializer.data["email"])

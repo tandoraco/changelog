@@ -4,7 +4,9 @@ from rest_framework.serializers import ValidationError
 from rest_framework.validators import UniqueValidator
 
 from v1.accounts import models as account_models
-from v1.accounts.constants import PASSWORD_INCORRECT, CHANGELOG_TERMINOLOGY, EMAIL_NOT_FOUND, RESET_TOKEN_INVALID
+from v1.accounts.constants import PASSWORD_INCORRECT_ERROR, CHANGELOG_TERMINOLOGY, EMAIL_NOT_FOUND_ERROR, \
+    RESET_TOKEN_INVALID, \
+    MAX_EMAIL_LENGTH
 from v1.accounts.models import ForgotPassword, User
 from v1.accounts.utils import hash_password, verify_password
 from v1.accounts.validators import password_validator
@@ -12,7 +14,7 @@ from v1.accounts.validators import password_validator
 
 class UserSerializer(serializers.Serializer):
     email = serializers.EmailField(
-        required=True, max_length=100, validators=[
+        required=True, max_length=MAX_EMAIL_LENGTH, validators=[
             UniqueValidator(
                 queryset=account_models.User.objects.all())])
     name = serializers.CharField(required=True, max_length=200)
@@ -44,16 +46,19 @@ class CompanySerializer(UserSerializer):
 
 
 class LoginSerializer(serializers.Serializer):
-    email = serializers.EmailField(required=True, max_length=100)
+    email = serializers.EmailField(required=True, max_length=MAX_EMAIL_LENGTH)
     password = serializers.CharField(
         required=True, validators=[password_validator])
 
     def validate(self, data):
-        user = get_object_or_404(account_models.User, email=data['email'])
+        email = data['email'][0] if isinstance(data['email'], list) else data['email']
+        password = data['password'][0] if isinstance(data['password'], list) else data['password']
+
+        user = get_object_or_404(account_models.User, email=email)
 
         if not verify_password(
-                user=user, password=data['password']):
-            raise ValidationError(PASSWORD_INCORRECT)
+                user=user, password=password):
+            raise ValidationError(PASSWORD_INCORRECT_ERROR)
 
         return data
 
@@ -69,7 +74,7 @@ class ForgotPasswordSerializer(serializers.ModelSerializer):
         try:
             User.objects.get(email=email)
         except User.DoesNotExist:
-            raise serializers.ValidationError(EMAIL_NOT_FOUND)
+            raise serializers.ValidationError(EMAIL_NOT_FOUND_ERROR)
 
         return data
 
