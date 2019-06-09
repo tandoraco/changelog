@@ -17,5 +17,6 @@ from django.conf.urls import url
 from django.urls import include
 
 urlpatterns = [
-    url(r"api/v1/", include("v1.urls"), name="v1-api")
+    url(r"api/v1/", include("v1.urls"), name="v1-api"),
+    url(r"", include("frontend.urls"), name="v1-frontend"),
 ]

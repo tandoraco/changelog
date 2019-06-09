@@ -37,3 +37,11 @@ class ForgotPassword(models.Model):
 
     def __str__(self):
         return f"{self.email}, {self.token}"
+
+
+class ClientToken(models.Model):
+    token = models.UUIDField(db_index=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return str(self.token)
