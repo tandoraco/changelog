@@ -11,3 +11,71 @@ body {
  left: 50%;
  transform: translate(-50%,-50%);
 }
+
+@keyframes lds-rolling {
+  0% {
+    -webkit-transform: translate(-50%, -50%) rotate(0deg);
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    -webkit-transform: translate(-50%, -50%) rotate(360deg);
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+@-webkit-keyframes lds-rolling {
+  0% {
+    -webkit-transform: translate(-50%, -50%) rotate(0deg);
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    -webkit-transform: translate(-50%, -50%) rotate(360deg);
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+.lds-rolling {
+  position: relative;
+}
+.lds-rolling div,
+.lds-rolling div:after {
+  position: absolute;
+  width: 160px;
+  height: 160px;
+  border: 20px solid #0055a5;
+  border-top-color: transparent;
+  border-radius: 50%;
+}
+.lds-rolling div {
+  -webkit-animation: lds-rolling 1s linear infinite;
+  animation: lds-rolling 1s linear infinite;
+  top: 100px;
+  left: 100px;
+}
+.lds-rolling div:after {
+  -webkit-transform: rotate(90deg);
+  transform: rotate(90deg);
+}
+.lds-rolling {
+  width: 200px !important;
+  height: 200px !important;
+  -webkit-transform: translate(-100px, -100px) scale(1) translate(100px, 100px);
+  transform: translate(-100px, -100px) scale(1) translate(100px, 100px);
+}
+
+.card {
+  /* Add shadows to create the "card" effect */
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+  border-radius: 5px;
+  border:5px solid black;
+}
+
+/* On mouse-over, add a deeper shadow */
+.card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+/* Add some padding inside the card container */
+.container {
+  padding: 2px 16px;
+}
