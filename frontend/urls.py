@@ -10,7 +10,8 @@ urlpatterns = [
     url(r'^logout', auth.logout, name="frontend-logout"),
     url(r'^app', app.ChangeLogList.as_view(), name="frontend-staff-index"),
     url(r'^changelogs', app.ChangeLogList.as_view(), name="frontend-staff-index"),
-    url(r'^new-changelog', changelog.new_changelog, name="frontend-new-changelog"),
+    url(r'^create-changelog', changelog.changelog_form, name="frontend-new-changelog"),
+    path('edit-changelog/<int:id>', changelog.edit_changelog, name="frontend-edit-changelog"),
     url(r'^ckeditor/', include('ckeditor_uploader.urls'), name='ckeditor'),
     path('changelog/<slug:slug>', app.view_changelog, name="frontend-view-changelog"),
 ]
