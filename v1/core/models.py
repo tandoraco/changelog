@@ -1,11 +1,14 @@
 from django.db import models
+from django.db.models.signals import pre_save
 
 from v1.accounts.models import User
 from v1.categories.models import Category
+from v1.core.signals import get_or_populate_slug_field
 
 
 class Changelog(models.Model):
-    title = models.CharField(blank=False, max_length=200)
+    title = models.CharField(blank=False, max_length=200, db_index=True)
+    slug = models.SlugField(blank=True, db_index=True)
     content = models.TextField(blank=False)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     published = models.BooleanField(default=False)
@@ -19,3 +22,6 @@ class Changelog(models.Model):
 
     def __str__(self):
         return f"{self.title}\n{self.content}"
+
+
+pre_save.connect(get_or_populate_slug_field, sender=Changelog)
