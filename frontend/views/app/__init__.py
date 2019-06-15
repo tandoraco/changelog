@@ -36,7 +36,7 @@ def view_changelog(request, slug):
 
 def view_changelog_as_public(request, company, changelog_terminology, slug):
     try:
-        Company.objects.get(company_name=company, changelog_terminology=changelog_terminology)
+        Company.objects.get(company_name__iexact=company, changelog_terminology__iexact=changelog_terminology)
         changelog = Changelog.objects.get(slug=slug, published=True, deleted=False)
         return render(request, 'public-single-changelog.html',
                       context={'title': changelog.title, 'content': changelog.content})
