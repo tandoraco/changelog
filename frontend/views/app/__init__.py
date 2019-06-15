@@ -1,3 +1,4 @@
+from django.http import Http404
 from django.shortcuts import render
 from django.views.generic import ListView
 
@@ -19,3 +20,12 @@ class ChangeLogList(ListView):
 
     def get_queryset(self):
         return Changelog.objects.all().order_by('-created_at')
+
+
+def view_changelog(request, slug):
+    try:
+        changelog = Changelog.objects.get(slug=slug)
+        return render(request, 'single-changelog.html',
+                      context={'title': changelog.title, 'content': changelog.content})
+    except Changelog.DoesNotExist:
+        raise Http404

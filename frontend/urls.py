@@ -12,4 +12,5 @@ urlpatterns = [
     url(r'^changelogs', app.ChangeLogList.as_view(), name="frontend-staff-index"),
     url(r'^new-changelog', changelog.new_changelog, name="frontend-new-changelog"),
     url(r'^ckeditor/', include('ckeditor_uploader.urls'), name='ckeditor'),
+    path('changelog/<slug:slug>', app.view_changelog, name="frontend-view-changelog"),
 ]
