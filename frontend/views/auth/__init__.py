@@ -24,5 +24,11 @@ def login(request):
 
 
 def logout(request):
+    try:
+        ClientToken.objects.get(token=request.session["auth-token"]).delete()
+    except ClientToken.DoesNotExist:
+        pass
+
     request.session.clear()
+
     return render(request, 'logout.html')
