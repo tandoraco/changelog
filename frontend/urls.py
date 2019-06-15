@@ -14,4 +14,6 @@ urlpatterns = [
     path('edit-changelog/<int:id>', changelog.edit_changelog, name="frontend-edit-changelog"),
     url(r'^ckeditor/', include('ckeditor_uploader.urls'), name='ckeditor'),
     path('changelog/<slug:slug>', app.view_changelog, name="frontend-view-changelog"),
+    path('<str:company>/<str:changelog_terminology>/<slug:slug>', app.view_changelog_as_public,
+         name="frontend-view-changelog-as-public"),
 ]
