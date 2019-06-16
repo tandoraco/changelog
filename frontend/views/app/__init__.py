@@ -1,3 +1,5 @@
+from urllib.parse import unquote
+
 from django.http import Http404
 from django.shortcuts import render
 from django.views.generic import ListView
@@ -27,7 +29,7 @@ class ChangeLogList(ListView):
 @check_auth
 def view_changelog(request, slug):
     try:
-        changelog = Changelog.objects.get(slug=slug)
+        changelog = Changelog.objects.get(slug=unquote(slug))
         return render(request, 'single-changelog.html',
                       context={'title': changelog.title, 'content': changelog.content})
     except Changelog.DoesNotExist:
@@ -37,7 +39,7 @@ def view_changelog(request, slug):
 def view_changelog_as_public(request, company, changelog_terminology, slug):
     try:
         Company.objects.get(company_name__iexact=company, changelog_terminology__iexact=changelog_terminology)
-        changelog = Changelog.objects.get(slug=slug, published=True, deleted=False)
+        changelog = Changelog.objects.get(slug=unquote(slug), published=True, deleted=False)
         return render(request, 'public-single-changelog.html',
                       context={'title': changelog.title, 'content': changelog.content})
     except (Company.DoesNotExist, Changelog.DoesNotExist):
