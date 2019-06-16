@@ -16,4 +16,5 @@ urlpatterns = [
     path('changelog/<slug:slug>', app.view_changelog, name="frontend-view-changelog"),
     path('<str:company>/<str:changelog_terminology>/<slug:slug>', app.view_changelog_as_public,
          name="frontend-view-changelog-as-public"),
+    path('delete-changelog/<slug:slug>', changelog.delete_changelog, name="frontend-delete-changelog"),
 ]
