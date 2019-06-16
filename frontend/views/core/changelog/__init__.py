@@ -2,9 +2,11 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 
-from frontend.constants import CHANGELOG_DOES_NOT_EXIST_ERROR, CHANGELOG_CREATED_OR_EDITED_SUCCESSFULLY
+from frontend.constants import CHANGELOG_DOES_NOT_EXIST_ERROR, CHANGELOG_CREATED_OR_EDITED_SUCCESSFULLY, \
+    CHANGELOG_DELETED_SUCCESSFULLY
 from frontend.custom.decorators import check_auth
 from frontend.forms.core.changelog import ChangelogForm
+from v1.accounts.models import User
 from v1.core.models import Changelog
 from v1.core.serializers import ChangelogSerializer
 
@@ -42,3 +44,18 @@ def _changelog_form(request, form, action, changelog_id=None, instance=None):
 
     return render(request, 'changelog-form.html',
                   {'form': form, 'action': f'/{action}-changelog{changelog_id}', 'title': action.title()})
+
+
+@check_auth
+def delete_changelog(request, slug):
+    try:
+        changelog = Changelog.objects.get(slug=slug)
+        changelog.deleted = True
+        changelog.last_edited_by = User.objects.get(pk=request.session["user-id"])
+        changelog.save()
+
+        messages.success(request, message=CHANGELOG_DELETED_SUCCESSFULLY)
+    except Changelog.DoesNotExist:
+        messages.error(request, message=CHANGELOG_DOES_NOT_EXIST_ERROR)
+
+    return HttpResponseRedirect("/")

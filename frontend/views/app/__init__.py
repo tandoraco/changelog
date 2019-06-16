@@ -21,7 +21,7 @@ class ChangeLogList(ListView):
         return ['app.html']
 
     def get_queryset(self):
-        return Changelog.objects.all().order_by('-created_at')
+        return Changelog.objects.filter(deleted=False).order_by('-created_at')
 
 
 @check_auth
