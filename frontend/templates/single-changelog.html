@@ -1,9 +1,9 @@
 {% extends "base-after-login.html" %}
 {% block content %}
-<center>
-    <h1>{{ title }}</h1>
-    <p>
-        {{ content }}
-    </p>
-</center>
+<div class="container">
+    <center><h1>{{ title }}</h1></center>
+    <div class="changelog-content">
+        <pre>{{ content }}</pre>
+    </div>
+</div>
 {% endblock %}

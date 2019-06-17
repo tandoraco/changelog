@@ -33,7 +33,7 @@ DEBUG = bool(os.environ.get("DEBUG", False))
 
 HOSTNAME = "localhost" if DEBUG else socket.gethostname()
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
