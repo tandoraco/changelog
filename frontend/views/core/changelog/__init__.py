@@ -47,9 +47,9 @@ def _changelog_form(request, form, action, changelog_id=None, instance=None):
 
 
 @check_auth
-def delete_changelog(request, slug):
+def delete_changelog(request, id):
     try:
-        changelog = Changelog.objects.get(slug=slug)
+        changelog = Changelog.objects.get(id=id)
         changelog.deleted = True
         changelog.last_edited_by = User.objects.get(pk=request.session["user-id"])
         changelog.save()

@@ -12,10 +12,10 @@ urlpatterns = [
     url(r'^changelogs', app.ChangeLogList.as_view(), name="frontend-staff-index"),
     url(r'^create-changelog', changelog.changelog_form, name="frontend-new-changelog"),
     path('edit-changelog/<int:id>', changelog.edit_changelog, name="frontend-edit-changelog"),
+    path('delete-changelog/<int:id>', changelog.delete_changelog, name="frontend-delete-changelog"),
     url(r'^ckeditor/', include('ckeditor_uploader.urls'), name='ckeditor'),
     path('changelog/<slug:slug>', app.view_changelog, name="frontend-view-changelog"),
     path('<str:company>/<str:changelog_terminology>/<slug:slug>', app.view_changelog_as_public,
          name="frontend-view-changelog-as-public"),
     path('<str:company>/<str:changelog_terminology>', app.public_index, name="frontend-public-index"),
-    path('delete-changelog/<slug:slug>', changelog.delete_changelog, name="frontend-delete-changelog"),
 ]

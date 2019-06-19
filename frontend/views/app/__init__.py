@@ -50,7 +50,9 @@ def view_changelog_as_public(request, company, changelog_terminology, slug):
 def public_index(request, company, changelog_terminology):
     try:
         company = Company.objects.get(company_name__iexact=company, changelog_terminology__iexact=changelog_terminology)
+        changelogs = Changelog.objects.filter(deleted=False, published=True)
         return render(request, 'public-index.html',
-                      context={'company_name': company.company_name, 'terminology': changelog_terminology})
+                      context={'company_name': company.company_name, 'terminology': changelog_terminology,
+                               'changelogs': changelogs})
     except (Company.DoesNotExist, Changelog.DoesNotExist):
         raise Http404
