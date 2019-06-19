@@ -8,4 +8,27 @@
         <p style="text-align:center;">{{ terminology }} </p>
     </div>
 </div>
+<div class="container page">
+    {% for changelog in changelogs %}
+    <div class="row">
+        <div class="col-md-9">
+            <div class="article-preview">
+                <!--div class="article-meta">
+                        Mete
+                    <div class="info">
+                        Info
+                    </div>
+                    <span class="date">Date</span>
+                </div-->
+                <div class="preview-link">
+                    <h2><a href="/{{ company_name}}/{{ terminology }}/{{ changelog.slug }}">{{ changelog.title }}</a></h2>
+                    <p>{{ changelog.content|truncatechars:280 }}</p>
+                    <span><a href="/{{ company_name}}/{{ terminology }}/{{ changelog.slug }}">Read more..</a></span>
+                </div>
+            </div>
+            <hr>
+        </div>
+    </div>
+    {% endfor %}
+</div>
 {% endblock %}

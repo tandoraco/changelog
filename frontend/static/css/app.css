@@ -86,7 +86,7 @@ color: white;
 
 .banner {
  color: #fff;
- background: #333;
+ background: #428bca;
  padding: 2rem;
  margin-bottom: 2rem;
  text-align: center;
@@ -118,4 +118,57 @@ font-family: inherit;
 display: flex;
 white-space: pre-wrap;
 word-break: break-word;
+}
+
+.preview-link {
+ color: inherit !important;
+}
+
+.preview-link:hover {
+ text-decoration: inherit !important;
+}
+
+.article-preview {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 1.5rem 0;
+}
+
+.article-preview .article-meta {
+  margin: 0 0 1rem 0;
+}
+
+.article-preview .preview-link h1 {
+  font-weight: 600 !important;
+  font-size: 1.5rem !important;
+  margin-bottom: 3px;
+}
+
+.article-preview .preview-link p {
+  font-weight: 300;
+  font-size: 24px;
+  color: #999;
+  margin-bottom: 15px;
+  font-size: 1rem;
+  line-height: 1.3rem;
+ }
+
+.article-preview .preview-link span {
+  max-width: 30%;
+  font-size: 0.8rem;
+  font-weight: 300;
+  color: #bbb;
+  vertical-align: middle;
+}
+
+.article-preview .preview-link ul {
+  float: right;
+  max-width: 50%;
+  vertical-align: top;
+}
+
+.article-preview .preview-link ul li {
+  font-weight: 300;
+  font-size: 0.8rem !important;
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
 }
