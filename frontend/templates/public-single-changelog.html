@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="banner">
+<div id='c-banner' class="banner">
     <div class="container">
         <h1 class="logo-font">
             {{ company_name }}
@@ -14,4 +14,8 @@
         <pre>{{ content }}</pre>
     </div>
 </div>
+<script>
+    let banner = document.getElementById('c-banner');
+    banner.style.backgroundColor = "{{ color }}";
+</script>
 {% endblock %}
