@@ -42,7 +42,8 @@ def view_changelog_as_public(request, company, changelog_terminology, slug):
         changelog = Changelog.objects.get(slug=unquote(slug), published=True, deleted=False)
         return render(request, 'public-single-changelog.html',
                       context={'company_name': company.company_name, 'terminology': changelog_terminology,
-                               'title': changelog.title, 'content': changelog.content})
+                               'title': changelog.title, 'content': changelog.content,
+                               'color': changelog.category.color})
     except (Company.DoesNotExist, Changelog.DoesNotExist):
         raise Http404
 
@@ -50,7 +51,7 @@ def view_changelog_as_public(request, company, changelog_terminology, slug):
 def public_index(request, company, changelog_terminology):
     try:
         company = Company.objects.get(company_name__iexact=company, changelog_terminology__iexact=changelog_terminology)
-        changelogs = Changelog.objects.filter(deleted=False, published=True)
+        changelogs = Changelog.objects.filter(deleted=False, published=True).order_by('-created_at')
         return render(request, 'public-index.html',
                       context={'company_name': company.company_name, 'terminology': changelog_terminology,
                                'changelogs': changelogs})
