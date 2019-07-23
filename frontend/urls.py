@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from django.urls import path, include
+from django.urls import path
 
 from frontend.views import auth, app
 from frontend.views.core import changelog
@@ -13,7 +13,6 @@ urlpatterns = [
     url(r'^create-changelog', changelog.changelog_form, name="frontend-new-changelog"),
     path('edit-changelog/<int:id>', changelog.edit_changelog, name="frontend-edit-changelog"),
     path('delete-changelog/<int:id>', changelog.delete_changelog, name="frontend-delete-changelog"),
-    url(r'^ckeditor/', include('ckeditor_uploader.urls'), name='ckeditor'),
     path('changelog/<slug:slug>', app.view_changelog, name="frontend-view-changelog"),
     path('<str:company>/<str:changelog_terminology>/<slug:slug>', app.view_changelog_as_public,
          name="frontend-view-changelog-as-public"),

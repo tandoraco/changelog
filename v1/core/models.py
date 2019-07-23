@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models.signals import pre_save
+from tinymce.models import HTMLField
 
 from v1.accounts.models import User
 from v1.categories.models import Category
@@ -9,7 +10,7 @@ from v1.core.signals import get_or_populate_slug_field
 class Changelog(models.Model):
     title = models.CharField(blank=False, max_length=200, db_index=True)
     slug = models.SlugField(blank=True, max_length=200, db_index=True)
-    content = models.TextField(blank=False)
+    content = HTMLField(blank=False)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     published = models.BooleanField(default=False)
     deleted = models.BooleanField(default=False)
