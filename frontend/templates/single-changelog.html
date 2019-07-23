@@ -3,7 +3,7 @@
 <div class="container">
     <center><h1>{{ title }}</h1></center>
     <div class="changelog-content">
-        <pre>{{ content }}</pre>
+        <span>{{ content|safe }}</span>
     </div>
 </div>
 {% endblock %}

@@ -22,7 +22,7 @@
                 </div-->
                 <div class="preview-link">
                     <h2><a href="/{{ company_name}}/{{ terminology }}/{{ changelog.slug }}">{{ changelog.title }}</a></h2>
-                    <p>{{ changelog.content|truncatechars:280 }}</p>
+                    <span>{{ changelog.content|truncatechars:280|safe }}</span>
                     <span><a href="/{{ company_name}}/{{ terminology }}/{{ changelog.slug }}">Read more..</a></span>
                 </div>
             </div>
