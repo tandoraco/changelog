@@ -3,6 +3,23 @@
 <head>
     <title>Tandora</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="http://cdn.tinymce.com/4/tinymce.min.js"></script>
+    <script>tinymce.init({
+      selector: 'textarea',
+      height: 300,
+      menubar: false,
+      plugins: [
+        'advlist autolink lists link image charmap print preview anchor textcolor',
+        'searchreplace visualblocks code fullscreen',
+        'insertdatetime media table paste code help wordcount'
+      ],
+      toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
+      content_css: [
+        '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
+        '//www.tiny.cloud/css/codepen.min.css'
+      ]
+});
+</script>
 </head>
 <script>
     let token = localStorage.getItem("auth-token");
@@ -46,7 +63,7 @@
   </div>
 </nav>
 {% block content %}{% endblock %}
-<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
         integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
         crossorigin="anonymous"></script>
@@ -63,17 +80,6 @@
 <script>
     let body = document.getElementsByTagName('body')[0];
     body.style.fontFamily = "Duru Sans";
-    document.addEventListener('DOMContentLoaded', function() {
-    var elems = document.querySelectorAll('.sidenav');
-    var instances = M.Sidenav.init(elems, options);
-  });
-
-  // Or with jQuery
-
-  $(document).ready(function(){
-    $('.sidenav').sidenav();
-  });
-
 </script>
 </body>
 </html>

@@ -50,8 +50,7 @@ INSTALLED_APPS = [
     'drfpasswordless',
     'django_extensions',
     'crispy_forms',
-    'ckeditor',
-    'ckeditor_uploader',
+    'tinymce',
     'knox',
     'v1',
     'frontend',
@@ -80,6 +79,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.static',
             ],
         },
     },
@@ -170,14 +170,3 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 SITE_ID = 1
-
-CKEDITOR_JQUERY_URL = 'https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js'
-
-CKEDITOR_UPLOAD_PATH = 'uploads/'
-CKEDITOR_IMAGE_BACKEND = "pillow"
-
-CKEDITOR_CONFIGS = {
-    'default': {
-        'toolbar': None,
-    },
-}
