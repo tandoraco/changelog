@@ -1,0 +1,15 @@
+{% extends "base-after-login.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container col-md-4 col-md-offset-4">
+    <center><h3>Create category</h3></center>
+    <form id="category_form"  method="post" action="{{ action }}">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <center>
+            <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+            <button class="btn btn-default" type="reset">Reset</button>
+        </center>
+    </form>
+</div>
+{% endblock %}
