@@ -1,19 +1,24 @@
-{% for changelog in object_list %}
-<div class="card"
-     {% if forloop.last and page_obj.has_next %}
-     ic-trigger-on="scrolled-into-view"
-     ic-append-from="/changelogs?page={{ page_obj.next_page_number }}"
-     ic-target="#changelogs"
-     ic-indicator="#spinner"
-     {% endif %}
->
-    <div class="card-body">
-        <h5 class="card-title">{{ changelog.title }}</h5>
-        <h6 class="card-subtitle mb-2 text-muted">{{ changelog.category }}</h6>
-        <span class="card-text">{{ changelog.content|safe }}</p>
-        <a class="card-link" href="/edit-changelog/{{ changelog.id }}">Edit</a>
-        <a class="card-link" href="/changelog/{{ changelog.slug }}">View</a>
-        <a class="card-link" href="/delete-changelog/{{ changelog.id }}">Delete</a>
+<div class="container page">
+    {% for changelog in object_list %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="article-preview">
+                <!--div class="article-meta">
+                        Mete
+                    <div class="info">
+                        Info
+                    </div>
+                    <span class="date">Date</span>
+                </div-->
+                <div class="preview-link">
+                    <h2><a href="/changelog/{{ changelog.slug }}">{{ changelog.title }}</a></h2>
+                    <span>{{ changelog.content|safe }}</span>
+                </div>
+                <a class="card-link" href="/edit-changelog/{{ changelog.id }}">Edit</a>
+                <a class="card-link" href="/changelog/{{ changelog.slug }}">View</a>
+                <a class="card-link" href="/delete-changelog/{{ changelog.id }}">Delete</a>
+            </div>
+        </div>
     </div>
+    {% endfor %}
 </div>
-{% endfor %}

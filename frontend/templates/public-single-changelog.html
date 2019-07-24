@@ -10,12 +10,14 @@
 </div>
 <div class="container">
     <center><h1>{{ title }}</h1></center>
-    <div class="changelog-content">
+    <div>
         <span>{{ content|safe }}</span>
     </div>
 </div>
 <script>
     let banner = document.getElementById('c-banner');
     banner.style.backgroundColor = "{{ color }}";
+    let body = document.getElementsByTagName('body')[0];
+    body.style.fontFamily = "M PLUS 1p";
 </script>
 {% endblock %}
