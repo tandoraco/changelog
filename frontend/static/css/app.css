@@ -1,5 +1,5 @@
 body {
-    font-family: 'Duru Sans', sans-serif;
+    font-family: 'M PLUS 1p', sans-serif;
 }
 
 .container{
@@ -103,7 +103,7 @@ p {
 }
 
 .changelog-content {
- font-family: 'Source Serif Pro', serif;
+ font-family: 'M PLUS 1p', serif;
  font-size: 1.2rem;
  line-height: 1.8rem;
  margin-bottom: 2rem;
@@ -171,4 +171,8 @@ word-break: break-word;
   font-size: 0.8rem !important;
   padding-top: 0px !important;
   padding-bottom: 0px !important;
+}
+
+span {
+  font-family: 'M PLUS 1p', sans-serif;
 }

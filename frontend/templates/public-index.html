@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="banner">
+<div id="c-banner" class="banner">
     <div class="container">
         <h1 class="logo-font">
             {{ company_name }}
@@ -31,4 +31,10 @@
     </div>
     {% endfor %}
 </div>
+<script>
+    let banner = document.getElementById('c-banner');
+    banner.style.backgroundColor = "{{ color }}";
+    let body = document.getElementsByTagName('body')[0];
+    body.style.fontFamily = "M PLUS 1p";
+</script>
 {% endblock %}
