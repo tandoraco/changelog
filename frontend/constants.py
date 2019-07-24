@@ -5,3 +5,5 @@ CHANGELOG_DOES_NOT_EXIST_ERROR = _("Changelog does not exist.")
 CHANGELOG_DELETED_SUCCESSFULLY = _("Changelog delete success.")
 
 NOT_LOGGED_IN_ERROR = _("Please login to continue")
+
+CATEGORY_CREATED_SUCCESSFULLY = _('Successfully created category: {}')

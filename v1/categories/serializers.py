@@ -1,8 +1,7 @@
 from rest_framework import serializers
 
-from v1.categories.constants import CATEGORY_EXISTS
 from v1.categories.models import Category
-from v1.utils.validators import validate_color
+from v1.utils.validators import validate_color, validate_category_name
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -15,8 +14,4 @@ class CategorySerializer(serializers.ModelSerializer):
         return validate_color(color)
 
     def validate_name(self, name):
-        try:
-            Category.objects.get(name__iexact=name)
-            raise serializers.ValidationError(CATEGORY_EXISTS)
-        except Category.DoesNotExist:
-            return name
+        return validate_category_name(name)
