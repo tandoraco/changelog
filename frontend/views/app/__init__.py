@@ -2,10 +2,9 @@ from urllib.parse import unquote
 
 from django.http import Http404
 from django.shortcuts import render
-from django.views.generic import ListView
 
 from frontend.custom.decorators import check_auth
-from frontend.views.auth.mixins import LoginRequiredMixin
+from frontend.custom.views import TandoraListViewMixin
 from v1.accounts.models import Company
 from v1.core.models import Changelog
 
@@ -14,7 +13,7 @@ def index(request):
     return render(request, 'app.html')
 
 
-class ChangeLogList(LoginRequiredMixin, ListView):
+class ChangeLogList(TandoraListViewMixin):
     paginate_by = 20
     template_name = 'app.html'
 

@@ -7,3 +7,4 @@ CHANGELOG_DELETED_SUCCESSFULLY = _("Changelog delete success.")
 NOT_LOGGED_IN_ERROR = _("Please login to continue")
 
 CATEGORY_CREATED_SUCCESSFULLY = _('Successfully created category: {}')
+CATEGORY_DELETED_SUCCESSFULLY = _('Category delete success.')
