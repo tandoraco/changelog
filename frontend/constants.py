@@ -6,5 +6,6 @@ CHANGELOG_DELETED_SUCCESSFULLY = _("Changelog delete success.")
 
 NOT_LOGGED_IN_ERROR = _("Please login to continue")
 
-CATEGORY_CREATED_SUCCESSFULLY = _('Successfully created category: {}')
+CATEGORY_CREATED_OR_EDITED_SUCCESSFULLY = _('Successfully {} category: {}')
 CATEGORY_DELETED_SUCCESSFULLY = _('Category delete success.')
+CATEGORY_DOES_NOT_EXIST = _('Category does not exist.')

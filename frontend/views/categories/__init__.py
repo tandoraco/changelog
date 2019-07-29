@@ -1,42 +1,32 @@
-from django.contrib import messages
-from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.urls import reverse
 
-from frontend.constants import CATEGORY_CREATED_SUCCESSFULLY, CATEGORY_DELETED_SUCCESSFULLY
+from frontend.constants import (CATEGORY_CREATED_OR_EDITED_SUCCESSFULLY,
+                                CATEGORY_DELETED_SUCCESSFULLY,
+                                CATEGORY_DOES_NOT_EXIST)
+from frontend.custom.decorators import check_auth
+from frontend.custom.forms import TandoraForm
+from frontend.custom.utils import delete_model
 from frontend.custom.views import TandoraListViewMixin
 from frontend.forms.categories import CategoryForm
 from v1.categories.models import Category
 
 
+@check_auth
 def category_form(request):
-    if request.method == 'POST':
-        form = CategoryForm(data=request.POST)
-
-        if form.is_valid():
-            category = form.save()
-            messages.success(request, CATEGORY_CREATED_SUCCESSFULLY.format(category.name))
-            return HttpResponseRedirect('/manage/categories')
-    else:
-        form = CategoryForm()
-
-    return render(request, 'category-form.html', {'form': form})
+    return TandoraForm(Category, CategoryForm, 'create', 'category-form.html', reverse('frontend-view-categories'))\
+        .get_form(request, CATEGORY_CREATED_OR_EDITED_SUCCESSFULLY, CATEGORY_DOES_NOT_EXIST)
 
 
+@check_auth
 def edit_category(request, id):
-    return HttpResponseRedirect('/manage/categories')
+    return TandoraForm(Category, CategoryForm, 'edit', 'category-form.html', reverse('frontend-view-categories'))\
+        .get_form(request, CATEGORY_CREATED_OR_EDITED_SUCCESSFULLY, CATEGORY_DOES_NOT_EXIST, id=id)
 
 
+@check_auth
 def delete_category(request, id):
-    try:
-        category = Category.objects.get(id=id)
-        category.deleted = True
-        category.save()
-
-        messages.success(request, message=CATEGORY_DELETED_SUCCESSFULLY)
-    except Category.DoesNotExist:
-        return HttpResponseRedirect('/')
-
-    return HttpResponseRedirect('/manage/categories')
+    return delete_model(request, Category, id, reverse('frontend-view-categories'), '/', CATEGORY_DELETED_SUCCESSFULLY,
+                        CATEGORY_DOES_NOT_EXIST)
 
 
 class CategoryList(TandoraListViewMixin):
