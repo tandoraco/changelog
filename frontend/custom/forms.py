@@ -24,8 +24,14 @@ class TandoraForm:
             messages.error(request, error_message)
             return HttpResponseRedirect(self.response_redirect_path)
 
-    def get_form(self, request, success_message, error_message, id=None):
+    def get_form(self, request, success_message=None, error_message=None, id=None):
         form = self.form()
+
+        if not success_message:
+            success_message = self.model.__name__.title() + ' {}ed successfully : {}'
+
+        if not error_message:
+            error_message = f'{self.model.__name__.title()} does not exist.'
 
         if id:
             form = self.form(instance=self._get_instance(id, request, error_message))
@@ -43,8 +49,8 @@ class TandoraForm:
 
             if form.is_valid():
                 obj = form.save()
-                messages.success(request, message=success_message.format(self.action, obj.id))
+                messages.success(request, message=success_message.format(self.action, str(obj)))
                 return HttpResponseRedirect(self.response_redirect_path)
 
         return render(request, self.form_html,
-                      {'form': form, 'title': self.action.title()})
+                      {'form': form, 'title': f'{self.action.title()} {self.model.__name__}'})
