@@ -2,7 +2,7 @@ from django import forms
 from django.utils.translation import ugettext as _
 
 from v1.accounts.constants import MAX_EMAIL_LENGTH, PASSWORD_INCORRECT_ERROR, EMAIL_NOT_FOUND_ERROR
-from v1.accounts.models import User
+from v1.accounts.models import User, Company
 from v1.accounts.utils import verify_password
 
 
@@ -42,3 +42,33 @@ class ForgotPasswordForm():
 
 class ResetPasswordForm():
     pass
+
+
+class CompanyForm(forms.ModelForm):
+    read_only_fields = [
+        'admin',
+        'website',
+        'company_name',
+    ]
+
+    def __init__(self, *args, **kwargs):
+        super(CompanyForm, self).__init__(*args, **kwargs)
+
+        for field in self.read_only_fields:
+            self.fields[field].disabled = True
+
+    class Meta:
+        model = Company
+        fields = '__all__'
+
+
+class UserForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(UserForm, self).__init__(*args, **kwargs)
+
+        self.fields['email'].disabled = True
+
+    class Meta:
+        model = User
+        fields = ['email', 'name', ]

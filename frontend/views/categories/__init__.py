@@ -13,14 +13,19 @@ from v1.categories.models import Category
 
 @check_auth
 def category_form(request):
-    return TandoraForm(Category, CategoryForm, 'create', 'category-form.html', reverse('frontend-view-categories'))\
-        .get_form(request, CATEGORY_CREATED_OR_EDITED_SUCCESSFULLY, CATEGORY_DOES_NOT_EXIST)
+    return TandoraForm(Category, CategoryForm, 'create', 'generic-after-login-form.html',
+                       reverse('frontend-view-categories'))\
+        .get_form(request, success_message=CATEGORY_CREATED_OR_EDITED_SUCCESSFULLY,
+                  error_message=CATEGORY_DOES_NOT_EXIST)
 
 
 @check_auth
 def edit_category(request, id):
-    return TandoraForm(Category, CategoryForm, 'edit', 'category-form.html', reverse('frontend-view-categories'))\
-        .get_form(request, CATEGORY_CREATED_OR_EDITED_SUCCESSFULLY, CATEGORY_DOES_NOT_EXIST, id=id)
+    return TandoraForm(Category, CategoryForm, 'edit', 'generic-after-login-form.html',
+                       reverse('frontend-view-categories'))\
+        .get_form(request,
+                  success_message=CATEGORY_CREATED_OR_EDITED_SUCCESSFULLY,
+                  error_message=CATEGORY_DOES_NOT_EXIST, id=id)
 
 
 @check_auth

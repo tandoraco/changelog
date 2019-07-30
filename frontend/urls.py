@@ -18,6 +18,8 @@ urlpatterns = [
     path('manage/categories/create-category', categories.category_form, name="frontend-category-form"),
     path('manage/categories/edit-category/<int:id>', categories.edit_category, name="frontend-edit-category"),
     path('manage/categories/delete-category/<int:id>', categories.delete_category, name="frontend-delete-category"),
+    path('manage/profile/company', auth.company_form, name="frontend-company-form"),
+    path('manage/profile/myself', auth.profile_form, name="frontend-profile-form"),
     path('<str:company>/<str:changelog_terminology>/<slug:slug>', app.view_changelog_as_public,
          name="frontend-view-changelog-as-public"),
     path('<str:company>/<str:changelog_terminology>', app.public_index, name="frontend-public-index"),
