@@ -11,3 +11,4 @@ requests==2.21.0
 faker==1.0.4
 django-crispy-forms==1.7.2
 django-tinymce==2.8.0
+django-colorful==1.3
