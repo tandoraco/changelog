@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
-import socket
 from datetime import timedelta
 
 from dotenv import load_dotenv
@@ -31,7 +30,6 @@ SECRET_KEY = '4r&ns-8mjg_s_^fh9z&7*up8n3w1jgbvj(yc(z12cay12&$+(i'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(os.environ.get("DEBUG", False))
 
-HOSTNAME = "localhost" if DEBUG else socket.gethostname()
 
 ALLOWED_HOSTS = ['*']
 
@@ -139,6 +137,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR + '/frontend/static'
 
 
 PASSWORD_HASHERS = [
