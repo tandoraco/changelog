@@ -1,10 +1,13 @@
-echo "Waiting for postgres..."
+echo "Check for postgres .."
 
-while ! nc -z $SQL_HOST $SQL_PORT; do
-      sleep 0.1
+until psql -h "tandora-backend_db_1" -U "postgres" -c '\q'; do
+  >&2 echo "Postgres not started - sleeping"
+  sleep 5
 done
 
-echo "PostgreSQL started"
 
+echo "PostgreSQL started"
+sleep 2
 echo "Running db migrations"
 python manage.py migrate
+python /code/manage.py runserver 0.0.0.0:8000
