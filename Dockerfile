@@ -11,5 +11,3 @@ ENV PYTHONUNBUFFERED=1
 RUN apk add build-base py-pip jpeg-dev zlib-dev
 ENV LIBRARY_PATH=/lib:/usr/lib
 RUN pip install pillow==6.0.0
-
-ENTRYPOINT ["/code/commons/script/entrypoint.sh"]
