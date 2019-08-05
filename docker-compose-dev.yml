@@ -14,21 +14,10 @@ services:
       - 8000
     depends_on:
       - db
-  letsencrypt:
-    image: linuxserver/letsencrypt
+  nginx:
+    build: ./commons/conf/nginx
     ports:
       - 80:80
-      - 443:443
-    volumes:
-      - ./config/letsencrypt:/config
-    environment:
-      - EMAIL=admin@tandora.co
-      - URL=localhost
-      - SUBDOMAINS=www,api
-      - VALIDATION=http
-      - TZ=Asia/Kolkata
-      - PUID=0
-      - PGID=0
     depends_on:
       - web
 
