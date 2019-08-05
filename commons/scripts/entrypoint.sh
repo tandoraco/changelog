@@ -8,6 +8,10 @@ done
 
 echo "PostgreSQL started"
 sleep 2
+echo "Installing requirements"
+pip install -r requirements.txt
 echo "Running db migrations"
 python manage.py migrate
-python /code/manage.py runserver 0.0.0.0:8000
+exec gunicorn tandora.wsgi:application \
+    --bind 0.0.0.0:8000 \
+    --workers 3
