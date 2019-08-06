@@ -25,10 +25,11 @@ services:
       - EMAIL=admin@tandora.co
       - URL=localhost
       - SUBDOMAINS=www,api
+      - ONLY_SUBDOMAINS=true
       - VALIDATION=http
       - TZ=Asia/Kolkata
-      - PUID=0
-      - PGID=0
+      - PUID=1000
+      - PGID=1000
     depends_on:
       - web
 
