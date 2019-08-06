@@ -427,3 +427,4 @@ $RECYCLE.BIN/
 # End of https://www.gitignore.io/api/venv,macos,python,django,windows,pycharm,virtualenv,pycharm+iml,pycharm+all
 media/
 static/
+config/
