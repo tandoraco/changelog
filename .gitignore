@@ -428,3 +428,5 @@ $RECYCLE.BIN/
 media/
 static/
 config/
+staging.yml
+prod.yml
