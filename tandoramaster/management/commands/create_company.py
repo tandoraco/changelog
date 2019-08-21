@@ -1,17 +1,21 @@
 import os
 import pathlib
-import random
 import subprocess
 import sys
+import tempfile
 from datetime import datetime
 
 import pytz
 from django.core.management import BaseCommand, call_command
+from django.db import transaction
 from dynamic_db_router import in_database
 
 from frontend.multidb.utils import add_instance_to_settings
 from tandora import settings
-from tandoramaster.constants import CREATE_DB_COMMAND, CREATE_DB_COMMAND_WITH_PASSWORD
+from tandoramaster.constants import (CREATE_DB_COMMAND,
+                                     CREATE_DB_COMMAND_WITH_PASSWORD,
+                                     DELETE_DB_COMMAND_WITH_PASSWORD,
+                                     DELETE_DB_COMMAND)
 from tandoramaster.models import Instance
 from v1.accounts.serializers import CompanySerializer
 
@@ -52,6 +56,20 @@ class Command(BaseCommand):
             self.stderr.write(e.__repr__(), style_func=self.style.WARNING)
             sys.exit(0)
 
+    def drop_db(self, db_name):
+        db = settings.DATABASES['default']
+
+        if db.get('PASSWORD'):
+            delete_db = DELETE_DB_COMMAND_WITH_PASSWORD.format(username=db['USER'], host=db['HOST'],
+                                                               database_name=db_name,
+                                                               password=db['PASSWORD'])
+        else:
+            delete_db = DELETE_DB_COMMAND.format(username=db['USER'], host=db['HOST'],
+                                                 database_name=db_name)
+
+        print(f"Delete this db using the command {delete_db}")
+
+    @transaction.atomic
     def handle(self, *args, **options):
         email = options.get('email')
         name = options.get('name')
@@ -86,7 +104,7 @@ class Command(BaseCommand):
                                            db_host=db_host,
                                            db_port=db_port,
                                            subdomain=subdomain)
-        add_instance_to_settings(instance, db_key=db_name)
+        add_instance_to_settings(instance)
 
         with in_database(db_name, write=True):
             self.stdout.write(f"Running migrations for {db_name} ..")
@@ -109,21 +127,25 @@ class Command(BaseCommand):
             else:
                 self.stderr.write("Creating admin failed", style_func=self.style.ERROR)
                 print(company_serializer.errors)
+                self.drop_db(db_name)
                 sys.exit(0)
 
             self.stdout.write(f"Populating initial data ..")
 
             current_path = pathlib.Path(__file__).parent
             initial_data_json = current_path / 'initial_data.json'
-            with open(initial_data_json) as initial_data:
-                data = initial_data.read()
-                data = data.replace('{created_time}', get_current_utc_time())
 
-            temporary_data_file = f'/tmp/{random.randint(10000, 50000)}.json'
-            with open(temporary_data_file, 'w') as f:
-                f.write(data)
+            temp_fixture_file = ''
+            with tempfile.NamedTemporaryFile(suffix='.json', mode='w', delete=False) as temp_fixture:
 
-            call_command('loaddata', temporary_data_file, f'--database={db_name}')
-            os.remove(f.name)
+                with open(initial_data_json) as initial_data:
+                    data = initial_data.read()
+                    data = data.replace('{created_time}', get_current_utc_time())
+                    temp_fixture.write(data)
+
+                temp_fixture_file = temp_fixture.name
+
+            call_command('loaddata', temp_fixture_file, f'--database={db_name}')
+            os.remove(temp_fixture_file)
 
             self.stdout.write(f"Done creating company ..", style_func=self.style.SUCCESS)

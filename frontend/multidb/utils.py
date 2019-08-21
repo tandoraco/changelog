@@ -1,7 +1,9 @@
+from django.db import connections
+
 from tandora import settings
 
 
-def add_instance_to_settings(instance, db_key):
+def add_instance_to_settings(instance):
     db = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': instance.db_name,
@@ -13,9 +15,10 @@ def add_instance_to_settings(instance, db_key):
     if instance.db_password:
         db['PASSWORD'] = instance.db_password
 
-    if db_key not in settings.DATABASES:
-        settings.DATABASES[db_key] = db
+    if instance.db_name not in settings.DATABASES:
+        settings.DATABASES[instance.db_name] = db
+        connections.databases[instance.db_name] = db
 
 
-def check_instance_in_settings(db_key):
-    return db_key in settings.DATABASES
+def is_instance_in_settings(instance):
+    return instance.db_name in settings.DATABASES
