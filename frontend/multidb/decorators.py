@@ -1,5 +1,6 @@
 import functools
 
+from django.conf import settings
 from dynamic_db_router import in_database
 
 from frontend.multidb.constants import HTTP_HOST_NOT_IN_HEADER_ERROR, SUBDOMAIN_DOES_NOT_EXIST_ERROR
@@ -11,8 +12,8 @@ def change_db(func):
 
     @functools.wraps(func)
     def wrapper(obj, request):
-        '''if settings.DEBUG:
-            return func(obj, request)'''
+        if settings.DEBUG:
+            return func(obj, request)
 
         try:
             host = request.META['HTTP_HOST']
