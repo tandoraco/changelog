@@ -4,7 +4,7 @@ from v1.core.models import Changelog
 
 
 class ChangelogForm(forms.ModelForm):
-    published = forms.BooleanField(initial=True, label='Publish Now\t')
+    published = forms.BooleanField(required=False, label='Publish Now\t')
 
     class Meta:
         model = Changelog
