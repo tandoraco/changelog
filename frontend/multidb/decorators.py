@@ -33,10 +33,19 @@ def change_db(func):
                     def db_for_write(*args, **kwargs):
                         return instance.db_name
 
+                    def default_read_db(*args, **kwargs):
+                        return "default"
+
+                    def default_write_db(*args, **kwargs):
+                        return "default"
+
                     DynamicDbRouter.db_for_read = db_for_read
                     DynamicDbRouter.db_for_write = db_for_write
 
                     func(obj, request)
+
+                    DynamicDbRouter.db_for_read = default_read_db
+                    DynamicDbRouter.db_for_write = default_write_db
 
             except Instance.DoesNotExist:
                 raise RuntimeError(SUBDOMAIN_DOES_NOT_EXIST_ERROR)
