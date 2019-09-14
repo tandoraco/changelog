@@ -27,6 +27,7 @@ def change_db(func):
 
                 with in_database(instance.db_name, write=True):
                     print(f'current db: {instance.db_name}')
+                    print(func)
                     return func(obj, request)
 
             except Instance.DoesNotExist:
