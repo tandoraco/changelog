@@ -1,7 +1,7 @@
 import functools
 
 from django.conf import settings
-from dynamic_db_router import in_database
+from dynamic_db_router import in_database, DynamicDbRouter
 
 from frontend.multidb.constants import HTTP_HOST_NOT_IN_HEADER_ERROR, SUBDOMAIN_DOES_NOT_EXIST_ERROR
 from frontend.multidb.utils import add_instance_to_settings, is_instance_in_settings
@@ -26,6 +26,16 @@ def change_db(func):
                     add_instance_to_settings(instance)
 
                 with in_database(instance.db_name, write=True):
+
+                    def db_for_read(*args, **kwargs):
+                        return instance.db_name
+
+                    def db_for_write(*args, **kwargs):
+                        return instance.db_name
+
+                    DynamicDbRouter.db_for_read = db_for_read
+                    DynamicDbRouter.db_for_write = db_for_write
+
                     func(obj, request)
 
             except Instance.DoesNotExist:
