@@ -26,9 +26,7 @@ def change_db(func):
                     add_instance_to_settings(instance)
 
                 with in_database(instance.db_name, write=True):
-                    print(f'current db: {instance.db_name}')
-                    print(func)
-                    return func(obj, request)
+                    func(obj, request)
 
             except Instance.DoesNotExist:
                 raise RuntimeError(SUBDOMAIN_DOES_NOT_EXIST_ERROR)
