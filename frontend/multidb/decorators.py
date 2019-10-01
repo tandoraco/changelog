@@ -12,12 +12,12 @@ def change_db(func):
 
     @functools.wraps(func)
     def wrapper(obj, request):
-        if settings.DEBUG:
-            return func(obj, request)
+        '''if settings.DEBUG:
+            return func(obj, request)'''
 
         try:
             host = request.META['HTTP_HOST']
-            subdomain = host.split(".")[0]
+            subdomain = host.split(".")[0] if not settings.DEBUG else "localhost"
 
             try:
                 instance = Instance.objects.get(subdomain=subdomain)

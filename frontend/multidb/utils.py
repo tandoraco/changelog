@@ -18,6 +18,7 @@ def add_instance_to_settings(instance):
     if instance.db_name not in settings.DATABASES:
         settings.DATABASES[instance.db_name] = db
         connections.databases[instance.db_name] = db
+        print(settings.DATABASES)
 
 
 def is_instance_in_settings(instance):

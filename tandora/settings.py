@@ -13,9 +13,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 import os
 from datetime import timedelta
 
-import sentry_sdk
 from dotenv import load_dotenv
-from sentry_sdk.integrations.django import DjangoIntegration
 
 load_dotenv()
 
@@ -60,7 +58,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'frontend.multidb.middleware.DBSwitchMiddleware',
+    # 'frontend.multidb.middleware.DBSwitchMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -174,10 +172,13 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 SITE_ID = 1
 
-DATABASE_ROUTERS = ['dynamic_db_router.DynamicDbRouter']
+# DATABASE_ROUTERS = ['dynamic_db_router.DynamicDbRouter']
 
 
 if not DEBUG:
+    import sentry_sdk
+    from sentry_sdk.integrations.django import DjangoIntegration
+
     sentry_sdk.init(
         dsn=os.environ['SENTRY_DSN'],
         integrations=[DjangoIntegration()]
