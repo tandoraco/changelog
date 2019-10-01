@@ -16,4 +16,14 @@ class CategoryForm(forms.ModelForm):
         return validate_color(self.cleaned_data['color'], serializer=False)
 
     def clean_name(self):
+        try:
+            id = self.data['id']
+            category = self.Meta.model.objects.get(id=id)
+            cleaned_name = self.cleaned_data['name']
+
+            if category.name == cleaned_name:
+                return cleaned_name
+        except KeyError:
+            pass
+
         return validate_category_name(self.cleaned_data['name'], serializer=False)

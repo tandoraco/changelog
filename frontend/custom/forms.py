@@ -45,7 +45,9 @@ class TandoraForm:
                 if not id:
                     raise RuntimeError("Form edit. Id not provided")
 
-                form = self.form(request.POST, instance=self._get_instance(id, request, error_message))
+                post_data = request.POST.copy()
+                post_data["id"] = id
+                form = self.form(post_data, instance=self._get_instance(id, request, error_message))
 
             if form.is_valid():
                 obj = form.save()
