@@ -52,11 +52,13 @@ INSTALLED_APPS = [
     'knox',
     'v1',
     'frontend',
+    'tandoramaster',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    # 'frontend.multidb.middleware.DBSwitchMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -169,3 +171,15 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 SITE_ID = 1
+
+# DATABASE_ROUTERS = ['dynamic_db_router.DynamicDbRouter']
+
+
+if not DEBUG:
+    import sentry_sdk
+    from sentry_sdk.integrations.django import DjangoIntegration
+
+    sentry_sdk.init(
+        dsn=os.environ['SENTRY_DSN'],
+        integrations=[DjangoIntegration()]
+    )

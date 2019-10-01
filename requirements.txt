@@ -14,3 +14,4 @@ django-tinymce==2.8.0
 django-colorful==1.3
 dj_static==0.0.6
 gunicorn==19.9.0
+django-dynamic-db-router==0.3.0
