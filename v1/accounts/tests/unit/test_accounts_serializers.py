@@ -13,7 +13,7 @@ from v1.utils.test_base.serializer_test_base import SerializerTestBase
 class TestLoginSerializer(SerializerTestBase):
     serializer_class = LoginSerializer
 
-    def test_login_serializer(self, company_data, user_data, create_admin, create_user, invalid_password):
+    def test_login_serializer(self, company_data, user_data, company, create_user, invalid_password):
         fake = Faker()
         fake_email = fake.email()
         data = list()

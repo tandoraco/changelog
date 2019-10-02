@@ -1,3 +1,4 @@
+from django.http import Http404
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 from rest_framework.serializers import ValidationError
@@ -12,14 +13,13 @@ from v1.accounts.utils import hash_password, verify_password
 from v1.accounts.validators import password_validator
 
 
-class UserSerializer(serializers.Serializer):
-    email = serializers.EmailField(
-        required=True, max_length=MAX_EMAIL_LENGTH, validators=[
-            UniqueValidator(
-                queryset=account_models.User.objects.all())])
-    name = serializers.CharField(required=True, max_length=200)
+class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(
         required=True, validators=[password_validator])
+
+    class Meta:
+        model = User
+        exclude = ['password_hash']
 
     def create(self, validated_data):
         password_hash = hash_password(validated_data.pop("password"))
@@ -40,9 +40,12 @@ class CompanySerializer(UserSerializer):
         changelog_terminology = validated_data.pop("changelog_terminology", CHANGELOG_TERMINOLOGY)
         user = super(CompanySerializer, self).create(validated_data)
         if user.pk:
-            admin = account_models.Company.objects.create(admin=user, company_name=company_name, website=website,
-                                                          changelog_terminology=changelog_terminology)
-            return admin
+            company = account_models.Company.objects.create(admin=user, company_name=company_name, website=website,
+                                                            changelog_terminology=changelog_terminology)
+            user.company = company
+            user.save()
+            return company
+        return None
 
 
 class LoginSerializer(serializers.Serializer):
@@ -54,7 +57,10 @@ class LoginSerializer(serializers.Serializer):
         email = data['email'][0] if isinstance(data['email'], list) else data['email']
         password = data['password'][0] if isinstance(data['password'], list) else data['password']
 
-        user = get_object_or_404(account_models.User, email=email)
+        try:
+            user = get_object_or_404(account_models.User, email=email)
+        except Http404:
+            raise ValidationError(EMAIL_NOT_FOUND_ERROR)
 
         if not verify_password(
                 user=user, password=password):
@@ -64,7 +70,6 @@ class LoginSerializer(serializers.Serializer):
 
 
 class ForgotPasswordSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = ForgotPassword
         fields = '__all__'

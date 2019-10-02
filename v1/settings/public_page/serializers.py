@@ -15,6 +15,7 @@ class PublicPageSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         return {
+            "company": instance.company.id,
             "color": instance.color,
             "hide_from_crawlers": instance.hide_from_crawlers,
             "private_mode": instance.private_mode,

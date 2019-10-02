@@ -21,7 +21,7 @@ def company_data():
 
 
 @pytest.fixture
-def create_admin(company_data):
+def company(company_data):
     serializer = CompanySerializer(data=company_data)
     if serializer.is_valid():
         return serializer.save()
@@ -30,16 +30,17 @@ def create_admin(company_data):
 
 
 @pytest.fixture
-def admin(create_admin, company_data):
+def admin(company, company_data):
     return User.objects.get(email=company_data.get('email'))
 
 
 @pytest.fixture
-def user_data():
+def user_data(company):
     return {
         'email': 'user@test.com',
         'password': 'User123.',
-        'name': 'User'
+        'name': 'User',
+        'company': company.id
     }
 
 

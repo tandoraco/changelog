@@ -18,8 +18,8 @@ class TestCategoriesViewSet(ModelViewSetTestBase):
         name = fake.name()
 
         create_data = dict()
-        create_data["valid_data"] = {"name": name, "color": "#00ff00"}
         create_data["invalid_data"] = {"name": name, "color": "#00ff00"}
+        create_data["valid_data"] = {"company": user.company.id, "name": name, "color": "#00ff00"}
 
         update_data = dict()
         update_data["valid_data"] = {"name": fake.name()}

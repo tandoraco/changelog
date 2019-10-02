@@ -12,10 +12,11 @@ from v1.settings import helpers as settings_helpers
 @permission_classes([IsAuthenticated])
 def settings(request):
     # Todo: add billing, team details and widget
+    company = request.user.company
     return_data = {
-        'company': settings_helpers.get_company(),
+        'company': settings_helpers.get_company(company),
         'user_profile': settings_helpers.get_user(request.user.email),
-        'categories': settings_helpers.get_categories(),
-        'public_page': settings_helpers.get_public_page()
+        'categories': settings_helpers.get_categories(company),
+        'public_page': settings_helpers.get_public_page(company)
     }
     return Response(status=HTTP_200_OK, data=return_data)

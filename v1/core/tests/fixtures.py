@@ -9,8 +9,9 @@ fake = Faker()
 
 
 @pytest.fixture
-def published_changelog_data(category):
+def published_changelog_data(category, company):
     return {
+        "company": company.id,
         "title": fake.name(),
         "content": fake.text(),
         "category": category.pk,
@@ -19,13 +20,21 @@ def published_changelog_data(category):
 
 
 @pytest.fixture
-def unpublished_changelog_data(category):
+def unpublished_changelog_data(category, company):
     return {
+        "company": company.id,
         "title": fake.name(),
         "content": fake.text(),
         "category": category.pk,
         "published": False
     }
+
+
+@pytest.fixture
+def changelog_data_without_company(published_changelog_data):
+    data = published_changelog_data.copy()
+    data.pop("company")
+    return data
 
 
 @pytest.fixture

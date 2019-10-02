@@ -1,23 +1,14 @@
-import os
+import json
 import pathlib
-import subprocess
-import sys
-import tempfile
 from datetime import datetime
 
 import pytz
-from django.core.management import BaseCommand, call_command
+from django.core.management import BaseCommand
 from django.db import transaction
-from dynamic_db_router import in_database
 
-from frontend.multidb.utils import add_instance_to_settings
-from tandora import settings
-from tandoramaster.constants import (CREATE_DB_COMMAND,
-                                     CREATE_DB_COMMAND_WITH_PASSWORD,
-                                     DELETE_DB_COMMAND_WITH_PASSWORD,
-                                     DELETE_DB_COMMAND)
-from tandoramaster.models import Instance
 from v1.accounts.serializers import CompanySerializer
+from v1.categories.models import Category
+from v1.core.models import Changelog
 
 
 def get_current_utc_time():
@@ -35,39 +26,6 @@ class Command(BaseCommand):
         parser.add_argument('-c', '--company_name', type=str, help='Company name')
         parser.add_argument('-w', '--website', type=str, help='Company website address')
         parser.add_argument('-ct', '--changelog_terminology', type=str, help='How the company wants to name changelog?')
-        parser.add_argument('-sd', '--subdomain', type=str, help='Subdomain')
-
-    def create_db(self, db_name):
-        db = settings.DATABASES['default']
-
-        if db.get('PASSWORD'):
-            create_db = CREATE_DB_COMMAND_WITH_PASSWORD.format(username=db['USER'], host=db['HOST'],
-                                                               database_name=db_name,
-                                                               password=db['PASSWORD'])
-        else:
-            create_db = CREATE_DB_COMMAND.format(username=db['USER'], host=db['HOST'],
-                                                 database_name=db_name)
-
-        try:
-            subprocess.run(create_db.split(' '), check=True, capture_output=True)
-            self.stdout.write(f"Successfully created db {db_name}", style_func=self.style.SUCCESS)
-        except subprocess.CalledProcessError as e:
-            self.stderr.write("Error during create db", style_func=self.style.WARNING)
-            self.stderr.write(e.__repr__(), style_func=self.style.WARNING)
-            sys.exit(0)
-
-    def drop_db(self, db_name):
-        db = settings.DATABASES['default']
-
-        if db.get('PASSWORD'):
-            delete_db = DELETE_DB_COMMAND_WITH_PASSWORD.format(username=db['USER'], host=db['HOST'],
-                                                               database_name=db_name,
-                                                               password=db['PASSWORD'])
-        else:
-            delete_db = DELETE_DB_COMMAND.format(username=db['USER'], host=db['HOST'],
-                                                 database_name=db_name)
-
-        print(f"Delete this db using the command {delete_db}")
 
     @transaction.atomic
     def handle(self, *args, **options):
@@ -77,75 +35,58 @@ class Command(BaseCommand):
         company_name = options.get('company_name')
         website = options.get('website')
         terminology = options.get('changelog_terminology')
-        subdomain = options.get('subdomain')
 
-        if not (email and name and password and company_name and website and terminology and subdomain):
+        if not (email and name and password and company_name and website and terminology):
             raise AssertionError("All required arguments are not present.")
-        db_name = f'tandora_{company_name}'
 
-        try:
-            Instance.objects.get(subdomain=subdomain, db_name=db_name)
-            # Todo send mail
-            self.stderr.write('Subdomain and db exists', style_func=self.style.ERROR)
-            sys.exit(0)
-        except Instance.DoesNotExist:
-            pass
+        self.stdout.write(f"Creating company ..")
 
-        self.create_db(db_name)
+        data = {
+            'company_name': company_name,
+            'website': website,
+            'changelog_terminology': terminology,
+            'email': email,
+            'name': name,
+            'password': password
+        }
 
-        db_user = settings.DATABASES['default']['USER']
-        db_host = settings.DATABASES['default']['HOST']
-        db_port = settings.DATABASES['default']['PORT']
+        company_serializer = CompanySerializer(data=data)
+        company = None
+        if company_serializer.is_valid():
+            company = company_serializer.save()
+        else:
+            self.stderr.write("Creating company failed", style_func=self.style.ERROR)
+            print(company_serializer.errors)
+            raise RuntimeError('Creating company failed')
 
-        instance = Instance.objects.create(admin_name=company_name, email=email,
-                                           db_name=db_name,
-                                           db_user=db_user,
-                                           db_password='',
-                                           db_host=db_host,
-                                           db_port=db_port,
-                                           subdomain=subdomain)
-        add_instance_to_settings(instance)
+        self.stdout.write(f"Populating initial data ..")
 
-        with in_database(db_name, write=True):
-            self.stdout.write(f"Running migrations for {db_name} ..")
-            call_command('migrate', f'--database={db_name}')
+        current_path = pathlib.Path(__file__).parent
+        initial_data_json = current_path / 'initial_data.json'
 
-            self.stdout.write(f"Creating admin ..")
+        with open(initial_data_json) as initial_data:
+            data = json.loads(initial_data.read())
 
-            data = {
-                'company_name': company_name,
-                'website': website,
-                'changelog_terminology': terminology,
-                'email': email,
-                'name': name,
-                'password': password
-            }
+            categories = list()
+            for category in data['categories']:
+                category['company'] = company
+                categories.append(Category(**category))
 
-            company_serializer = CompanySerializer(data=data)
-            if company_serializer.is_valid():
-                company_serializer.save()
-            else:
-                self.stderr.write("Creating admin failed", style_func=self.style.ERROR)
-                print(company_serializer.errors)
-                self.drop_db(db_name)
-                sys.exit(0)
+            Category.objects.bulk_create(categories)
 
-            self.stdout.write(f"Populating initial data ..")
+            new_category = Category.objects.get(company=company, name='New')
 
-            current_path = pathlib.Path(__file__).parent
-            initial_data_json = current_path / 'initial_data.json'
+            changelog = data['changelog']
+            changelog['company'] = company
+            changelog['category'] = new_category
+            changelog['created_by'] = company.admin
+            changelog['last_edited_by'] = company.admin
+            created_changelog = Changelog.objects.create(**changelog)
 
-            temp_fixture_file = ''
-            with tempfile.NamedTemporaryFile(suffix='.json', mode='w', delete=False) as temp_fixture:
+        success_data = {
+            'company_id': company.id,
+            'created_changelog_id': created_changelog.id,
+            'new_category_id': new_category.id
+        }
 
-                with open(initial_data_json) as initial_data:
-                    data = initial_data.read()
-                    data = data.replace('{created_time}', get_current_utc_time())
-                    temp_fixture.write(data)
-
-                temp_fixture_file = temp_fixture.name
-
-            call_command('loaddata', temp_fixture_file, f'--database={db_name}')
-            os.remove(temp_fixture_file)
-
-            self.stdout.write(f"Done creating company ..", style_func=self.style.SUCCESS)
+        self.stdout.write(f"Done creating company .. {success_data}", style_func=self.style.SUCCESS)

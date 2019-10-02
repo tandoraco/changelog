@@ -2,8 +2,8 @@ import pytest
 from django.urls import reverse
 from rest_framework.test import APIRequestFactory, force_authenticate
 
-from v1.accounts.models import Company
 from v1.settings import views as settings_views
+from v1.settings.public_page.models import PublicPage
 
 
 def _get_settings_request():
@@ -14,14 +14,16 @@ def _get_settings_request():
 
 @pytest.mark.integration
 @pytest.mark.django_db
-def test_settings_views_without_data(user):
+def test_settings_views_without_data(user, public_page):
     request = _get_settings_request()
     response = settings_views.settings(request)
     assert response.status_code == 401
 
+    PublicPage.objects.all().delete()
+
     force_authenticate(request, user=user)
     # company is not yet created, so error is thrown
-    with pytest.raises(Company.DoesNotExist):
+    with pytest.raises(PublicPage.DoesNotExist):
         response = settings_views.settings(request)
 
 

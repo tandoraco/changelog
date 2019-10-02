@@ -2,6 +2,7 @@ from django.db import models
 
 
 class PublicPage(models.Model):
+    company = models.ForeignKey('Company', null=False, on_delete=models.CASCADE)
     color = models.CharField(max_length=7)
     hide_from_crawlers = models.BooleanField(default=False)
     show_authors = models.BooleanField(default=False)

@@ -17,8 +17,9 @@ def category_data():
 
 
 @pytest.fixture
-def categories(category_data):
+def categories(category_data, company):
     for category in category_data:
+        category["company"] = company.id
         serializer = CategorySerializer(data=category)
         if serializer.is_valid():
             serializer.save()

@@ -1,48 +1,31 @@
-[
-  {
-    "model": "v1.category",
-    "pk": 1,
-    "fields": {
+{
+  "categories": [
+    {
       "name": "New",
       "color": "#FFA500",
       "deleted": false,
-      "created_time": "{created_time}"
-    }
-  },
-  {
-    "model": "v1.category",
-    "pk": 2,
-    "fields": {
+      "company": ""
+    },
+    {
       "name": "Announcement",
       "color": "#800000",
       "deleted": false,
-      "created_time": "{created_time}"
-    }
-  },
-  {
-    "model": "v1.category",
-    "pk": 3,
-    "fields": {
+      "company": ""
+    },
+    {
       "name": "Changes",
       "color": "#008080",
       "deleted": false,
-      "created_time": "{created_time}"
+      "company": ""
     }
-  },
-  {
-    "model": "v1.changelog",
-    "pk": 1,
-    "fields": {
-      "title": "We are more closer to you than ever.Yes we have started a changelog.",
-      "slug": "we-are-starting-a-changelog",
-      "content": "We are starting a public changelog today so that you are always kept in sync with the latest product updates, company announcements etc. <br>  You will receive an update whenever we change something in the product. Watch this page for more updates.",
-      "category_id": 1,
-      "created_by_id": 1,
-      "last_edited_by_id": 1,
-      "published": false,
-      "deleted": false,
-      "created_at": "{created_time}",
-      "last_edited_at": "{created_time}"
-    }
+  ],
+  "changelog": {
+    "title": "We are more closer to you than ever.Yes we have started a changelog.",
+    "slug": "we-are-starting-a-changelog",
+    "content": "We are starting a public changelog today so that you are always kept in sync with the latest product updates, company announcements etc. <br>  You will receive an update whenever we change something in the product. Watch this page for more updates.",
+    "category": "",
+    "published": false,
+    "deleted": false,
+    "company": ""
   }
-]
+}

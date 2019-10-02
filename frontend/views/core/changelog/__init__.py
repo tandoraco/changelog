@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render
 
 from frontend.constants import CHANGELOG_DOES_NOT_EXIST_ERROR, CHANGELOG_CREATED_OR_EDITED_SUCCESSFULLY, \
@@ -13,37 +13,47 @@ from v1.core.serializers import ChangelogSerializer
 
 @check_auth
 def changelog_form(request):
-    return _changelog_form(request, ChangelogForm(), "create")
+    data = {'request': request}
+    return _changelog_form(request, ChangelogForm(initial=data), "create")
 
 
 @check_auth
 def edit_changelog(request, id):
     try:
-        changelog = Changelog.objects.get(pk=id)
-        form = ChangelogForm(instance=changelog)
+        company_id = request.session["company-id"]
+        changelog = Changelog.objects.get(company__id=company_id, pk=id)
+        data = {'published': changelog.published, 'request': request}
+        form = ChangelogForm(instance=changelog, initial=data)
         return _changelog_form(request, form, "edit", changelog_id=id, instance=changelog)
     except Changelog.DoesNotExist:
         messages.error(request, message=CHANGELOG_DOES_NOT_EXIST_ERROR)
-        return HttpResponseRedirect("/changelogs")
+        raise Http404
 
 
 def _changelog_form(request, form, action, changelog_id=None, instance=None):
     if request.method == "POST":
-        form = ChangelogForm(request.POST) if not instance else ChangelogForm(request.POST, instance)
+        initial = {'request': request}
+        form = ChangelogForm(request.POST, initial=initial) if not instance else ChangelogForm(request.POST, instance,
+                                                                                               initial=initial)
         data = request.POST.copy()
-        data["created_by"] = request.session["user-id"]
+        data["company"] = request.session["company-id"]
+        if not instance:
+            data["created_by"] = request.session["user-id"]
+        else:
+            data["created_by"] = instance.created_by.id
+
         data["last_edited_by"] = request.session["user-id"]
 
         serializer = ChangelogSerializer(data=data) if not instance else ChangelogSerializer(instance, data=data)
         if serializer.is_valid():
             serializer.save()
             messages.success(request, message=CHANGELOG_CREATED_OR_EDITED_SUCCESSFULLY.format(f"{action}"))
-            return HttpResponseRedirect("/changelogs")
+            return HttpResponseRedirect("/staff/changelogs")
 
     changelog_id = f"/{str(changelog_id)}" if changelog_id else ""
 
     return render(request, 'changelog-form.html',
-                  {'form': form, 'action': f'/{action}-changelog{changelog_id}', 'title': action.title()})
+                  {'form': form, 'action': f'/staff/{action}-changelog{changelog_id}', 'title': action.title()})
 
 
 @check_auth

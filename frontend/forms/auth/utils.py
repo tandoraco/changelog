@@ -20,3 +20,8 @@ def is_valid_auth_token_and_email(request):
         return False
 
     return True
+
+
+def clear_request_session(request):
+    request.session.clear()
+    request.session.flush()

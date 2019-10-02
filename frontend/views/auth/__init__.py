@@ -1,12 +1,14 @@
 import uuid
 
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.urls import reverse
+from django.utils.text import slugify
 
 from frontend.constants import COMPANY_CREATED_OR_EDITED_SUCCESSFULLY, COMPANY_DOES_NOT_EXIST
 from frontend.custom.decorators import check_auth
 from frontend.custom.forms import TandoraForm
 from frontend.forms.auth import LoginForm, CompanyForm, UserForm
+from frontend.forms.auth.utils import clear_request_session
 from v1.accounts.models import User, ClientToken, Company
 
 
@@ -20,8 +22,14 @@ def login(request):
             request.session["auth-token"] = token
             request.session["email"] = user.email
             request.session["user-id"] = user.id
-            return render(request, 'login.html', {'token': token, 'is_logged_in': True, 'email': user.email})
+            request.session["company-id"] = user.company.id
+
+            company_slug = slugify(user.company.company_name)
+            changelog_terminology = slugify(user.company.changelog_terminology)
+            request.session["public-page-url"] = f'/{company_slug}/{changelog_terminology}'
+            return HttpResponseRedirect('staff/changelogs')
     else:
+        clear_request_session(request)
         form = LoginForm()
 
     return render(request, 'login.html', {'form': form})
@@ -34,7 +42,7 @@ def logout(request):
     except ClientToken.DoesNotExist:
         pass
 
-    request.session.clear()
+    clear_request_session(request)
 
     return render(request, 'logout.html')
 
@@ -44,14 +52,14 @@ def profile_form(request):
     email = request.session.get('email', '')
     id = User.objects.get(email=email).id
     return TandoraForm(User, UserForm, 'edit', 'generic-after-login-form.html',
-                       reverse('frontend-profile-form')) \
+                       '/') \
         .get_form(request, id=id)
 
 
 @check_auth
 def company_form(request):
-    id = Company.objects.get().id
+    id = request.session["company-id"]
     return TandoraForm(Company, CompanyForm, 'edit', 'generic-after-login-form.html',
-                       reverse('frontend-company-form')) \
+                       "/login") \
         .get_form(request, success_message=COMPANY_CREATED_OR_EDITED_SUCCESSFULLY,
                   error_message=COMPANY_DOES_NOT_EXIST, id=id)

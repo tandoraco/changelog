@@ -57,7 +57,7 @@ def test_create_company(company_data):
 
 @pytest.mark.django_db
 @pytest.mark.integration
-def test_create_user(admin, user_data, company_data):
+def test_create_user(admin, user_data):
     url = reverse('v1-create-user')
 
     request = factory.post(url, user_data)

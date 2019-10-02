@@ -95,7 +95,8 @@ class ModelViewSetTestBase(object):
         assert response.status_code == status.HTTP_200_OK
         assert response.data
         response_data = response.data
-        assert request_data.id == response_data["id"]
+        if "id" in response_data:
+            assert request_data.id == response_data["id"]
         if keys:
             for key in keys:
                 print(key)

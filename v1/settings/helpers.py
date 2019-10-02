@@ -1,4 +1,4 @@
-from v1.accounts.models import User, Company
+from v1.accounts.models import User
 from v1.categories.models import Category
 from v1.settings.public_page.models import PublicPage
 
@@ -12,8 +12,7 @@ def get_user(email):
     }
 
 
-def get_company():
-    company = Company.objects.get()
+def get_company(company):
 
     return {
         'admin': company.admin.email,
@@ -23,8 +22,8 @@ def get_company():
     }
 
 
-def get_public_page():
-    public_page = PublicPage.objects.get()
+def get_public_page(company):
+    public_page = PublicPage.objects.get(company=company)
 
     return {
         'color': public_page.color,
@@ -34,8 +33,8 @@ def get_public_page():
     }
 
 
-def get_categories():
-    categories = Category.objects.all()
+def get_categories(company):
+    categories = Category.objects.filter(company=company)
 
     return [
         {
