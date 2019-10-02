@@ -1,25 +1,26 @@
 from django.conf.urls import url
 from django.urls import path
+from django.views.generic import RedirectView
 
 from frontend.views import auth, app, categories
 from frontend.views.core import changelog
 
 urlpatterns = [
-    path('', app.ChangeLogList.as_view(), name="frontend-index"),
+    path('', RedirectView.as_view(url='staff/changelogs'), name="frontend-index"),
     url(r'^login', auth.login, name="frontend-login"),
     url(r'^logout', auth.logout, name="frontend-logout"),
-    url(r'^app', app.ChangeLogList.as_view(), name="frontend-staff-index"),
-    url(r'^changelogs', app.ChangeLogList.as_view(), name="frontend-staff-index"),
-    url(r'^create-changelog', changelog.changelog_form, name="frontend-new-changelog"),
-    path('edit-changelog/<int:id>', changelog.edit_changelog, name="frontend-edit-changelog"),
-    path('delete-changelog/<int:id>', changelog.delete_changelog, name="frontend-delete-changelog"),
-    path('changelog/<slug:slug>', app.view_changelog, name="frontend-view-changelog"),
-    path('manage/categories', categories.CategoryList.as_view(), name="frontend-view-categories"),
-    path('manage/categories/create-category', categories.category_form, name="frontend-category-form"),
-    path('manage/categories/edit-category/<int:id>', categories.edit_category, name="frontend-edit-category"),
-    path('manage/categories/delete-category/<int:id>', categories.delete_category, name="frontend-delete-category"),
-    path('manage/profile/company', auth.company_form, name="frontend-company-form"),
-    path('manage/profile/myself', auth.profile_form, name="frontend-profile-form"),
+    path('staff/changelogs', app.ChangeLogList.as_view(), name="frontend-staff-index"),
+    path('staff/create-changelog', changelog.changelog_form, name="frontend-new-changelog"),
+    path('staff/edit-changelog/<int:id>', changelog.edit_changelog, name="frontend-edit-changelog"),
+    path('staff/delete-changelog/<int:id>', changelog.delete_changelog, name="frontend-delete-changelog"),
+    path('staff/changelog/<slug:slug>', app.view_changelog, name="frontend-view-changelog"),
+    path('staff/manage/categories', categories.CategoryList.as_view(), name="frontend-view-categories"),
+    path('staff/manage/categories/create-category', categories.category_form, name="frontend-category-form"),
+    path('staff/manage/categories/edit-category/<int:id>', categories.edit_category, name="frontend-edit-category"),
+    path('staff/manage/categories/delete-category/<int:id>', categories.delete_category,
+         name="frontend-delete-category"),
+    path('staff/manage/profile/company', auth.company_form, name="frontend-company-form"),
+    path('staff/manage/profile/myself', auth.profile_form, name="frontend-profile-form"),
     path('<str:company>/<str:changelog_terminology>/<slug:slug>', app.view_changelog_as_public,
          name="frontend-view-changelog-as-public"),
     path('<str:company>/<str:changelog_terminology>', app.public_index, name="frontend-public-index"),

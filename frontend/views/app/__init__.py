@@ -23,13 +23,15 @@ class ChangeLogList(TandoraListViewMixin):
         return ['app.html']
 
     def get_queryset(self):
-        return Changelog.objects.filter(deleted=False).order_by('-created_at')
+        company_id = self.request.session['company-id']
+        return Changelog.objects.filter(deleted=False, company__id=company_id).order_by('-created_at')
 
 
 @check_auth
 def view_changelog(request, slug):
     try:
-        changelog = Changelog.objects.get(slug=unquote(slug))
+        company_id = request.session["company-id"]
+        changelog = Changelog.objects.get(company__id=company_id, slug=unquote(slug))
         return render(request, 'single-changelog.html',
                       context={'title': changelog.title, 'content': changelog.content})
     except Changelog.DoesNotExist:
@@ -38,8 +40,10 @@ def view_changelog(request, slug):
 
 def view_changelog_as_public(request, company, changelog_terminology, slug):
     try:
+        company = company.replace("-", " ")
+        changelog_terminology = changelog_terminology.replace("-", " ")
         company = Company.objects.get(company_name__iexact=company, changelog_terminology__iexact=changelog_terminology)
-        changelog = Changelog.objects.get(slug=unquote(slug), published=True, deleted=False)
+        changelog = Changelog.objects.get(company=company, slug=unquote(slug), published=True, deleted=False)
         return render(request, 'public-single-changelog.html',
                       context={'company_name': company.company_name, 'terminology': changelog_terminology,
                                'title': changelog.title, 'content': changelog.content,
@@ -50,8 +54,10 @@ def view_changelog_as_public(request, company, changelog_terminology, slug):
 
 def public_index(request, company, changelog_terminology):
     try:
+        company = company.replace("-", " ")
+        changelog_terminology = changelog_terminology.replace("-", " ")
         company = Company.objects.get(company_name__iexact=company, changelog_terminology__iexact=changelog_terminology)
-        changelogs = Changelog.objects.filter(deleted=False, published=True).order_by('-created_at')
+        changelogs = Changelog.objects.filter(company=company, deleted=False, published=True).order_by('-created_at')
         return render(request, 'public-index.html',
                       context={'company_name': company.company_name, 'terminology': changelog_terminology,
                                'changelogs': changelogs})

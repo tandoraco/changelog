@@ -1,4 +1,5 @@
 {% load static %}
+{% load frontend_tags %}
 <html>
 <head>
     <title>Tandora</title>
@@ -21,13 +22,6 @@
 });
 </script>
 </head>
-<script>
-    let token = localStorage.getItem("auth-token");
-    if(!token) {
-        window.location.href="/login";
-    }
-
-</script>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
   <a class="navbar-brand" href="/">Tandora</a>
@@ -37,15 +31,15 @@
   <div class="collapse navbar-collapse" id="navbarNavDropdown">
     <ul class="navbar-nav">
       <li class="nav-item">
-        <a class="nav-link" href="/create-changelog">New Tandora</a>
+        <a class="nav-link" href="/staff/create-changelog">New Tandora</a>
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Profile
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          <a class="dropdown-item" href="/manage/profile/myself">Me</a>
-          <a class="dropdown-item" href="/manage/profile/company">Company</a>
+          <a class="dropdown-item" href="/staff/manage/profile/myself">Me</a>
+          <a class="dropdown-item" href="/staff/manage/profile/company">Company</a>
         </div>
       </li>
       <li class="nav-item dropdown">
@@ -53,10 +47,13 @@
           Manage
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          <a class="dropdown-item" href="/manage/categories">Categories</a>
+          <a class="dropdown-item" href="/staff/manage/categories">Categories</a>
         </div>
       </li>
-        <li class="nav-item">
+      <li class="nav-item">
+        <a class="nav-link" href="{% public_page_url %}">Public page</a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link" href="/logout">Logout</a>
       </li>
     </ul>

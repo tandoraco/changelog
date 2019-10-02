@@ -65,6 +65,7 @@ class TestWidgetViews:
     def test_embed_update_with_data(self, user, embed):
         self.client.force_authenticate(user)
         data = {
+            'company': user.company.id,
             'color': '#123456',
             'javascript': '<script></script>',
             'css': 'css'

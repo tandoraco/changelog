@@ -1,8 +1,11 @@
 from django.db import models
 from django.template.loader import render_to_string
 
+from v1.accounts.models import Company
+
 
 class Embed(models.Model):
+    company = models.ForeignKey(Company, null=False, on_delete=models.DO_NOTHING)
     css = models.TextField(blank=True)
     javascript = models.TextField(blank=True)
     color = models.CharField(max_length=7, blank=False)

@@ -15,5 +15,5 @@ class PublicPageViewSet(TandoraModelViewSet):
     def destroy(self, request, *args, **kwargs):
         raise MethodNotAllowed(request.method)
 
-    def retrieve(self, request, *args, **kwargs):
+    def list(self, request, *args, **kwargs):
         raise MethodNotAllowed(request.method)

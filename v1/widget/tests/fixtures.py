@@ -1,17 +1,20 @@
 import pytest
 
-from v1.widget.models import Embed
+from v1.widget.serializers import EmbedSerializer
 
 COLOR = "#FF00FF"
 
 
 @pytest.fixture
-def embed_data():
+def embed_data(company):
     return {
+        'company': company.id,
         'color': COLOR
     }
 
 
 @pytest.fixture
 def embed(embed_data):
-    return Embed.objects.create(color=COLOR)
+    serializer = EmbedSerializer(data=embed_data)
+    serializer.is_valid()
+    return serializer.save()

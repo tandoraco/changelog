@@ -26,13 +26,11 @@ class SerializerTestBase(object):
             try:
                 assert serializer.is_valid() == data.is_valid
             except AssertionError:
-                if not serializer.errors:
-                    print("Actual serializer.is_valid does not match expected is_valid")
-                else:
-                    print(serializer.errors)
+                print(serializer.errors)
+                print(data.data)
                 raise
 
-            if data.is_valid and create_db_entry:
+            if serializer.is_valid() and data.is_valid and create_db_entry:
                 serializer.save()
 
     def run_required_fields_assertions(self, data):

@@ -9,12 +9,13 @@ from v1.widget.serializers import EmbedSerializer
 class TestWidgetSerializer(SerializerTestBase):
     serializer_class = EmbedSerializer
 
-    def test_embed_serializer(self):
+    def test_embed_serializer(self, company):
         data = [
-            SerializerTestData(data={'color': 'asdfdfdf'}, is_valid=False),
-            SerializerTestData(data={'color': '#000000'}, is_valid=True),
-            SerializerTestData(data={'color': '000000'}, is_valid=True),
-            SerializerTestData(data={'color': '000000', 'javascript': '<script></script>', 'css': ''}, is_valid=True)
+            SerializerTestData(data={'company': company.id, 'color': 'asdfdfdf'}, is_valid=False),
+            SerializerTestData(data={'company': company.id, 'color': '#000000'}, is_valid=True),
+            SerializerTestData(data={'company': company.id, 'color': '000000'}, is_valid=True),
+            SerializerTestData(data={'company': company.id,
+                                     'color': '000000', 'javascript': '<script></script>', 'css': ''}, is_valid=True)
         ]
 
         self.run_data_assertions(data)

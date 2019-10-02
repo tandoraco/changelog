@@ -11,11 +11,14 @@ from v1.utils.test_base.serializer_test_base import SerializerTestBase
 class TestChangelogSerializer(SerializerTestBase):
     serializer_class = ChangelogSerializer
 
-    def test_changelog_serializer_invalid_data(self, published_changelog_data, unpublished_changelog_data):
+    def test_changelog_serializer_invalid_data(self, published_changelog_data, unpublished_changelog_data,
+                                               changelog_data_without_company
+                                               ):
         data = []
         data.append(SerializerTestData(data=published_changelog_data,
                                        is_valid=False))  # without created and last edited by, so false
         data.append(SerializerTestData(data=unpublished_changelog_data, is_valid=False))
+        data.append(SerializerTestData(data=changelog_data_without_company, is_valid=False))
         data.append(data[0])  # duplicates allowed
         data.append(data[1])  # duplicates allowed
         self.run_data_assertions(test_data=data, create_db_entry=True)

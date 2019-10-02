@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render
 
 ACTION_CREATE = "create"
@@ -18,11 +18,13 @@ class TandoraForm:
 
     def _get_instance(self, id, request, error_message):
         try:
-            instance = self.model.objects.get(id=id)
-            return instance
-        except self.model.Does.NotExist:
-            messages.error(request, error_message)
-            return HttpResponseRedirect(self.response_redirect_path)
+            if hasattr(self.model, "company"):
+                company_id = request.session['company-id']
+                return self.model.objects.get(company__id=company_id, id=id)
+            else:
+                return self.model.objects.get(id=id)
+        except self.model.DoesNotExist:
+            raise Http404
 
     def get_form(self, request, success_message=None, error_message=None, id=None):
         form = self.form()
@@ -50,7 +52,13 @@ class TandoraForm:
                 form = self.form(post_data, instance=self._get_instance(id, request, error_message))
 
             if form.is_valid():
-                obj = form.save()
+                obj = form.save(commit=False)
+
+                if self.action == ACTION_CREATE and hasattr(self.model, "company"):
+                    setattr(obj, "company_id", request.session['company-id'])
+
+                obj.save()
+
                 messages.success(request, message=success_message.format(self.action, str(obj)))
                 return HttpResponseRedirect(self.response_redirect_path)
 

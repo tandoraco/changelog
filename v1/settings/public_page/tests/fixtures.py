@@ -1,13 +1,16 @@
 import pytest
 
-from v1.settings.public_page.models import PublicPage
+from v1.settings.public_page.serializers import PublicPageSerializer
 
 
 @pytest.fixture
-def public_page():
+def public_page(company):
     data = {
+        'company': company.id,
         'color': '#00ff00',
         'private_mode': True
     }
 
-    return PublicPage.objects.create(**data)
+    serializer = PublicPageSerializer(data=data)
+    serializer.is_valid()
+    return serializer.save()

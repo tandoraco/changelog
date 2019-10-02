@@ -22,7 +22,10 @@ def create_user(request):
     if serializer.is_valid():
         user = serializer.save()
         data = {
+            'id': user.id,
             'email': user.email,
+            'company_id': user.company.id,
+            'company_name': user.company.company_name
         }
         return Response(status=status.HTTP_201_CREATED, data=data)
 

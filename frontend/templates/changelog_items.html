@@ -11,12 +11,12 @@
                     <span class="date">Date</span>
                 </div-->
                 <div class="preview-link">
-                    <h2><a href="/changelog/{{ changelog.slug }}">{{ changelog.title }}</a></h2>
+                    <h2><a href="/staff/changelog/{{ changelog.slug }}">{{ changelog.title }}</a></h2>
                     <span>{{ changelog.content|safe }}</span>
                 </div>
-                <a class="card-link" href="/edit-changelog/{{ changelog.id }}">Edit</a>
-                <a class="card-link" href="/changelog/{{ changelog.slug }}">View</a>
-                <a class="card-link" href="/delete-changelog/{{ changelog.id }}">Delete</a>
+                <a class="card-link" href="/staff/edit-changelog/{{ changelog.id }}">Edit</a>
+                <a class="card-link" href="/staff/changelog/{{ changelog.slug }}">View</a>
+                <a class="card-link" href="/staff/delete-changelog/{{ changelog.id }}">Delete</a>
             </div>
         </div>
     </div>
