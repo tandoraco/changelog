@@ -18,3 +18,4 @@ WIDGET_CREATED_OR_EDITED_SUCCESSFULLY = _('Successfully {} widget: {}')
 WIDGET_DOES_NOT_EXIST = _('Widget does not exist')
 WIDGET_CODE_EDIT_WARNING = _(
     'Please be cautious while editing this code as it can modify the appearance of widget.')
+WIDGET_CSS_EDIT_WARNING = '// Please be cautious while editing this code as it can modify the appearance of widget.'
