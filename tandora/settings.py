@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'tinymce',
     'knox',
+    'django_ace',
     'v1',
     'frontend',
     'tandoramaster',

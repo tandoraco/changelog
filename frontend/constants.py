@@ -13,3 +13,8 @@ CATEGORY_DOES_NOT_EXIST = _('Category does not exist.')
 COMPANY_CREATED_OR_EDITED_SUCCESSFULLY = _(
     'Successfully {} company: {}. As a security measure, you should log in again..')
 COMPANY_DOES_NOT_EXIST = _('Company does not exist')
+
+WIDGET_CREATED_OR_EDITED_SUCCESSFULLY = _('Successfully {} widget: {}')
+WIDGET_DOES_NOT_EXIST = _('Widget does not exist')
+WIDGET_CODE_EDIT_WARNING = _(
+    'Please be cautious while editing this code as it can modify the appearance of widget.')

@@ -9,6 +9,9 @@ done
 echo "PostgreSQL started"
 sleep 2
 
+echo "Install requirements"
+pip install -r requirements_dev.txt
+
 echo "Running db migrations"
 python manage.py migrate
 exec gunicorn tandora.wsgi:application \
