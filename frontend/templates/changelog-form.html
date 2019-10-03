@@ -1,6 +1,23 @@
 {% extends "base-after-login.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
+<script src="https://cdn.tinymce.com/4/tinymce.min.js"></script>
+    <script>tinymce.init({
+      selector: 'textarea',
+      height: 300,
+      menubar: true,
+      plugins: [
+        'advlist autolink lists link image charmap print preview anchor textcolor',
+        'searchreplace visualblocks code fullscreen',
+        'insertdatetime media table paste code help wordcount'
+      ],
+      toolbar: 'undo redo | formatselect | bold italic forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
+      content_css: [
+        '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
+        '//www.tiny.cloud/css/codepen.min.css'
+      ]
+});
+</script>
 <div class="container col-md-4 col-md-offset-4">
     <center><h3>{{ title }} Tandora</h3></center>
     <form id="changelog_form"  method="post" action="{{ action }}">

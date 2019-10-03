@@ -22,8 +22,8 @@ def widget_form(request):
     if Embed.objects.filter(company__id=company_id).count() == 0:
         action = 'create'
         initial = {
-            'javascript': f'/* {WIDGET_CODE_EDIT_WARNING} */ \n <script>\n // Insert your code here \n <script>',
-            'css': f'//{WIDGET_CODE_EDIT_WARNING}'
+            'javascript': f'<script>\n /* {WIDGET_CODE_EDIT_WARNING} */ \n // Insert your code below \n </script>',
+            'css': '{}'
         }
         id = None
     else:
@@ -43,7 +43,7 @@ def public_widget(request, company, changelog_terminology):
     try:
         company = get_company_from_slug_and_changelog_terminology(company, changelog_terminology)
         widget = Embed.objects.get(company=company, enabled=True)
-        changelogs = Changelog.objects.filter(company=company, published=True, deleted=False)
+        changelogs = Changelog.objects.filter(company=company, published=True, deleted=False)[:10]
         return render(request, 'public-widget.html',
                       context={
                           'company': company,

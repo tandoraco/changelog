@@ -1,7 +1,9 @@
 from django.db import models
+from django.db.models.signals import pre_save
 from django.template.loader import render_to_string
 
 from v1.accounts.models import Company
+from v1.widget.signals import remove_css_code_edit_warning
 
 
 class Embed(models.Model):
@@ -16,3 +18,6 @@ class Embed(models.Model):
             return render_to_string("embed.html", {'color': self.color})
 
         return f"{self.css} {self.javascript}"
+
+
+pre_save.connect(remove_css_code_edit_warning, sender=Embed)
