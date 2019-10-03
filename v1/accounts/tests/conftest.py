@@ -1,0 +1,1 @@
+from v1.accounts.tests.fixtures import *

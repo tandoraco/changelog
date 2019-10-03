@@ -1,0 +1,31 @@
+# This is a sample build configuration for Python.
+# Check our guides at https://confluence.atlassian.com/x/x4UWN for more examples.
+# Only use spaces to indent your .yml configuration.
+# -----
+# You can specify a custom docker image from Docker Hub as your build environment.
+image: python:3.7.2
+
+pipelines:
+  default:
+    - parallel:
+      - step:
+          name: Run Unit tests
+          caches:
+            - pip
+          script: # Modify the commands below to build your repository.
+            - pip install -r requirements_dev.txt
+            - pytest -m unit
+      - step:
+          name: Run Integration tests
+          caches:
+            - pip
+          script:
+            - pip install -r requirements_dev.txt
+            - pytest -m integration
+      - step:
+          name: Style checks (flake8)
+          caches:
+            - pip
+          script:
+            - pip install flake8
+            - flake8 .

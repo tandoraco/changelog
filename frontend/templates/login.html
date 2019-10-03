@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+{% if messages %}
+    {% for message in messages %}
+            <div class="alert {% if message.tags %}alert-{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}danger{% else %}{{ message.tags }}{% endif %}{% endif %}" role="alert">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                {{ message }}
+            </div>
+    {% endfor %}
+{% endif %}
+<!--div class="d-flex justify-content-center align-items-center container"-->
+<div class="container col-md-4 col-md-offset-4">
+    <center><h3>Login to Tandora</h3></center>
+    <form id="login_form"  method="post" action="/login">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <center>
+            <button type="submit" class="btn btn-primary btn-lg">Login</button>
+            <button class="btn btn-default" type="reset">Reset</button>
+        </center>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<div id='c-banner' class="banner">
+    <div class="container">
+        <h1 class="logo-font">
+            {{ company_name }}
+        </h1>
+        <p style="text-align:center;">{{ terminology }} </p>
+    </div>
+</div>
+<div class="container">
+    <center><h1>{{ title }}</h1></center>
+    <div>
+        <span>{{ content|safe }}</span>
+    </div>
+</div>
+<script>
+    let banner = document.getElementById('c-banner');
+    banner.style.backgroundColor = "{{ color }}";
+    let body = document.getElementsByTagName('body')[0];
+    body.style.fontFamily = "M PLUS 1p";
+</script>
+{% endblock %}
