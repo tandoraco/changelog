@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect
 from frontend.forms.auth.utils import is_valid_auth_token_and_email
 
 
-def check_auth(func):
+def is_authenticated(func):
 
     @functools.wraps(func)
     def wrapper(*args, **kwargs):

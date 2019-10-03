@@ -8,13 +8,14 @@ ACTION_EDIT = "edit"
 
 class TandoraForm:
 
-    def __init__(self, model, form, action, form_html, response_redirect, serializer=None):
+    def __init__(self, model, form, action, form_html, response_redirect, serializer=None, initial=None):
         self.model = model
         self.form = form
         self.action = action
         self.form_html = form_html
         self.response_redirect_path = response_redirect
         self.serializer = serializer
+        self.initial = initial
 
     def _get_instance(self, id, request, error_message):
         try:
@@ -27,7 +28,7 @@ class TandoraForm:
             raise Http404
 
     def get_form(self, request, success_message=None, error_message=None, id=None):
-        form = self.form()
+        form = self.form() if not self.initial else self.form(initial=self.initial)
 
         if not success_message:
             success_message = self.model.__name__.title() + ' {}ed successfully : {}'

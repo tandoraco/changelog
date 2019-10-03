@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.utils.text import slugify
 
 from frontend.constants import COMPANY_CREATED_OR_EDITED_SUCCESSFULLY, COMPANY_DOES_NOT_EXIST
-from frontend.custom.decorators import check_auth
+from frontend.custom.decorators import is_authenticated
 from frontend.custom.forms import TandoraForm
 from frontend.forms.auth import LoginForm, CompanyForm, UserForm
 from frontend.forms.auth.utils import clear_request_session
@@ -35,7 +35,7 @@ def login(request):
     return render(request, 'login.html', {'form': form})
 
 
-@check_auth
+@is_authenticated
 def logout(request):
     try:
         ClientToken.objects.get(token=request.session["auth-token"]).delete()
@@ -47,7 +47,7 @@ def logout(request):
     return render(request, 'logout.html')
 
 
-@check_auth
+@is_authenticated
 def profile_form(request):
     email = request.session.get('email', '')
     id = User.objects.get(email=email).id
@@ -56,7 +56,7 @@ def profile_form(request):
         .get_form(request, id=id)
 
 
-@check_auth
+@is_authenticated
 def company_form(request):
     id = request.session["company-id"]
     return TandoraForm(Company, CompanyForm, 'edit', 'generic-after-login-form.html',

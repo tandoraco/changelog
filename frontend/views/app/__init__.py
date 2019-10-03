@@ -3,7 +3,8 @@ from urllib.parse import unquote
 from django.http import Http404
 from django.shortcuts import render
 
-from frontend.custom.decorators import check_auth
+from frontend.custom.decorators import is_authenticated
+from frontend.custom.utils import get_company_from_slug_and_changelog_terminology
 from frontend.custom.views import TandoraListViewMixin
 from v1.accounts.models import Company
 from v1.core.models import Changelog
@@ -27,7 +28,7 @@ class ChangeLogList(TandoraListViewMixin):
         return Changelog.objects.filter(deleted=False, company__id=company_id).order_by('-created_at')
 
 
-@check_auth
+@is_authenticated
 def view_changelog(request, slug):
     try:
         company_id = request.session["company-id"]
@@ -40,9 +41,7 @@ def view_changelog(request, slug):
 
 def view_changelog_as_public(request, company, changelog_terminology, slug):
     try:
-        company = company.replace("-", " ")
-        changelog_terminology = changelog_terminology.replace("-", " ")
-        company = Company.objects.get(company_name__iexact=company, changelog_terminology__iexact=changelog_terminology)
+        company = get_company_from_slug_and_changelog_terminology(company, changelog_terminology)
         changelog = Changelog.objects.get(company=company, slug=unquote(slug), published=True, deleted=False)
         return render(request, 'public-single-changelog.html',
                       context={'company_name': company.company_name, 'terminology': changelog_terminology,
@@ -54,9 +53,7 @@ def view_changelog_as_public(request, company, changelog_terminology, slug):
 
 def public_index(request, company, changelog_terminology):
     try:
-        company = company.replace("-", " ")
-        changelog_terminology = changelog_terminology.replace("-", " ")
-        company = Company.objects.get(company_name__iexact=company, changelog_terminology__iexact=changelog_terminology)
+        company = get_company_from_slug_and_changelog_terminology(company, changelog_terminology)
         changelogs = Changelog.objects.filter(company=company, deleted=False, published=True).order_by('-created_at')
         return render(request, 'public-index.html',
                       context={'company_name': company.company_name, 'terminology': changelog_terminology,
