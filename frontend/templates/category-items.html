@@ -1,0 +1,23 @@
+{% extends "base-after-login.html" %}
+{% block content %}
+<center>
+  <h2>Manage categories</h2>
+</center>
+<center> <a class="card-link" href="/staff/manage/categories/create-category">Create category</a></center>
+<div class="container page">
+    {% for category in object_list %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="article-preview">
+                <div class="preview-link">
+                    <h3>{{ category.name }}</h3>
+                </div>
+                <a class="card-link" href="/staff/manage/categories/edit-category/{{ category.id }}">Edit</a>
+                <!--a class="card-link" href="/changelog/{{ cateogry.slug }}">View</a-->
+                <a class="card-link" href="/staff/manage/categories/delete-category/{{ category.id }}">Delete</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

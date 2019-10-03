@@ -1,0 +1,9 @@
+{% extends "base-after-login.html" %}
+{% block content %}
+<div class="container">
+    <center><h1>{{ title }}</h1></center>
+    <div>
+        <span>{{ content|safe }}</span>
+    </div>
+</div>
+{% endblock %}

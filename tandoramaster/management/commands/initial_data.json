@@ -1,0 +1,31 @@
+{
+  "categories": [
+    {
+      "name": "New",
+      "color": "#FFA500",
+      "deleted": false,
+      "company": ""
+    },
+    {
+      "name": "Announcement",
+      "color": "#800000",
+      "deleted": false,
+      "company": ""
+    },
+    {
+      "name": "Changes",
+      "color": "#008080",
+      "deleted": false,
+      "company": ""
+    }
+  ],
+  "changelog": {
+    "title": "We are more closer to you than ever.Yes we have started a changelog.",
+    "slug": "we-are-starting-a-changelog",
+    "content": "We are starting a public changelog today so that you are always kept in sync with the latest product updates, company announcements etc. <br>  You will receive an update whenever we change something in the product. Watch this page for more updates.",
+    "category": "",
+    "published": false,
+    "deleted": false,
+    "company": ""
+  }
+}

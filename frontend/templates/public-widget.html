@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+<div id="c-banner" class="banner">
+    <div class="container">
+        <h1 class="logo-font">
+            <a href="{{ company.website }}">{{ company.company_name }}</a>
+        </h1>
+        <p style="text-align:center;">{{ company.changelog_terminology }} </p>
+    </div>
+</div>
+<div class="container page">
+    {% for changelog in changelogs %}
+    <div class="row">
+        <div class="col-md-9">
+            <div class="article-preview">
+                <!--div class="article-meta">
+                        Mete
+                    <div class="info">
+                        Info
+                    </div>
+                    <span class="date">Date</span>
+                </div-->
+                <div class="preview-link">
+                    <h2 style="color:{{ changelog.category.color }};"><!--a href="/{{ company_name}}/{{ terminology }}/{{ changelog.slug }}"-->{{ changelog.title }}<!--/a--></h2>
+                    <h4>{{ changelog.category.name }}</h4>
+                    <span>{{ changelog.content|safe }}</span>
+                    <!--span><a href="/{{ company_name}}/{{ terminology }}/{{ changelog.slug }}">Read more..</a></span-->
+                </div>
+            </div>
+            <hr>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<script>
+    let banner = document.getElementById('c-banner');
+    banner.style.backgroundColor = "{{ widget.color }}";
+    let body = document.getElementsByTagName('body')[0];
+    body.style.fontFamily = "M PLUS 1p";
+</script>
+{{ widget.javascript|safe }}
+<style>
+{{ widget.css }}
+</style>
+{% endblock %}
