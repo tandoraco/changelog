@@ -8,8 +8,6 @@ services:
       - .:/code
     expose:
       - 8000
-    depends_on:
-      - db
   letsencrypt:
     image: linuxserver/letsencrypt
     ports:
@@ -19,8 +17,8 @@ services:
       - ./config/letsencrypt:/config
     environment:
       - EMAIL=admin@tandora.co
-      - URL=localhost
-      - SUBDOMAINS=www,api
+      - URL=tandora.co
+      - SUBDOMAINS=www,app
       - ONLY_SUBDOMAINS=true
       - VALIDATION=http
       - TZ=Asia/Kolkata
