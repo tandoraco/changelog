@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 sudo apt-get update; \
 sudo apt-get install \
     apt-transport-https \
@@ -10,6 +11,7 @@ sudo add-apt-repository \
    $(lsb_release -cs) \
    stable"; \
  sudo apt-get update -y; \
+ sudo snap install docker;
  sudo apt-get install docker-ce -y; \
  docker --version;
 sudo curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
