@@ -97,6 +97,7 @@ DATABASES = {
         'NAME': os.environ.get('DB_NAME', 'postgres'),
         'USER': os.environ.get('DB_USER', 'postgres'),
         'HOST': os.environ.get('DB_HOST', 'tandora-backend_db_1'),
+        'PASSWORD': os.environ.get('DB_PASSWORD'),
         'PORT': 5432,
     }
 }
