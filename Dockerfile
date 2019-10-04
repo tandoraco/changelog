@@ -1,7 +1,7 @@
 FROM python:3.7.2-alpine
 
 RUN apk add --update --no-cache python3-dev gcc musl-dev libffi-dev openssl-dev postgresql-dev musl-dev postgresql vim
-RUN pip install cryptography==2.2.2
+RUN apk add py-cryptography
 
 COPY . /code/
 WORKDIR /code
