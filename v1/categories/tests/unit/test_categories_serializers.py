@@ -1,5 +1,6 @@
 import pytest
 
+from v1.categories.constants import DELETED_CATEGORY
 from v1.categories.serializers import CategorySerializer
 from v1.utils.test_base import SerializerTestData
 from v1.utils.test_base.serializer_test_base import SerializerTestBase
@@ -27,3 +28,24 @@ class TestCategoriesSerializer(SerializerTestBase):
         ]
 
         self.run_data_assertions(data, create_db_entry=True)
+
+
+@pytest.mark.unit
+@pytest.mark.django_db
+def test_cannot_create_category_with_deleted_category_name(company):
+    data = {
+        'name': 'test',
+        'color': '#000000',
+        'company': company.id
+    }
+
+    serializer = CategorySerializer(data=data)
+    assert serializer.is_valid()
+    category = serializer.save()
+    category.deleted = True
+    category.save()
+
+    data['color'] = '#FF0000'
+    serializer = CategorySerializer(data=data)
+    assert not serializer.is_valid()
+    assert str(serializer.errors['name'][0]) == DELETED_CATEGORY

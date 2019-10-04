@@ -1,7 +1,7 @@
 from django import forms
 from rest_framework import serializers
 
-from v1.categories.constants import INVALID_HEX_CODE, CATEGORY_EXISTS
+from v1.categories.constants import INVALID_HEX_CODE, CATEGORY_EXISTS, DELETED_CATEGORY
 from v1.categories.models import Category
 
 
@@ -25,7 +25,10 @@ def validate_category_name(name, serializer=True):
     obj = serializers if serializer else forms
 
     try:
-        Category.objects.get(name__iexact=name)
-        raise obj.ValidationError(CATEGORY_EXISTS)
+        category = Category.objects.get(name__iexact=name)
+        if category.deleted:
+            raise obj.ValidationError(DELETED_CATEGORY)
+        else:
+            raise obj.ValidationError(CATEGORY_EXISTS)
     except Category.DoesNotExist:
         return name
