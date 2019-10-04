@@ -19,5 +19,8 @@ class Embed(models.Model):
 
         return f"{self.css} {self.javascript}"
 
+    def __str__(self):
+        return f'Enabled: {"Yes" if self.enabled else "No"}'
+
 
 pre_save.connect(remove_css_code_edit_warning, sender=Embed)
