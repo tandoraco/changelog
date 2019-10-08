@@ -27,7 +27,7 @@ class TandoraForm:
         except self.model.DoesNotExist:
             raise Http404
 
-    def get_form(self, request, success_message=None, error_message=None, id=None):
+    def get_form(self, request, success_message=None, error_message=None, id=None, extra=None):
         form = self.form() if not self.initial else self.form(initial=self.initial)
 
         if not success_message:
@@ -64,4 +64,4 @@ class TandoraForm:
                 return HttpResponseRedirect(self.response_redirect_path)
 
         return render(request, self.form_html,
-                      {'form': form, 'title': f'{self.action.title()} {self.model.__name__}'})
+                      {'form': form, 'title': f'{self.action.title()} {self.model.__name__}', 'extra': extra})

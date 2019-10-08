@@ -45,8 +45,7 @@ def view_changelog_as_public(request, company, changelog_terminology, slug):
         changelog = Changelog.objects.get(company=company, slug=unquote(slug), published=True, deleted=False)
         return render(request, 'public-single-changelog.html',
                       context={'company_name': company.company_name, 'terminology': changelog_terminology,
-                               'title': changelog.title, 'content': changelog.content,
-                               'color': changelog.category.color})
+                               'changelog': changelog})
     except (Company.DoesNotExist, Changelog.DoesNotExist):
         raise Http404
 
