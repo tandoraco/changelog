@@ -16,10 +16,19 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls import url
 from django.conf.urls.static import static
-from django.urls import include
+from django.urls import include, path
+
+from frontend.admin import admin_site
 
 urlpatterns = [
     url(r'^tinymce/', include('tinymce.urls')),
     url(r"api/v1/", include("v1.urls"), name="v1-api"),
     url(r"", include("frontend.urls"), name="v1-frontend"),
+    path('admin/', admin_site.urls),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+if settings.DEBUG and 'debug_toolbar' in settings.INSTALLED_APPS:
+    import debug_toolbar
+    urlpatterns += [
+        url(r'^__debug__/', include(debug_toolbar.urls)),
+    ]

@@ -18,6 +18,7 @@ from v1.widget.models import Embed
 @is_authenticated
 def widget_form(request):
     company_id = request.session['company-id']
+    extra = None
 
     if Embed.objects.filter(company__id=company_id).count() == 0:
         action = 'create'
@@ -29,12 +30,16 @@ def widget_form(request):
     else:
         action = 'edit'
         initial = None
-        id = Embed.objects.get(company__id=company_id).id
+        embed = Embed.objects.get(company__id=company_id)
+        id = embed.id
+        if embed.enabled:
+            public_page_url = f"{request.session['public-page-url']}/widget/1"
+            extra = f'<i><a target="_blank" href="{public_page_url}">Click here</a> to view widget.</i>'
 
     return TandoraForm(Embed, WidgetForm, action, 'generic-after-login-form.html',
                        '/', initial=initial) \
         .get_form(request, success_message=WIDGET_CREATED_OR_EDITED_SUCCESSFULLY,
-                  error_message=WIDGET_DOES_NOT_EXIST, id=id)
+                  error_message=WIDGET_DOES_NOT_EXIST, id=id, extra=extra)
 
 
 @csrf_exempt
