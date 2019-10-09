@@ -1,5 +1,6 @@
 from urllib.parse import unquote
 
+from django.db import transaction
 from django.http import Http404
 from django.shortcuts import render
 
@@ -39,10 +40,13 @@ def view_changelog(request, slug):
         raise Http404
 
 
+@transaction.atomic
 def view_changelog_as_public(request, company, changelog_terminology, slug):
     try:
         company = get_company_from_slug_and_changelog_terminology(company, changelog_terminology)
         changelog = Changelog.objects.get(company=company, slug=unquote(slug), published=True, deleted=False)
+        changelog.view_count += 1
+        changelog.save()
         return render(request, 'public-single-changelog.html',
                       context={'company_name': company.company_name, 'terminology': changelog_terminology,
                                'changelog': changelog})
