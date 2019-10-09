@@ -14,6 +14,9 @@
     <div>
         <span>{{ changelog.content|safe }}</span>
     </div>
+    <div>
+        Views: {{ changelog.view_count }}
+    </div>
 </div>
 <script>
     let banner = document.getElementById('c-banner');
