@@ -21,8 +21,8 @@
                     <span class="date">Date</span>
                 </div-->
                 <div>
-                    <h2 style="color:{{ changelog.category.color }};"><!--a href="/{{ company_name}}/{{ terminology }}/{{ changelog.slug }}"-->{{ changelog.title }}<!--/a--></h2>
-                    <h4>{{ changelog.category.name }}</h4>
+                    <h2><!--a href="/{{ company_name}}/{{ terminology }}/{{ changelog.slug }}"-->{{ changelog.title }}<!--/a--></h2>
+                    <span style="color: white; background-color: {{ changelog.category.color }};">{{ changelog.category.name }}</span>
                     <span style="font-color:black;">{{ changelog.content|safe }}</span>
                     <!--span><a href="/{{ company_name}}/{{ terminology }}/{{ changelog.slug }}">Read more..</a></span-->
                 </div>
