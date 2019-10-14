@@ -10,7 +10,7 @@
 </div>
 <div class="container">
     <center><h1>{{ changelog.title }}</h1></center>
-    <i><h6 style="color:{{ changelog.category.color }}">{{ changelog.category.name }}</h6></i>
+    <span style="color: white; background-color:{{ changelog.category.color }};">{{ changelog.category.name }}</span>
     <div>
         <span>{{ changelog.content|safe }}</span>
     </div>
