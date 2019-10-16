@@ -24,7 +24,7 @@ class Changelog(models.Model):
     view_count = models.PositiveIntegerField(default=0)
 
     def __str__(self):
-        return f"{self.title}\n{self.content}"
+        return f"{self.title}\n{self.id}"
 
 
 pre_save.connect(get_or_populate_slug_field, sender=Changelog)

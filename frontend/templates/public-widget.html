@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load humanize %}
 {% block content %}
 <div id="c-banner" class="banner">
     <div class="container">
@@ -20,10 +21,11 @@
                     </div>
                     <span class="date">Date</span>
                 </div-->
-                <div class="preview-link">
-                    <h2 style="color:{{ changelog.category.color }};"><!--a href="/{{ company_name}}/{{ terminology }}/{{ changelog.slug }}"-->{{ changelog.title }}<!--/a--></h2>
-                    <h4>{{ changelog.category.name }}</h4>
-                    <span>{{ changelog.content|safe }}</span>
+                <div>
+                    <h2><!--a href="/{{ company_name}}/{{ terminology }}/{{ changelog.slug }}"-->{{ changelog.title }}<!--/a--></h2>
+                    <span style="color: white; background-color: {{ changelog.category.color }};">&nbsp{{ changelog.category.name }}&nbsp</span><br>
+                    <i><span style="color:grey;">Created: {{ changelog.created_at|naturaltime }}</span><br></i><br>
+                    <span style="font-color:black;">{{ changelog.content|safe }}</span>
                     <!--span><a href="/{{ company_name}}/{{ terminology }}/{{ changelog.slug }}">Read more..</a></span-->
                 </div>
             </div>
