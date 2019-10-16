@@ -48,7 +48,8 @@ def public_widget(request, company, changelog_terminology):
     try:
         company = get_company_from_slug_and_changelog_terminology(company, changelog_terminology)
         widget = Embed.objects.get(company=company, enabled=True)
-        changelogs = Changelog.objects.filter(company=company, published=True, deleted=False)[:10]
+        changelogs = Changelog.objects.filter(company=company, published=True,
+                                              deleted=False).order_by('-created_at')[:10]
         return render(request, 'public-widget.html',
                       context={
                           'company': company,

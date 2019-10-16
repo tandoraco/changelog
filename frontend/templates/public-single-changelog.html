@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load humanize %}
 {% block content %}
 <div id='c-banner' class="banner">
     <div class="container">
@@ -10,13 +11,15 @@
 </div>
 <div class="container">
     <center><h1>{{ changelog.title }}</h1></center>
-    <span style="color: white; background-color:{{ changelog.category.color }};">{{ changelog.category.name }}</span>
+    <span style="color: white; background-color:{{ changelog.category.color }};">&nbsp{{ changelog.category.name }}&nbsp</span><br>
+    <i><span style="color:grey;">Created: {{ changelog.created_at|naturaltime }}</span><br></i>
+    <br>
     <div>
         <span>{{ changelog.content|safe }}</span>
     </div>
-    <div>
-        Views: {{ changelog.view_count }}
-    </div>
+    <span style="color:grey;">
+        <u>Views: {{ changelog.view_count }}<u>
+    </span>
 </div>
 <script>
     let banner = document.getElementById('c-banner');
