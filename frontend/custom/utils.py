@@ -24,3 +24,21 @@ def get_company_from_slug_and_changelog_terminology(company, changelog_terminolo
     changelog_terminology = changelog_terminology.replace("-", " ")
     company = Company.objects.get(company_name__iexact=company, changelog_terminology__iexact=changelog_terminology)
     return company
+
+
+def save_and_get_redirect_url(request):
+    redirect_to = request.path
+    request.session['redirect-to'] = redirect_to
+    return redirect_to
+
+
+def redirect_to_login(request):
+    redirect_to = save_and_get_redirect_url(request)
+    # Showing redirect url in path for transparency
+    # Saving redirect to in request session, so that unsafe url redirects can be avoided
+    return HttpResponseRedirect(f'/login?redirect_to={redirect_to}')
+
+
+def set_redirect_in_session(request, redirect_to):
+    if redirect_to:
+        request.session['redirect-to'] = redirect_to

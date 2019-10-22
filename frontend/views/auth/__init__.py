@@ -7,12 +7,15 @@ from django.utils.text import slugify
 from frontend.constants import COMPANY_CREATED_OR_EDITED_SUCCESSFULLY, COMPANY_DOES_NOT_EXIST
 from frontend.custom.decorators import is_authenticated
 from frontend.custom.forms import TandoraForm
+from frontend.custom.utils import set_redirect_in_session
 from frontend.forms.auth import LoginForm, CompanyForm, UserForm
 from frontend.forms.auth.utils import clear_request_session
 from v1.accounts.models import User, ClientToken, Company
 
 
 def login(request):
+    redirect_to = request.session.pop('redirect-to', '')
+
     if request.method == "POST":
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -27,10 +30,16 @@ def login(request):
             company_slug = slugify(user.company.company_name)
             changelog_terminology = slugify(user.company.changelog_terminology)
             request.session["public-page-url"] = f'/{company_slug}/{changelog_terminology}'
+
+            if redirect_to:
+                return HttpResponseRedirect(redirect_to)
+
             return HttpResponseRedirect('/staff/changelogs')
     else:
         clear_request_session(request)
         form = LoginForm()
+
+    set_redirect_in_session(request, redirect_to)
 
     return render(request, 'login.html', {'form': form})
 
