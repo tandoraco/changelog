@@ -19,3 +19,7 @@ WIDGET_DOES_NOT_EXIST = _('Widget does not exist')
 WIDGET_CODE_EDIT_WARNING = _(
     'Please be cautious while editing this code as it can modify the appearance of widget.')
 WIDGET_CSS_EDIT_WARNING = '// Please be cautious while editing this code as it can modify the appearance of widget.'
+
+FREE_TRIAL_PERIOD_IN_DAYS = 7
+FREE_TRIAL_EXPIRED = _('Your free trial is expired. Please contact support (support@tandora.co).')
+LOGIN_AGAIN_INFO = _('Please login again to continue.')
