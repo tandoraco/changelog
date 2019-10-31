@@ -60,7 +60,7 @@ class CompanyForm(forms.ModelForm):
 
     class Meta:
         model = Company
-        fields = '__all__'
+        exclude = ['is_trial_account', 'created_time']
 
 
 class UserForm(forms.ModelForm):
