@@ -102,3 +102,8 @@ def invalid_company_data(invalid_password):
 @pytest.fixture
 def forgot_password(user, user_data):
     return ForgotPassword.objects.create(email=user_data['email'], token=str(uuid.uuid4()))
+
+
+@pytest.fixture(scope='class')
+def test_user(user):
+    return user
