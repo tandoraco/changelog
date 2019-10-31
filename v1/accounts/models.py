@@ -52,6 +52,31 @@ class Company(models.Model):
         return slugify(self.company_name)
 
 
+class PricePlan(models.Model):
+    name = models.TextField(max_length=100)
+    monthly_price = models.FloatField()
+    yearly_price = models.FloatField()
+    active = models.DateTimeField(default=True)
+    created_time = models.DateTimeField(auto_now_add=True)
+    plan_features = models.TextField()
+
+    def __str__(self):
+        return self.name
+
+
+class Subscription(models.Model):
+    company = models.OneToOneField(Company, on_delete=models.CASCADE)
+    plan = models.ForeignKey(PricePlan, on_delete=models.DO_NOTHING)
+    is_recurring = models.BooleanField(default=False)
+    is_yearly = models.BooleanField(default=True)
+    razorpay_account_id = models.CharField(max_length=50)
+    razorpay_data = models.TextField()
+    last_paid_time = models.DateTimeField()
+
+    def __str__(self):
+        return f'{str(self.company)} is in {self.plan_name} plan'
+
+
 class ForgotPassword(models.Model):
     token = models.UUIDField(db_index=True)
     email = models.EmailField(MAX_EMAIL_LENGTH, unique=True)
