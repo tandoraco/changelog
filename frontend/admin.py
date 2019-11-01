@@ -4,7 +4,7 @@ from django.contrib.admin import AdminSite
 from django.utils.translation import ugettext as _
 
 from frontend.forms.auth import TandoraAdminLoginForm
-from v1.accounts.models import Company, User
+from v1.accounts.models import Company, User, Subscription, PricePlan
 from v1.accounts.utils import hash_password
 
 
@@ -29,3 +29,5 @@ class UserAdmin(admin.ModelAdmin):
 admin_site = TandoraLoginAdminSite()
 admin_site.register(Company)
 admin_site.register(User, UserAdmin)
+admin_site.register(PricePlan)
+admin_site.register(Subscription)

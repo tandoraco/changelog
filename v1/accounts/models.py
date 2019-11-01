@@ -51,12 +51,15 @@ class Company(models.Model):
     def slug(self):
         return slugify(self.company_name)
 
+    class Meta:
+        verbose_name_plural = 'Companies'
+
 
 class PricePlan(models.Model):
-    name = models.TextField(max_length=100)
+    name = models.CharField(max_length=100)
     monthly_price = models.FloatField()
     yearly_price = models.FloatField()
-    active = models.DateTimeField(default=True)
+    active = models.BooleanField(default=True)
     created_time = models.DateTimeField(auto_now_add=True)
     plan_features = models.TextField()
 
@@ -74,7 +77,7 @@ class Subscription(models.Model):
     last_paid_time = models.DateTimeField()
 
     def __str__(self):
-        return f'{str(self.company)} is in {self.plan_name} plan'
+        return f'{str(self.company)} is in {self.plan.name} plan'
 
 
 class ForgotPassword(models.Model):
