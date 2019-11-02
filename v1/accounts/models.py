@@ -1,6 +1,13 @@
+import json
+
 from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.postgres.fields import JSONField
 from django.db import models
+from django.utils.safestring import mark_safe
 from django.utils.text import slugify
+from pygments import highlight
+from pygments.formatters.html import HtmlFormatter
+from pygments.lexers.data import JsonLexer
 
 from v1.accounts.constants import CHANGELOG_TERMINOLOGY, MAX_EMAIL_LENGTH
 from v1.accounts.utils import UserManager
@@ -68,16 +75,16 @@ class PricePlan(models.Model):
 
 
 class Subscription(models.Model):
-    company = models.OneToOneField(Company, on_delete=models.CASCADE)
-    plan = models.ForeignKey(PricePlan, on_delete=models.DO_NOTHING)
+    company = models.OneToOneField(Company, null=True, on_delete=models.CASCADE)
+    plan = models.ForeignKey(PricePlan, null=True, on_delete=models.DO_NOTHING)
     is_recurring = models.BooleanField(default=False)
     is_yearly = models.BooleanField(default=True)
-    razorpay_account_id = models.CharField(max_length=50)
+    razorpay_account_id = models.CharField(max_length=50, unique=True, db_index=True)
     razorpay_data = models.TextField()
-    last_paid_time = models.DateTimeField()
+    last_paid_time = models.DateTimeField(null=True)
 
     def __str__(self):
-        return f'{str(self.company)} is in {self.plan.name} plan'
+        return f'{str(self.company)} is in {self.plan.name if self.plan else ""}'
 
 
 class ForgotPassword(models.Model):
@@ -94,3 +101,24 @@ class ClientToken(models.Model):
 
     def __str__(self):
         return str(self.token)
+
+
+class AngelUser(models.Model):
+    # this table is used to store data of user who has paid
+    # but user details are not available
+    # we will receive this data, via razorpay webhook
+    email = models.EmailField(blank=False)
+    data = JSONField(blank=False)
+
+    def __str__(self):
+        return self.email
+
+    def data_formatted(self):
+        data = json.dumps(self.data, indent=2)
+
+        formatter = HtmlFormatter(style='colorful')
+        response = highlight(data, JsonLexer(), formatter)
+
+        style = f'<style>{formatter.get_style_defs()}+</style></br>'
+
+        return mark_safe(f'{style}{response}')
