@@ -59,6 +59,13 @@ def user(create_user, user_data):
 
 
 @pytest.fixture
+def trial_user(admin):
+    admin.company.is_trial_account = True
+    admin.company.save()
+    return admin
+
+
+@pytest.fixture
 def valid_password():
     return "Fixture12@"
 
@@ -104,6 +111,47 @@ def forgot_password(user, user_data):
     return ForgotPassword.objects.create(email=user_data['email'], token=str(uuid.uuid4()))
 
 
-@pytest.fixture(scope='class')
-def test_user(user):
-    return user
+@pytest.fixture
+def razorpay_webhook_data():
+    return {'entity': 'event',
+            'account_id': 'acc_DS11bHy6VsKIm1',
+            'event': 'order.paid',
+            'contains': ['payment', 'order'],
+            'payload': {'payment': {'entity': {'id': 'pay_DbS5ICgza7ahUA',
+                                               'entity': 'payment',
+                                               'amount': 700000,
+                                               'currency': 'INR',
+                                               'status': 'captured',
+                                               'order_id': 'order_DbS5EFZxo0DBCN',
+                                               'invoice_id': None,
+                                               'international': False,
+                                               'method': 'upi',
+                                               'amount_refunded': 0,
+                                               'refund_status': None,
+                                               'captured': True,
+                                               'description': None,
+                                               'card_id': None,
+                                               'bank': None,
+                                               'wallet': None,
+                                               'vpa': 'test@test',
+                                               'email': 'test@test.com',
+                                               'contact': '123456789',
+                                               'notes': {'email': 'test@test.com', 'phone': '123456789'},
+                                               'fee': 16520,
+                                               'tax': 2520,
+                                               'error_code': None,
+                                               'error_description': None,
+                                               'created_at': 1572694014}},
+                        'order': {'entity': {'id': 'order_DbS5EFZxo0DBCN',
+                                             'entity': 'order',
+                                             'amount': 700000,
+                                             'amount_paid': 700000,
+                                             'amount_due': 0,
+                                             'currency': 'INR',
+                                             'receipt': None,
+                                             'offer_id': None,
+                                             'status': 'paid',
+                                             'attempts': 1,
+                                             'notes': [],
+                                             'created_at': 1572694011}}},
+            'created_at': 1572694018}
