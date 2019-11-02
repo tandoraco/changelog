@@ -25,4 +25,4 @@ def save_subscription_details(data):
             company.save()
 
     except User.DoesNotExist:
-        AngelUser.objects.create(email=email, data=data)
+        AngelUser.objects.create(email=email, data=json.dumps(data))

@@ -1,7 +1,6 @@
 import json
 
 from django.contrib.auth.models import AbstractBaseUser
-from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.utils.safestring import mark_safe
 from django.utils.text import slugify
@@ -108,7 +107,7 @@ class AngelUser(models.Model):
     # but user details are not available
     # we will receive this data, via razorpay webhook
     email = models.EmailField(blank=False)
-    data = JSONField(blank=False)
+    data = models.TextField(blank=False)
 
     def __str__(self):
         return self.email
