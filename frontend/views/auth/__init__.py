@@ -1,8 +1,11 @@
 import uuid
 
+from django.db import transaction
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.utils.text import slugify
+from rest_framework.decorators import api_view, authentication_classes
+from rest_framework.response import Response
 
 from frontend.constants import COMPANY_CREATED_OR_EDITED_SUCCESSFULLY, COMPANY_DOES_NOT_EXIST
 from frontend.custom.decorators import is_authenticated
@@ -10,6 +13,7 @@ from frontend.custom.forms import TandoraForm
 from frontend.custom.utils import set_redirect_in_session
 from frontend.forms.auth import LoginForm, CompanyForm, UserForm
 from frontend.forms.auth.utils import clear_request_session
+from frontend.views.auth.utils import save_subscription_details
 from v1.accounts.models import User, ClientToken, Company
 
 
@@ -72,3 +76,12 @@ def company_form(request):
                        "/login") \
         .get_form(request, success_message=COMPANY_CREATED_OR_EDITED_SUCCESSFULLY,
                   error_message=COMPANY_DOES_NOT_EXIST, id=id)
+
+
+@api_view(['POST'])
+@authentication_classes([])
+@transaction.atomic
+def razorpay_webhook(request):
+    post_data = request.data
+    save_subscription_details(post_data)
+    return Response('OK')
