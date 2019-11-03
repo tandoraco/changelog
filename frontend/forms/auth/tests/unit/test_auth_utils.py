@@ -18,8 +18,8 @@ def test_is_trial_expired(company):
     session = {
         'company-id': company.id
     }
-    mock_request = namedtuple('mock_request', 'session')
-    request = mock_request(session=session)
+    mock_request = namedtuple('mock_request', 'session META')
+    request = mock_request(session=session, META={})
     assert not is_trial_expired(request)
 
     company.is_trial_account = True
