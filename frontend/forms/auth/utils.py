@@ -4,7 +4,8 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.utils import timezone
 
-from frontend.constants import NOT_LOGGED_IN_ERROR, FREE_TRIAL_PERIOD_IN_DAYS, LOGIN_AGAIN_INFO
+from frontend.constants import NOT_LOGGED_IN_ERROR, FREE_TRIAL_PERIOD_IN_DAYS, LOGIN_AGAIN_INFO,\
+    TRIAL_UPGRADE_WARNING, TRIAL_ENDS_TODAY
 from v1.accounts.models import ClientToken, Company
 
 
@@ -42,4 +43,10 @@ def is_trial_expired(request):
     if company.is_trial_account and (company.created_time + timedelta(days=FREE_TRIAL_PERIOD_IN_DAYS) < now):
         return True
 
+    if company.is_trial_account:
+        days_left_in_trial = ((company.created_time + timedelta(days=FREE_TRIAL_PERIOD_IN_DAYS)) - now).days
+        if days_left_in_trial == 0:
+            messages.warning(request, message=TRIAL_ENDS_TODAY)
+        elif days_left_in_trial > 0:
+            messages.info(request, message=TRIAL_UPGRADE_WARNING.format(days=days_left_in_trial))
     return False

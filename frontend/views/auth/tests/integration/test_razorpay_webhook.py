@@ -11,6 +11,7 @@ path = reverse('razorpay-webhook')
 
 
 @pytest.mark.django_db
+@pytest.mark.integration
 def test_angeluser(razorpay_webhook_data):
     # if the paid user is not in User table, create an angel user
     assert AngelUser.objects.count() == 0
@@ -25,6 +26,7 @@ def test_angeluser(razorpay_webhook_data):
 
 
 @pytest.mark.django_db
+@pytest.mark.integration
 def test_subscription_created(trial_user, razorpay_webhook_data):
     assert trial_user.company.is_trial_account
     trial_user.email = 'test@test.com'
