@@ -36,7 +36,7 @@ def is_trial_expired(request):
     try:
         company = Company.objects.get(id=request.session['company-id'])
     except KeyError:
-        messages.info(request, message=LOGIN_AGAIN_INFO)
+        messages.info(request, message=LOGIN_AGAIN_INFO, fail_silently=True)
         return HttpResponseRedirect('/login')
 
     now = timezone.now()
@@ -46,7 +46,7 @@ def is_trial_expired(request):
     if company.is_trial_account:
         days_left_in_trial = ((company.created_time + timedelta(days=FREE_TRIAL_PERIOD_IN_DAYS)) - now).days
         if days_left_in_trial == 0:
-            messages.warning(request, message=TRIAL_ENDS_TODAY)
+            messages.warning(request, message=TRIAL_ENDS_TODAY, fail_silently=True)
         elif days_left_in_trial > 0:
-            messages.info(request, message=TRIAL_UPGRADE_WARNING.format(days=days_left_in_trial))
+            messages.info(request, message=TRIAL_UPGRADE_WARNING.format(days=days_left_in_trial), fail_silently=True)
     return False
