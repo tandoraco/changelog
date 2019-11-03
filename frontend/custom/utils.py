@@ -1,4 +1,5 @@
-from django.contrib import messages
+from django.contrib import messages as msgs
+from django.contrib.messages import get_messages
 from django.http import HttpResponseRedirect
 
 from v1.accounts.models import Company
@@ -11,9 +12,9 @@ def delete_model(request, model, id, success_redirect_path, error_redirect_path,
             setattr(instance, 'deleted', True)
         instance.save()
 
-        messages.success(request, message=success_message)
+        msgs.success(request, message=success_message)
     except model.DoesNotExist:
-        messages.error(request, message=error_message)
+        msgs.error(request, message=error_message)
         return HttpResponseRedirect(error_redirect_path)
 
     return HttpResponseRedirect(success_redirect_path)
@@ -42,3 +43,15 @@ def redirect_to_login(request):
 def set_redirect_in_session(request, redirect_to):
     if redirect_to:
         request.session['redirect-to'] = redirect_to
+
+
+def messages(request):
+    """Remove duplicate messages"""
+    _messages = []
+    unique_messages = []
+    for m in get_messages(request):
+        if m.message not in _messages:
+            _messages.append(m.message)
+            unique_messages.append(m)
+
+    return {'messages': unique_messages}

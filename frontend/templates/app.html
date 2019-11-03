@@ -1,13 +1,5 @@
 {% extends "base-after-login.html" %}
 {% block content %}
-{% if messages %}
-    {% for message in messages %}
-            <div class="alert {% if message.tags %}alert-{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}danger{% else %}{{ message.tags }}{% endif %}{% endif %}" role="alert">
-                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                {{ message|safe }}
-            </div>
-    {% endfor %}
-{% endif %}
 <div id="changelogs">
 {% include 'changelog_items.html' %}
 </div>
