@@ -18,7 +18,7 @@ services:
     environment:
       - EMAIL=admin@tandora.co
       - URL=tandora.co
-      - SUBDOMAINS=app
+      - SUBDOMAINS=www, app
       - ONLY_SUBDOMAINS=true
       - VALIDATION=http
       - TZ=Asia/Kolkata
