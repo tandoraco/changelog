@@ -1,5 +1,6 @@
 import uuid
 
+from django.contrib import messages
 from django.db import transaction
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -7,14 +8,17 @@ from django.utils.text import slugify
 from rest_framework.decorators import api_view, authentication_classes
 from rest_framework.response import Response
 
-from frontend.constants import COMPANY_CREATED_OR_EDITED_SUCCESSFULLY, COMPANY_DOES_NOT_EXIST
+from frontend.constants import COMPANY_CREATED_OR_EDITED_SUCCESSFULLY, COMPANY_DOES_NOT_EXIST, \
+    PASSWORD_RESET_INITIATED, \
+    PASSWORD_RESET_SUCCESS, PASSWORD_RESET_TOKEN_INVALID
 from frontend.custom.decorators import is_authenticated
 from frontend.custom.forms import TandoraForm
 from frontend.custom.utils import set_redirect_in_session
-from frontend.forms.auth import LoginForm, CompanyForm, UserForm
+from frontend.forms.auth import LoginForm, CompanyForm, UserForm, ForgotPasswordForm, ResetPasswordForm
 from frontend.forms.auth.utils import clear_request_session
 from frontend.views.auth.utils import save_subscription_details
-from v1.accounts.models import User, ClientToken, Company
+from v1.accounts.models import User, ClientToken, Company, ForgotPassword
+from v1.accounts.serializers import ResetPasswordSerializer
 
 
 def login(request):
@@ -85,3 +89,45 @@ def razorpay_webhook(request):
     post_data = request.data
     save_subscription_details(post_data)
     return Response('OK')
+
+
+@transaction.atomic
+def forgot_password_form(request):
+    return TandoraForm(ForgotPassword, ForgotPasswordForm, 'create', 'generic-pre-login-form.html',
+                       "/login") \
+        .get_form(request, success_message=PASSWORD_RESET_INITIATED, title="Forgot Password")
+
+
+@transaction.atomic
+def reset_password_form(request, token):
+    try:
+        ForgotPassword.objects.get(token=token)
+
+        if request.method == "POST":
+            form = ResetPasswordForm(request.POST)
+            if form.is_valid():
+                password = form.cleaned_data.get('password')
+
+                data = {
+                    'password': password,
+                    'token': token
+                }
+
+                serializer = ResetPasswordSerializer(data=data)
+                serializer.is_valid()
+                # The above will be always true, since we have already form validated the password
+                # and we are using token from valid forgot password object
+                serializer.save()
+
+                messages.success(request, message=PASSWORD_RESET_SUCCESS)
+                return HttpResponseRedirect('/login')
+        else:
+            form = ResetPasswordForm()
+
+        return render(request, 'generic-pre-login-form.html', {
+            'form': form,
+            'title': 'Reset Password'
+        })
+    except ForgotPassword.DoesNotExist:
+        messages.info(request, message=PASSWORD_RESET_TOKEN_INVALID)
+        return HttpResponseRedirect("/login")

@@ -2,6 +2,7 @@ import json
 
 from django.contrib.auth.models import AbstractBaseUser
 from django.db import models
+from django.db.models.signals import post_save
 from django.utils.safestring import mark_safe
 from django.utils.text import slugify
 from pygments import highlight
@@ -10,6 +11,7 @@ from pygments.lexers.data import JsonLexer
 
 from v1.accounts.constants import CHANGELOG_TERMINOLOGY, MAX_EMAIL_LENGTH
 from v1.accounts.utils import UserManager
+from v1.notifications.email import send_forgot_password_mail
 
 
 class User(AbstractBaseUser):
@@ -88,10 +90,14 @@ class Subscription(models.Model):
 
 class ForgotPassword(models.Model):
     token = models.UUIDField(db_index=True)
-    email = models.EmailField(MAX_EMAIL_LENGTH, unique=True)
+    email = models.EmailField()
+    created_date = models.DateField(null=True, auto_now_add=True)
 
     def __str__(self):
         return f"{self.email}, {self.token}"
+
+    class Meta:
+        unique_together = ('email', 'created_date')
 
 
 class ClientToken(models.Model):
@@ -121,3 +127,6 @@ class AngelUser(models.Model):
         style = f'<style>{formatter.get_style_defs()}+</style></br>'
 
         return mark_safe(f'{style}{response}')
+
+
+post_save.connect(send_forgot_password_mail, sender=ForgotPassword)

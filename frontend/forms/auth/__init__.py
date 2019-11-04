@@ -1,10 +1,14 @@
+import uuid
+
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.utils.translation import ugettext as _
 
+from frontend.constants import PASSWORD_DOES_NOT_MATCH
 from v1.accounts.constants import MAX_EMAIL_LENGTH, PASSWORD_INCORRECT_ERROR, EMAIL_NOT_FOUND_ERROR
-from v1.accounts.models import User, Company
+from v1.accounts.models import User, Company, ForgotPassword
 from v1.accounts.utils import verify_password
+from v1.accounts.validators import form_password_validator
 
 
 class LoginForm(forms.Form):
@@ -37,12 +41,36 @@ class CompanySignupForm():
     pass
 
 
-class ForgotPasswordForm():
-    pass
+class ForgotPasswordForm(forms.ModelForm):
+    token = forms.CharField(widget=forms.HiddenInput(), required=False)
+
+    class Meta:
+        model = ForgotPassword
+        fields = '__all__'
+
+    def clean_token(self):
+        return str(uuid.uuid4())
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        try:
+            User.objects.get(email=email)
+        except User.DoesNotExist:
+            raise forms.ValidationError(_(EMAIL_NOT_FOUND_ERROR))
+
+        return email
 
 
-class ResetPasswordForm():
-    pass
+class ResetPasswordForm(forms.Form):
+    password = forms.CharField(widget=forms.PasswordInput, validators=[form_password_validator])
+    confirm_password = forms.CharField(widget=forms.PasswordInput)
+
+    def clean_confirm_password(self):
+        password = self.cleaned_data.get('password')
+        confirm_password = self.cleaned_data.get('confirm_password')
+
+        if password != confirm_password:
+            raise forms.ValidationError(PASSWORD_DOES_NOT_MATCH)
 
 
 class CompanyForm(forms.ModelForm):
