@@ -5,7 +5,7 @@
     {% for message in messages %}
             <div class="alert {% if message.tags %}alert-{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}danger{% else %}{{ message.tags }}{% endif %}{% endif %}" role="alert">
                 <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                {{ message }}
+                {{ message|safe }}
             </div>
     {% endfor %}
 {% endif %}
@@ -15,6 +15,7 @@
     <form id="login_form"  method="post" action="/login">
         {% csrf_token %}
         {{ form|crispy }}
+        <a href="/forgot-password">Forgot Password?</a>
         <center>
             <button type="submit" class="btn btn-primary btn-lg">Login</button>
             <button class="btn btn-default" type="reset">Reset</button>

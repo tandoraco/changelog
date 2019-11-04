@@ -1,9 +1,17 @@
+import json
+
 from django.contrib.auth.models import AbstractBaseUser
 from django.db import models
+from django.db.models.signals import post_save
+from django.utils.safestring import mark_safe
 from django.utils.text import slugify
+from pygments import highlight
+from pygments.formatters.html import HtmlFormatter
+from pygments.lexers.data import JsonLexer
 
 from v1.accounts.constants import CHANGELOG_TERMINOLOGY, MAX_EMAIL_LENGTH
 from v1.accounts.utils import UserManager
+from v1.notifications.email import send_forgot_password_mail
 
 
 class User(AbstractBaseUser):
@@ -42,6 +50,7 @@ class Company(models.Model):
     website = models.URLField(max_length=200, blank=False, unique=True)
     company_name = models.CharField(max_length=100)
     changelog_terminology = models.CharField(max_length=50, default=CHANGELOG_TERMINOLOGY)
+    is_trial_account = models.BooleanField(blank=False, default=False)
     created_time = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -50,13 +59,45 @@ class Company(models.Model):
     def slug(self):
         return slugify(self.company_name)
 
+    class Meta:
+        verbose_name_plural = 'Companies'
+
+
+class PricePlan(models.Model):
+    name = models.CharField(max_length=100)
+    monthly_price = models.FloatField()
+    yearly_price = models.FloatField()
+    active = models.BooleanField(default=True)
+    created_time = models.DateTimeField(auto_now_add=True)
+    plan_features = models.TextField()
+
+    def __str__(self):
+        return self.name
+
+
+class Subscription(models.Model):
+    company = models.OneToOneField(Company, null=True, on_delete=models.CASCADE)
+    plan = models.ForeignKey(PricePlan, null=True, on_delete=models.DO_NOTHING)
+    is_recurring = models.BooleanField(default=False)
+    is_yearly = models.BooleanField(default=True)
+    razorpay_account_id = models.CharField(max_length=50, unique=True, db_index=True)
+    razorpay_data = models.TextField()
+    last_paid_time = models.DateTimeField(null=True)
+
+    def __str__(self):
+        return f'{str(self.company)} is in {self.plan.name if self.plan else ""}'
+
 
 class ForgotPassword(models.Model):
     token = models.UUIDField(db_index=True)
-    email = models.EmailField(MAX_EMAIL_LENGTH, unique=True)
+    email = models.EmailField()
+    created_date = models.DateField(null=True, auto_now_add=True)
 
     def __str__(self):
         return f"{self.email}, {self.token}"
+
+    class Meta:
+        unique_together = ('email', 'created_date')
 
 
 class ClientToken(models.Model):
@@ -65,3 +106,27 @@ class ClientToken(models.Model):
 
     def __str__(self):
         return str(self.token)
+
+
+class AngelUser(models.Model):
+    # this table is used to store data of user who has paid
+    # but user details are not available
+    # we will receive this data, via razorpay webhook
+    email = models.EmailField(blank=False)
+    data = models.TextField(blank=False)
+
+    def __str__(self):
+        return self.email
+
+    def data_formatted(self):
+        data = json.dumps(self.data, indent=2)
+
+        formatter = HtmlFormatter(style='colorful')
+        response = highlight(data, JsonLexer(), formatter)
+
+        style = f'<style>{formatter.get_style_defs()}+</style></br>'
+
+        return mark_safe(f'{style}{response}')
+
+
+post_save.connect(send_forgot_password_mail, sender=ForgotPassword)
