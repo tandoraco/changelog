@@ -17,7 +17,7 @@ def get_current_utc_time():
 
 
 class Command(BaseCommand):
-    description = "Create a seperate database for a company."
+    description = "Create a company and populate initial data."
 
     def add_arguments(self, parser):
         parser.add_argument('-e', '--email', type=str, help='Email address of company admin')
