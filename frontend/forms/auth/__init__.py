@@ -1,9 +1,11 @@
+import uuid
+
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.utils.translation import ugettext as _
 
 from v1.accounts.constants import MAX_EMAIL_LENGTH, PASSWORD_INCORRECT_ERROR, EMAIL_NOT_FOUND_ERROR
-from v1.accounts.models import User, Company
+from v1.accounts.models import User, Company, ForgotPassword
 from v1.accounts.utils import verify_password
 
 
@@ -37,8 +39,24 @@ class CompanySignupForm():
     pass
 
 
-class ForgotPasswordForm():
-    pass
+class ForgotPasswordForm(forms.ModelForm):
+    token = forms.CharField(widget=forms.HiddenInput(), required=False)
+
+    class Meta:
+        model = ForgotPassword
+        fields = '__all__'
+
+    def clean_token(self):
+        return str(uuid.uuid4())
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        try:
+            User.objects.get(email=email)
+        except User.DoesNotExist:
+            raise forms.ValidationError(_(EMAIL_NOT_FOUND_ERROR))
+
+        return email
 
 
 class ResetPasswordForm():

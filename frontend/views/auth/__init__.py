@@ -1,20 +1,20 @@
 import uuid
 
 from django.db import transaction
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import render
 from django.utils.text import slugify
 from rest_framework.decorators import api_view, authentication_classes
 from rest_framework.response import Response
 
-from frontend.constants import COMPANY_CREATED_OR_EDITED_SUCCESSFULLY, COMPANY_DOES_NOT_EXIST
+from frontend.constants import COMPANY_CREATED_OR_EDITED_SUCCESSFULLY, COMPANY_DOES_NOT_EXIST, PASSWORD_RESET_INITIATED
 from frontend.custom.decorators import is_authenticated
 from frontend.custom.forms import TandoraForm
 from frontend.custom.utils import set_redirect_in_session
-from frontend.forms.auth import LoginForm, CompanyForm, UserForm
+from frontend.forms.auth import LoginForm, CompanyForm, UserForm, ForgotPasswordForm
 from frontend.forms.auth.utils import clear_request_session
 from frontend.views.auth.utils import save_subscription_details
-from v1.accounts.models import User, ClientToken, Company
+from v1.accounts.models import User, ClientToken, Company, ForgotPassword
 
 
 def login(request):
@@ -85,3 +85,19 @@ def razorpay_webhook(request):
     post_data = request.data
     save_subscription_details(post_data)
     return Response('OK')
+
+
+@transaction.atomic
+def forgot_password_form(request):
+    return TandoraForm(ForgotPassword, ForgotPasswordForm, 'create', 'generic-pre-login-form.html',
+                       "/login") \
+        .get_form(request, success_message=PASSWORD_RESET_INITIATED, title="Forgot Password")
+
+
+@transaction.atomic
+def reset_password_form(request, token):
+    try:
+        _ = ForgotPassword.objects.get(token=token)
+        return HttpResponse('OK')
+    except ForgotPassword.DoesNotExist:
+        raise Http404
