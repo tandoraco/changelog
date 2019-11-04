@@ -27,3 +27,8 @@ FREE_TRIAL_EXPIRED = _(f'Your free trial is expired. {UPGRADE}')
 LOGIN_AGAIN_INFO = _('Please login again to continue.')
 TRIAL_UPGRADE_WARNING = _('Your trial ends in {days} days. ') + UPGRADE
 TRIAL_ENDS_TODAY = _(f'Today is your last day of free trial. {UPGRADE}')
+
+PASSWORD_RESET_INITIATED = _('You will receive an email with instructions to reset the password.')
+PASSWORD_DOES_NOT_MATCH = _('Passwords does not match.')
+PASSWORD_RESET_SUCCESS = _('Your password is reset successfully.')
+PASSWORD_RESET_TOKEN_INVALID = _('Reset password link is expired or does not exist. Please initiate a new request.')

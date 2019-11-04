@@ -9,6 +9,8 @@ urlpatterns = [
     path('', RedirectView.as_view(url='staff/changelogs'), name="frontend-index"),
     url(r'^login', auth.login, name="frontend-login"),
     url(r'^logout', auth.logout, name="frontend-logout"),
+    url(r'^forgot-password', auth.forgot_password_form, name="frontend-forgot-password"),
+    url(r'^reset-password/(?P<token>[0-9A-Fa-f-]+)', auth.reset_password_form, name="frontend-reset-password"),
     path('webhook/razorpay', auth.razorpay_webhook, name="razorpay-webhook"),
     path('staff/changelogs', app.ChangeLogList.as_view(), name="frontend-staff-index"),
     path('staff/create-changelog', changelog.changelog_form, name="frontend-new-changelog"),
