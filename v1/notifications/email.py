@@ -12,6 +12,7 @@ class Email(object):
 
     @classmethod
     def send_mail(cls, template, model):
+        recipient_email = ""
         if hasattr(model, "email"):
             recipient_email = getattr(model, "email")
         elif hasattr(model, "admin"):
@@ -32,9 +33,8 @@ class Email(object):
 
 
 def send_forgot_password_mail(sender, instance, created, **kwargs):
-    from v1.accounts.models import ForgotPassword
     if created:
         template = TEMPLATES['forgot_password']
         reset_password_link = urljoin(settings.HOST, f'reset-password/{instance.token}')
         template['body'] = template['body'].format(link=reset_password_link)
-        Email.send_mail(template, ForgotPassword)
+        Email.send_mail(template, instance)
