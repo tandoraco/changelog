@@ -79,7 +79,7 @@ TEMPLATES = [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+                'frontend.custom.utils.messages',
                 'django.template.context_processors.static',
             ],
         },
@@ -198,3 +198,13 @@ if DEBUG:
     DEBUG_TOOLBAR_CONFIG = {
         "SHOW_TOOLBAR_CALLBACK": show_toolbar,
     }
+
+if DEBUG:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+else:
+    EMAIL_BACKEND = 'django_ses.SESBackend'
+
+AWS_SES_ACCESS_KEY_ID = os.environ.get('AWS_SES_ACCESS_KEY_ID')
+AWS_SES_SECRET_ACCESS_KEY = os.environ.get('AWS_SES_SECRET_ACCESS_KEY')
+
+HOST = "http://localhost:8000/" if DEBUG else os.environ.get('HOST')
