@@ -50,7 +50,7 @@ class Company(models.Model):
     website = models.URLField(max_length=200, blank=False, unique=True)
     company_name = models.CharField(max_length=100)
     changelog_terminology = models.CharField(max_length=50, default=CHANGELOG_TERMINOLOGY)
-    is_trial_account = models.BooleanField(blank=False, default=False)
+    is_trial_account = models.BooleanField(blank=False, default=True)
     created_time = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
