@@ -11,7 +11,7 @@
 {% endif %}
 <!--div class="d-flex justify-content-center align-items-center container"-->
 <div class="container col-md-4 col-md-offset-4">
-    <center><h3>Login to Tandora</h3></center>
+    <center><h3>Login</h3></center>
     <form id="login_form"  method="post" action="/login">
         {% csrf_token %}
         {{ form|crispy }}
