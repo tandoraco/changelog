@@ -10,11 +10,12 @@ from rest_framework.response import Response
 
 from frontend.constants import COMPANY_CREATED_OR_EDITED_SUCCESSFULLY, COMPANY_DOES_NOT_EXIST, \
     PASSWORD_RESET_INITIATED, \
-    PASSWORD_RESET_SUCCESS, PASSWORD_RESET_TOKEN_INVALID
+    PASSWORD_RESET_SUCCESS, PASSWORD_RESET_TOKEN_INVALID, ACCOUNT_CREATED_MESSAGE
 from frontend.custom.decorators import is_authenticated
 from frontend.custom.forms import TandoraForm
 from frontend.custom.utils import set_redirect_in_session
-from frontend.forms.auth import LoginForm, CompanyForm, UserForm, ForgotPasswordForm, ResetPasswordForm
+from frontend.forms.auth import LoginForm, CompanyForm, UserForm, ForgotPasswordForm, ResetPasswordForm, \
+    CompanySignupForm
 from frontend.forms.auth.utils import clear_request_session
 from frontend.views.auth.utils import save_subscription_details
 from v1.accounts.models import User, ClientToken, Company, ForgotPassword
@@ -62,6 +63,22 @@ def logout(request):
     clear_request_session(request)
 
     return render(request, 'logout.html')
+
+
+def signup(request):
+    if request.method == "POST":
+        form = CompanySignupForm(data=request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, message=ACCOUNT_CREATED_MESSAGE)
+            return HttpResponseRedirect('/login')
+    else:
+        form = CompanySignupForm()
+
+    return render(request, 'generic-pre-login-form.html', {
+        'form': form,
+        'title': 'Signup for 7 day free trial'
+    })
 
 
 @is_authenticated
