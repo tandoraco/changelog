@@ -2,10 +2,13 @@ import uuid
 
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
+from django.core.management import call_command
+from django.db import transaction
 from django.utils.translation import ugettext as _
 
-from frontend.constants import PASSWORD_DOES_NOT_MATCH
-from v1.accounts.constants import MAX_EMAIL_LENGTH, PASSWORD_INCORRECT_ERROR, EMAIL_NOT_FOUND_ERROR
+from frontend.constants import PASSWORD_DOES_NOT_MATCH, EMAIL_EXISTS_ERROR, WEBSITE_EXISTS_ERROR
+from v1.accounts.constants import MAX_EMAIL_LENGTH, PASSWORD_INCORRECT_ERROR, EMAIL_NOT_FOUND_ERROR, \
+    MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH
 from v1.accounts.models import User, Company, ForgotPassword
 from v1.accounts.utils import verify_password
 from v1.accounts.validators import form_password_validator
@@ -37,8 +40,47 @@ class LoginForm(forms.Form):
         return password
 
 
-class CompanySignupForm():
-    pass
+class CompanySignupForm(forms.Form):
+    name = forms.CharField(max_length=100, label='Your name')
+    email = forms.EmailField(required=True)
+    password = forms.CharField(widget=forms.PasswordInput, min_length=MIN_PASSWORD_LENGTH,
+                               max_length=MAX_PASSWORD_LENGTH)
+    website = forms.URLField(max_length=200, required=True)
+    company_name = forms.CharField(max_length=100)
+    changelog_terminology = forms.CharField(max_length=50, initial='', required=False)
+
+    def clean_email(self):
+        email = self.data.get('email')
+        try:
+            User.objects.get(email=email)
+            raise forms.ValidationError(EMAIL_EXISTS_ERROR)
+        except User.DoesNotExist:
+            pass
+        return email
+
+    def clean_password(self):
+        return form_password_validator(self.data.get('password'))
+
+    def clean_website(self):
+        website = self.data.get('website')
+        try:
+            Company.objects.get(website=website)
+            raise forms.ValidationError(WEBSITE_EXISTS_ERROR)
+        except Company.DoesNotExist:
+            pass
+        return website
+
+    @transaction.atomic
+    def save(self):
+        data = self.cleaned_data
+        call_command('create_company',
+                     f'--email={data["email"]}',
+                     f'--name={data["name"]}',
+                     f'--password={data["password"]}',
+                     f'--company_name={data["company_name"]}',
+                     f'--website={data["website"]}',
+                     f'--changelog_terminology={data["changelog_terminology"]}'
+                     )
 
 
 class ForgotPasswordForm(forms.ModelForm):

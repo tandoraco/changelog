@@ -6,6 +6,7 @@ import pytz
 from django.core.management import BaseCommand
 from django.db import transaction
 
+from v1.accounts.constants import CHANGELOG_TERMINOLOGY
 from v1.accounts.serializers import CompanySerializer
 from v1.categories.models import Category
 from v1.core.models import Changelog
@@ -34,7 +35,7 @@ class Command(BaseCommand):
         password = options.get('password')
         company_name = options.get('company_name')
         website = options.get('website')
-        terminology = options.get('changelog_terminology')
+        terminology = options.get('changelog_terminology', CHANGELOG_TERMINOLOGY)
 
         if not (email and name and password and company_name and website and terminology):
             raise AssertionError("All required arguments are not present.")

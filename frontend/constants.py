@@ -32,3 +32,8 @@ PASSWORD_RESET_INITIATED = _('You will receive an email with instructions to res
 PASSWORD_DOES_NOT_MATCH = _('Passwords does not match.')
 PASSWORD_RESET_SUCCESS = _('Your password is reset successfully.')
 PASSWORD_RESET_TOKEN_INVALID = _('Reset password link is expired or does not exist. Please initiate a new request.')
+
+EMAIL_EXISTS_ERROR = _('Email is already present in our records. Please enter a different email.')
+WEBSITE_EXISTS_ERROR = _('Website is already present in our records. Please enter a different website.')
+
+ACCOUNT_CREATED_MESSAGE = _('Your account is created. Please login to start using your free trial.')
