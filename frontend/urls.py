@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'^login', auth.login, name="frontend-login"),
     url(r'^logout', auth.logout, name="frontend-logout"),
     url(r'^signup', auth.signup, name="frontend-signup"),
+    url(r'^affiliate-signup', auth.affiliate_signup, name="frontend-affiliate-signup"),
     url(r'^forgot-password', auth.forgot_password_form, name="frontend-forgot-password"),
     url(r'^reset-password/(?P<token>[0-9A-Fa-f-]+)', auth.reset_password_form, name="frontend-reset-password"),
     path('webhook/razorpay', auth.razorpay_webhook, name="razorpay-webhook"),
