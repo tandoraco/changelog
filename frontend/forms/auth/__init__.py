@@ -9,7 +9,7 @@ from django.utils.translation import ugettext as _
 from frontend.constants import PASSWORD_DOES_NOT_MATCH, EMAIL_EXISTS_ERROR, WEBSITE_EXISTS_ERROR
 from v1.accounts.constants import MAX_EMAIL_LENGTH, PASSWORD_INCORRECT_ERROR, EMAIL_NOT_FOUND_ERROR, \
     MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH
-from v1.accounts.models import User, Company, ForgotPassword
+from v1.accounts.models import User, Company, ForgotPassword, Affiliate
 from v1.accounts.utils import verify_password
 from v1.accounts.validators import form_password_validator
 
@@ -47,7 +47,7 @@ class CompanySignupForm(forms.Form):
                                max_length=MAX_PASSWORD_LENGTH)
     website = forms.URLField(max_length=200, required=True)
     company_name = forms.CharField(max_length=100)
-    changelog_terminology = forms.CharField(max_length=50, initial='', required=False)
+    # changelog_terminology = forms.CharField(max_length=50, initial='', required=False)
 
     def clean_email(self):
         email = self.data.get('email')
@@ -79,7 +79,7 @@ class CompanySignupForm(forms.Form):
                      f'--password={data["password"]}',
                      f'--company_name={data["company_name"]}',
                      f'--website={data["website"]}',
-                     f'--changelog_terminology={data["changelog_terminology"]}'
+                     f'--changelog_terminology={data.get("changelog_terminology", "Changelog")}'
                      )
 
 
@@ -185,3 +185,11 @@ class TandoraAdminLoginForm(AuthenticationForm):
                 self.confirm_login_allowed(self.user_cache)
 
         return self.cleaned_data
+
+
+class AffiliateSignupForm(forms.ModelForm):
+    why = forms.CharField(widget=forms.TextInput, label='Why do you want to be the Tandora Man of Tandora?')
+
+    class Meta:
+        model = Affiliate
+        fields = '__all__'

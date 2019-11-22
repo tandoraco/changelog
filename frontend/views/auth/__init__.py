@@ -10,15 +10,15 @@ from rest_framework.response import Response
 
 from frontend.constants import COMPANY_CREATED_OR_EDITED_SUCCESSFULLY, COMPANY_DOES_NOT_EXIST, \
     PASSWORD_RESET_INITIATED, \
-    PASSWORD_RESET_SUCCESS, PASSWORD_RESET_TOKEN_INVALID, ACCOUNT_CREATED_MESSAGE
+    PASSWORD_RESET_SUCCESS, PASSWORD_RESET_TOKEN_INVALID, ACCOUNT_CREATED_MESSAGE, AFFILIATE_CREATED_SUCCESSFULLY
 from frontend.custom.decorators import is_authenticated
 from frontend.custom.forms import TandoraForm
 from frontend.custom.utils import set_redirect_in_session
 from frontend.forms.auth import LoginForm, CompanyForm, UserForm, ForgotPasswordForm, ResetPasswordForm, \
-    CompanySignupForm
+    CompanySignupForm, AffiliateSignupForm
 from frontend.forms.auth.utils import clear_request_session
 from frontend.views.auth.utils import save_subscription_details
-from v1.accounts.models import User, ClientToken, Company, ForgotPassword
+from v1.accounts.models import User, ClientToken, Company, ForgotPassword, Affiliate
 from v1.accounts.serializers import ResetPasswordSerializer
 
 
@@ -79,6 +79,25 @@ def signup(request):
         'form': form,
         'title': 'Signup for 7 day free trial'
     })
+
+
+def affiliate_signup(request):
+    affiliate_content = '''<b>Want to become the Tandora man (affiliate) of Tandora?</b><br>
+
+Becoming a Tandora man is simple but make sure to do loud noises about Tandora. When your noise brings us customers,
+you get 12% of the total bill as affiliate charge for every customer you bring in.<br>
+
+<ul>
+<li>Hassle-free payments guaranteed.</li>
+
+<li>Payouts on every month.</li>
+</ul>
+<u>Fill in the below form if you would like to join the Tandora team as Tandora Man:</u>
+    '''
+    return TandoraForm(Affiliate, AffiliateSignupForm, 'create', 'generic-pre-login-form.html',
+                       "/login") \
+        .get_form(request, success_message=AFFILIATE_CREATED_SUCCESSFULLY, extra=affiliate_content,
+                  title='Affiliate Signup')
 
 
 @is_authenticated

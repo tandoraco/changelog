@@ -37,3 +37,4 @@ EMAIL_EXISTS_ERROR = _('Email is already present in our records. Please enter a 
 WEBSITE_EXISTS_ERROR = _('Website is already present in our records. Please enter a different website.')
 
 ACCOUNT_CREATED_MESSAGE = _('Your account is created. Please login to start using your free trial.')
+AFFILIATE_CREATED_SUCCESSFULLY = _('Your request is received. We will contact you shortly.')

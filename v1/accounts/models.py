@@ -129,4 +129,16 @@ class AngelUser(models.Model):
         return mark_safe(f'{style}{response}')
 
 
+class Affiliate(models.Model):
+    name = models.CharField(max_length=50)
+    email = models.EmailField()
+    phone_no = models.CharField(max_length=30)
+    city = models.CharField(max_length=50)
+    company_name = models.CharField(max_length=50)
+    why = models.TextField()
+
+    def __str__(self):
+        return f'{self.name} {self.email} {self.company_name}'
+
+
 post_save.connect(send_forgot_password_mail, sender=ForgotPassword)
