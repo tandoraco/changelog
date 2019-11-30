@@ -6,12 +6,14 @@ from django.core.management import call_command
 from django.db import transaction
 from django.utils.translation import ugettext as _
 
-from frontend.constants import PASSWORD_DOES_NOT_MATCH, EMAIL_EXISTS_ERROR, WEBSITE_EXISTS_ERROR
+from frontend.constants import PASSWORD_DOES_NOT_MATCH, EMAIL_EXISTS_ERROR, WEBSITE_EXISTS_ERROR, INVALID_REFERRAL_CODE
 from v1.accounts.constants import MAX_EMAIL_LENGTH, PASSWORD_INCORRECT_ERROR, EMAIL_NOT_FOUND_ERROR, \
     MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH
-from v1.accounts.models import User, Company, ForgotPassword, Affiliate
+from v1.accounts.models import User, Company, ForgotPassword, Affiliate, Referral
 from v1.accounts.utils import verify_password
 from v1.accounts.validators import form_password_validator
+
+REFERRAL_CODE = 'If you have a referral code provided by Tandora man (affiliate), provide here.'
 
 
 class LoginForm(forms.Form):
@@ -47,6 +49,7 @@ class CompanySignupForm(forms.Form):
                                max_length=MAX_PASSWORD_LENGTH)
     website = forms.URLField(max_length=200, required=True)
     company_name = forms.CharField(max_length=100)
+    referral_code = forms.CharField(max_length=50, required=False, label=REFERRAL_CODE)
     # changelog_terminology = forms.CharField(max_length=50, initial='', required=False)
 
     def clean_email(self):
@@ -70,6 +73,17 @@ class CompanySignupForm(forms.Form):
             pass
         return website
 
+    def clean_referral_code(self):
+        referral_code = self.cleaned_data.get('referral_code')
+
+        if referral_code:
+            try:
+                Referral.objects.get(referral_code=referral_code)
+            except Referral.DoesNotExist:
+                raise forms.ValidationError(INVALID_REFERRAL_CODE)
+
+        return referral_code
+
     @transaction.atomic
     def save(self):
         data = self.cleaned_data
@@ -79,7 +93,8 @@ class CompanySignupForm(forms.Form):
                      f'--password={data["password"]}',
                      f'--company_name={data["company_name"]}',
                      f'--website={data["website"]}',
-                     f'--changelog_terminology={data.get("changelog_terminology", "Changelog")}'
+                     f'--changelog_terminology={data.get("changelog_terminology", "Changelog")}',
+                     f'--referral_code={data.get("referral_code", None)}'
                      )
 
 
