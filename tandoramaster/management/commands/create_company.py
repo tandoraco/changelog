@@ -7,6 +7,7 @@ from django.core.management import BaseCommand
 from django.db import transaction
 
 from v1.accounts.constants import CHANGELOG_TERMINOLOGY
+from v1.accounts.models import Referral
 from v1.accounts.serializers import CompanySerializer
 from v1.categories.models import Category
 from v1.core.models import Changelog
@@ -27,6 +28,7 @@ class Command(BaseCommand):
         parser.add_argument('-c', '--company_name', type=str, help='Company name')
         parser.add_argument('-w', '--website', type=str, help='Company website address')
         parser.add_argument('-ct', '--changelog_terminology', type=str, help='How the company wants to name changelog?')
+        parser.add_argument('-ref', '--referral_code', type=str, help='Code to track conversion from affiliates.')
 
     @transaction.atomic
     def handle(self, *args, **options):
@@ -36,6 +38,7 @@ class Command(BaseCommand):
         company_name = options.get('company_name')
         website = options.get('website')
         terminology = options.get('changelog_terminology', CHANGELOG_TERMINOLOGY)
+        referral_code = options.get('referral_code')
 
         if not (email and name and password and company_name and website and terminology):
             raise AssertionError("All required arguments are not present.")
@@ -83,6 +86,13 @@ class Command(BaseCommand):
             changelog['created_by'] = company.admin
             changelog['last_edited_by'] = company.admin
             created_changelog = Changelog.objects.create(**changelog)
+
+        if referral_code:
+            try:
+                referral = Referral.objects.get(referral_code=referral_code)
+                referral.add_signup(company.id)
+            except Referral.DoesNotExist:
+                pass
 
         success_data = {
             'company_id': company.id,
