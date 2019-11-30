@@ -4,7 +4,7 @@ from django.contrib.admin import AdminSite
 from django.utils.translation import ugettext as _
 
 from frontend.forms.auth import TandoraAdminLoginForm
-from v1.accounts.models import Company, User, Subscription, PricePlan, AngelUser, Affiliate
+from v1.accounts.models import Company, User, Subscription, PricePlan, AngelUser, Affiliate, Referral
 from v1.accounts.utils import hash_password
 
 
@@ -49,6 +49,10 @@ class SubscriptionAdmin(admin.ModelAdmin):
     readonly_fields = ('razorpay_data', )
 
 
+class ReferralAdmin(admin.ModelAdmin):
+    readonly_fields = ('conversion_count', 'company_ids', )
+
+
 admin_site = TandoraLoginAdminSite()
 admin_site.register(Company)
 admin_site.register(User, UserAdmin)
@@ -56,3 +60,4 @@ admin_site.register(PricePlan)
 admin_site.register(Subscription, SubscriptionAdmin)
 admin_site.register(AngelUser, AngelUserAdmin)
 admin_site.register(Affiliate)
+admin_site.register(Referral, ReferralAdmin)
