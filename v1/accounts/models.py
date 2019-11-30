@@ -134,11 +134,30 @@ class Affiliate(models.Model):
     email = models.EmailField()
     phone_no = models.CharField(max_length=30)
     city = models.CharField(max_length=50)
-    company_name = models.CharField(max_length=50)
+    qualification = models.CharField(max_length=50)
     why = models.TextField()
 
     def __str__(self):
-        return f'{self.name} {self.email} {self.company_name}'
+        return f'{self.name} {self.email}'
+
+
+class Referral(models.Model):
+    referrer = models.OneToOneField(Affiliate, on_delete=models.DO_NOTHING, blank=False, null=False)
+    referral_code = models.CharField(max_length=50, unique=True, db_index=True)
+    conversion_count = models.PositiveIntegerField(default=0)
+    company_ids = models.TextField(default='{}')
+
+    def add_signup(self, value):
+        ids = json.loads(self.company_ids)
+        signed_up_ids = ids.get('signed_up_company_ids', [])
+        signed_up_ids.append(value)
+        ids['signed_up_company_ids'] = signed_up_ids
+        self.company_ids = json.dumps(ids)
+        self.conversion_count += 1
+        self.save()
+
+    def __str__(self):
+        return self.referrer.name
 
 
 post_save.connect(send_forgot_password_mail, sender=ForgotPassword)
