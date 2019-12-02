@@ -49,7 +49,9 @@ def view_changelog_as_public(request, company, changelog_terminology, slug):
         changelog.save()
         return render(request, 'public-single-changelog.html',
                       context={'company_name': company.company_name, 'terminology': changelog_terminology,
-                               'changelog': changelog})
+                               'changelog': changelog,
+                               'hide_tandora_logo': True
+                               })
     except (Company.DoesNotExist, Changelog.DoesNotExist):
         raise Http404
 
@@ -60,6 +62,7 @@ def public_index(request, company, changelog_terminology):
         changelogs = Changelog.objects.filter(company=company, deleted=False, published=True).order_by('-created_at')
         return render(request, 'public-index.html',
                       context={'company_name': company.company_name, 'terminology': changelog_terminology,
-                               'changelogs': changelogs})
+                               'changelogs': changelogs,
+                               'hide_tandora_logo': True})
     except (Company.DoesNotExist, Changelog.DoesNotExist):
         raise Http404

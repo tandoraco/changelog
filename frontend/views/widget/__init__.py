@@ -54,7 +54,8 @@ def public_widget(request, company, changelog_terminology):
                       context={
                           'company': company,
                           'widget': widget,
-                          'changelogs': changelogs
+                          'changelogs': changelogs,
+                          'hide_tandora_logo': True
                       })
     except (Company.DoesNotExist, Embed.DoesNotExist):
         raise Http404
