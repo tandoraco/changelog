@@ -12,9 +12,11 @@
 <script>
 </script>
 <body>
+{% if hide_tandora_logo is None %}
 <div class="container">
     <center><h1><a style="color:#428bca;" href="https://www.tandora.co">tandora</a></h1></center>
 </div>
+{% endif %}
 {% block content %}
 {% endblock %}
 </body>
