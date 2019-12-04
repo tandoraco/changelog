@@ -28,8 +28,6 @@ class TestAuthenticatedEndpoints:
         # When we do not login and hit an endpoint that requires authentication
         # we will be redirected to login page with redirect_to set to requested endpoint
 
-        assert not company.is_trial_account
-
         for endpoint in AUTHENTICATED_ENDPOINTS:
             response = self.client.get(endpoint)
             assert response.status_code == status.HTTP_302_FOUND
