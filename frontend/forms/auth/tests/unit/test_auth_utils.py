@@ -11,9 +11,8 @@ from frontend.forms.auth.utils import is_trial_expired
 @pytest.mark.django_db
 @pytest.mark.unit
 def test_is_trial_expired(company):
-    # by default trial is false for all accounts
-    # this is so to enable smooth migration for existing setups
-    assert not company.is_trial_account
+    # by default trial is true for all accounts
+    assert company.is_trial_account
 
     session = {
         'company-id': company.id
