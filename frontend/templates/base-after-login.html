@@ -65,8 +65,27 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script-->
 <link href="https://fonts.googleapis.com/css?family=M+PLUS+1p&&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{% static 'css/app.css' %}">
+<link rel="stylesheet" href="{% static 'css/codemirror.css' %}">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
       integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<script src="{% static 'js/codemirror.js' %}"></script>
+<script src="{% static 'js/codemirror-css.js' %}"></script>
+<script src="{% static 'js/codemirror-js.js' %}"></script>
+<script src="{% static 'js/codemirror-html-mixed.js' %}"></script>
+<script>
+  var javascriptTextarea = document.getElementById("id_javascript");
+  if(javascriptTextarea) {
+    var editor = CodeMirror.fromTextArea(javascriptTextarea, {
+      lineNumbers: true, mode: {"name": "javascript"}
+    });
+  }
+  var cssTextarea = document.getElementById("id_css");
+  if(cssTextarea) {
+    var editor = CodeMirror.fromTextArea(cssTextarea, {
+      lineNumbers: true, mode: {"name": "css"}
+    });
+  }
+</script>
 <script>
     let body = document.getElementsByTagName('body')[0];
     //body.style.fontFamily = "Duru Sans";
