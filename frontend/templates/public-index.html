@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load humanize %}
+{% load frontend_tags %}
 {% block content %}
 <div id="c-banner" class="banner">
     <div class="container">
@@ -24,7 +25,7 @@
                 <div class="preview-link">
                     <h2><a href="/{{ company_name}}/{{ terminology }}/{{ changelog.slug }}">{{ changelog.title }}</a></h2>
                     <i><span style="color:grey;">Created: {{ changelog.created_at|naturaltime }}</span><br></i><br>
-                    <span>{{ changelog.content|truncatechars:280|safe }}</span>
+                    <span>{{ changelog.content|extract_text_and_truncate }}</span>
                     <span><a href="/{{ company_name}}/{{ terminology }}/{{ changelog.slug }}">Read more..</a></span>
                 </div>
             </div>
