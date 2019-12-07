@@ -176,3 +176,8 @@ word-break: break-word;
 span {
   font-family: 'M PLUS 1p', sans-serif;
 }
+
+.CodeMirror {
+  border: 1px solid #000;
+  height: auto;
+}
