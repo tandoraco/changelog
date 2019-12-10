@@ -8,7 +8,7 @@ from django.utils.translation import ugettext as _
 
 from frontend.constants import PASSWORD_DOES_NOT_MATCH, EMAIL_EXISTS_ERROR, WEBSITE_EXISTS_ERROR, INVALID_REFERRAL_CODE
 from v1.accounts.constants import MAX_EMAIL_LENGTH, PASSWORD_INCORRECT_ERROR, EMAIL_NOT_FOUND_ERROR, \
-    MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH
+    MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH, USE_CASE_CHOICES
 from v1.accounts.models import User, Company, ForgotPassword, Affiliate, Referral
 from v1.accounts.utils import verify_password
 from v1.accounts.validators import form_password_validator
@@ -48,6 +48,7 @@ class CompanySignupForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput, min_length=MIN_PASSWORD_LENGTH,
                                max_length=MAX_PASSWORD_LENGTH)
     website = forms.URLField(max_length=200, required=True)
+    use_case = forms.ChoiceField(choices=USE_CASE_CHOICES, required=True)
     company_name = forms.CharField(max_length=100)
     referral_code = forms.CharField(max_length=50, required=False, label=REFERRAL_CODE)
     # changelog_terminology = forms.CharField(max_length=50, initial='', required=False)
@@ -93,6 +94,7 @@ class CompanySignupForm(forms.Form):
                      f'--password={data["password"]}',
                      f'--company_name={data["company_name"]}',
                      f'--website={data["website"]}',
+                     f'--use_case={data["use_case"]}',
                      f'--changelog_terminology={data.get("changelog_terminology", "Changelog")}',
                      f'--referral_code={data.get("referral_code", None)}'
                      )
@@ -145,7 +147,7 @@ class CompanyForm(forms.ModelForm):
 
     class Meta:
         model = Company
-        exclude = ['is_trial_account', 'created_time']
+        exclude = ['is_trial_account', 'created_time', 'use_case', '_settings']
 
 
 class UserForm(forms.ModelForm):
