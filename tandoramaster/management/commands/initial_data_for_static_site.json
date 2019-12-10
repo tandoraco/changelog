@@ -1,0 +1,42 @@
+{
+  "categories": [
+    {
+      "name": "Home",
+      "color": "#FFA500",
+      "deleted": false,
+      "company": ""
+    },
+    {
+      "name": "Privacy Policy",
+      "color": "#800000",
+      "deleted": false,
+      "company": ""
+    },
+    {
+      "name": "Terms of service",
+      "color": "#008080",
+      "deleted": false,
+      "company": ""
+    }
+  ],
+  "changelogs": [
+    {
+      "title": "Privacy policy",
+      "slug": "privacy-policy",
+      "content": "",
+      "category": "",
+      "published": false,
+      "deleted": false,
+      "company": ""
+    },
+    {
+      "title": "Terms of service",
+      "slug": "terms-of-service",
+      "content": "",
+      "category": "",
+      "published": false,
+      "deleted": false,
+      "company": ""
+    }
+  ]
+}
