@@ -21,7 +21,7 @@ class ChangeLogList(TandoraListViewMixin):
 
     def get_template_names(self):
         if int(self.request.GET.get('page', 1)) > 1:
-            return ['changelog_items.html']
+            return ['staff/changelogs/index.html']
         return ['app.html']
 
     def get_queryset(self):
@@ -34,7 +34,7 @@ def view_changelog(request, slug):
     try:
         company_id = request.session["company-id"]
         changelog = Changelog.objects.get(company__id=company_id, slug=unquote(slug))
-        return render(request, 'single-changelog.html',
+        return render(request, 'staff/changelogs/changelog.html',
                       context={'title': changelog.title, 'content': changelog.content})
     except Changelog.DoesNotExist:
         raise Http404
