@@ -47,7 +47,7 @@ def view_changelog_as_public(request, company, changelog_terminology, slug):
         changelog = Changelog.objects.get(company=company, slug=unquote(slug), published=True, deleted=False)
         changelog.view_count += 1
         changelog.save()
-        return render(request, 'public-single-changelog.html',
+        return render(request, 'public/changelog.html',
                       context={'company_name': company.company_name, 'terminology': changelog_terminology,
                                'changelog': changelog,
                                'hide_tandora_logo': True
@@ -60,7 +60,7 @@ def public_index(request, company, changelog_terminology):
     try:
         company = get_company_from_slug_and_changelog_terminology(company, changelog_terminology)
         changelogs = Changelog.objects.filter(company=company, deleted=False, published=True).order_by('-created_at')
-        return render(request, 'public-index.html',
+        return render(request, 'public/index.html',
                       context={'company_name': company.company_name, 'terminology': changelog_terminology,
                                'changelogs': changelogs,
                                'hide_tandora_logo': True})
