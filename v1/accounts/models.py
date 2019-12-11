@@ -72,6 +72,10 @@ class Company(models.Model):
     def settings(self, value):
         self._settings = json.dumps(value)
 
+    @property
+    def is_static_site(self):
+        return self.use_case == 's'
+
 
 class PricePlan(models.Model):
     name = models.CharField(max_length=100)

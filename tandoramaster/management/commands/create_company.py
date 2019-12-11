@@ -71,6 +71,7 @@ class Command(BaseCommand):
             'company_name': company_name,
             'website': website,
             'changelog_terminology': terminology,
+            'use_case': use_case,
             'email': email,
             'name': name,
             'password': password
