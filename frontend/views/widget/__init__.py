@@ -50,7 +50,7 @@ def public_widget(request, company, changelog_terminology):
         widget = Embed.objects.get(company=company, enabled=True)
         changelogs = Changelog.objects.filter(company=company, published=True,
                                               deleted=False).order_by('-created_at')[:10]
-        return render(request, 'public-widget.html',
+        return render(request, 'public/widget.html',
                       context={
                           'company': company,
                           'widget': widget,
