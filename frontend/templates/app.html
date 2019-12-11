@@ -1,7 +1,7 @@
-{% extends "base-after-login.html" %}
+{% extends "staff/base.html" %}
 {% block content %}
 <div id="changelogs">
-{% include 'changelog_items.html' %}
+{% include 'staff/changelogs/index.html' %}
 </div>
 <img id="spinner" src="/static/images/loading.gif" style="display:none">
 <!--div id="editor">

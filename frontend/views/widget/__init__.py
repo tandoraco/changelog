@@ -36,7 +36,7 @@ def widget_form(request):
             public_page_url = f"{request.session['public-page-url']}/widget/1"
             extra = f'<i><a target="_blank" href="{public_page_url}">Click here</a> to view widget.</i>'
 
-    return TandoraForm(Embed, WidgetForm, action, 'generic-after-login-form.html',
+    return TandoraForm(Embed, WidgetForm, action, 'staff/form.html',
                        '/', initial=initial) \
         .get_form(request, success_message=WIDGET_CREATED_OR_EDITED_SUCCESSFULLY,
                   error_message=WIDGET_DOES_NOT_EXIST, id=id, extra=extra)
