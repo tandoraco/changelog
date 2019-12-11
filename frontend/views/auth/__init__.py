@@ -75,7 +75,7 @@ def signup(request):
     else:
         form = CompanySignupForm()
 
-    return render(request, 'generic-pre-login-form.html', {
+    return render(request, 'public/form.html', {
         'form': form,
         'title': 'Signup for 7 day free trial'
     })
@@ -94,7 +94,7 @@ you get 12% of the total bill as affiliate charge for every customer you bring i
 </ul>
 <u>Fill in the below form if you would like to join the Tandora team as Tandora Man:</u>
     '''
-    return TandoraForm(Affiliate, AffiliateSignupForm, 'create', 'generic-pre-login-form.html',
+    return TandoraForm(Affiliate, AffiliateSignupForm, 'create', 'public/form.html',
                        "/login") \
         .get_form(request, success_message=AFFILIATE_CREATED_SUCCESSFULLY, extra=affiliate_content,
                   title='Affiliate Signup')
@@ -104,7 +104,7 @@ you get 12% of the total bill as affiliate charge for every customer you bring i
 def profile_form(request):
     email = request.session.get('email', '')
     id = User.objects.get(email=email).id
-    return TandoraForm(User, UserForm, 'edit', 'generic-after-login-form.html',
+    return TandoraForm(User, UserForm, 'edit', 'staff/form.html',
                        '/') \
         .get_form(request, id=id)
 
@@ -112,7 +112,7 @@ def profile_form(request):
 @is_authenticated
 def company_form(request):
     id = request.session["company-id"]
-    return TandoraForm(Company, CompanyForm, 'edit', 'generic-after-login-form.html',
+    return TandoraForm(Company, CompanyForm, 'edit', 'staff/form.html',
                        "/login") \
         .get_form(request, success_message=COMPANY_CREATED_OR_EDITED_SUCCESSFULLY,
                   error_message=COMPANY_DOES_NOT_EXIST, id=id)
@@ -129,7 +129,7 @@ def razorpay_webhook(request):
 
 @transaction.atomic
 def forgot_password_form(request):
-    return TandoraForm(ForgotPassword, ForgotPasswordForm, 'create', 'generic-pre-login-form.html',
+    return TandoraForm(ForgotPassword, ForgotPasswordForm, 'create', 'public/form.html',
                        "/login") \
         .get_form(request, success_message=PASSWORD_RESET_INITIATED, title="Forgot Password")
 
@@ -160,7 +160,7 @@ def reset_password_form(request, token):
         else:
             form = ResetPasswordForm()
 
-        return render(request, 'generic-pre-login-form.html', {
+        return render(request, 'public/form.html', {
             'form': form,
             'title': 'Reset Password'
         })
