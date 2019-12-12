@@ -160,4 +160,16 @@ class Referral(models.Model):
         return self.referrer.name
 
 
+class CustomDomain(models.Model):
+    company = models.OneToOneField(Company, on_delete=models.DO_NOTHING)
+    domain_name = models.CharField(max_length=200, blank=False, null=False, unique=True, db_index=True)
+    tandora_url = models.URLField(blank=False, null=False)
+    is_enabled = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.domain_name} -> {self.tandora_url}'
+
+
 post_save.connect(send_forgot_password_mail, sender=ForgotPassword)
