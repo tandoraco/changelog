@@ -14,7 +14,7 @@ class CustomDomainMiddleware(MiddlewareMixin):
                 custom_domain = CustomDomain.objects.get(domain_name=host, is_enabled=True)
                 redirect_to = []
                 for part in custom_domain.tandora_url.split('/'):
-                    if part and ['http:', 'https:', 'app.tandora.co'] not in part:
+                    if part and part not in {'http:', 'https:', 'app.tandora.co'}:
                         redirect_to.append(part)
                 return HttpResponseRedirect('/'.join(redirect_to))
             except CustomDomain.DoesNotExist:
