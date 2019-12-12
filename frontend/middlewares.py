@@ -1,4 +1,4 @@
-from django.http import HttpResponseRedirect
+from django.shortcuts import redirect
 from django.utils.deprecation import MiddlewareMixin
 
 from v1.accounts.models import CustomDomain
@@ -16,6 +16,6 @@ class CustomDomainMiddleware(MiddlewareMixin):
                 for part in custom_domain.tandora_url.split('/'):
                     if part and part not in {'http:', 'https:', 'app.tandora.co'}:
                         redirect_to.append(part)
-                return HttpResponseRedirect('/'.join(redirect_to))
+                return redirect('/'.join(redirect_to))
             except CustomDomain.DoesNotExist:
                 pass
