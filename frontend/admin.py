@@ -4,7 +4,7 @@ from django.contrib.admin import AdminSite
 from django.utils.translation import ugettext as _
 
 from frontend.forms.auth import TandoraAdminLoginForm
-from v1.accounts.models import Company, User, Subscription, PricePlan, AngelUser, Affiliate, Referral
+from v1.accounts import models as v1_account_models
 from v1.accounts.utils import hash_password
 
 
@@ -54,10 +54,11 @@ class ReferralAdmin(admin.ModelAdmin):
 
 
 admin_site = TandoraLoginAdminSite()
-admin_site.register(Company)
-admin_site.register(User, UserAdmin)
-admin_site.register(PricePlan)
-admin_site.register(Subscription, SubscriptionAdmin)
-admin_site.register(AngelUser, AngelUserAdmin)
-admin_site.register(Affiliate)
-admin_site.register(Referral, ReferralAdmin)
+admin_site.register(v1_account_models.Company)
+admin_site.register(v1_account_models.User, UserAdmin)
+admin_site.register(v1_account_models.PricePlan)
+admin_site.register(v1_account_models.Subscription, SubscriptionAdmin)
+admin_site.register(v1_account_models.AngelUser, AngelUserAdmin)
+admin_site.register(v1_account_models.Affiliate)
+admin_site.register(v1_account_models.Referral, ReferralAdmin)
+admin_site.register(v1_account_models.CustomDomain)
