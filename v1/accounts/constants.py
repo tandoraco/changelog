@@ -17,3 +17,8 @@ EMAIL_OR_PASSWORD_INVALID = _("Email or Password is invalid.")
 CHANGELOG_TERMINOLOGY = _("Changelog")
 
 RESET_TOKEN_INVALID = _("Forgot password token is invalid.")
+
+USE_CASE_CHOICES = (
+    ('c', 'Publishing product updates, changelog or blog',),
+    ('s', 'Static site'),
+)
