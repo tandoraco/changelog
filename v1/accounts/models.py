@@ -9,7 +9,7 @@ from pygments import highlight
 from pygments.formatters.html import HtmlFormatter
 from pygments.lexers.data import JsonLexer
 
-from v1.accounts.constants import CHANGELOG_TERMINOLOGY, MAX_EMAIL_LENGTH
+from v1.accounts.constants import CHANGELOG_TERMINOLOGY, MAX_EMAIL_LENGTH, USE_CASE_CHOICES
 from v1.accounts.utils import UserManager
 from v1.notifications.email import send_forgot_password_mail
 
@@ -51,7 +51,9 @@ class Company(models.Model):
     company_name = models.CharField(max_length=100)
     changelog_terminology = models.CharField(max_length=50, default=CHANGELOG_TERMINOLOGY)
     is_trial_account = models.BooleanField(blank=False, default=True)
+    use_case = models.CharField(max_length=1, choices=USE_CASE_CHOICES, default='c')
     created_time = models.DateTimeField(auto_now_add=True)
+    _settings = models.TextField(blank=True, null=True, db_column='settings')
 
     def __str__(self):
         return f'{self.company_name}'
@@ -61,6 +63,18 @@ class Company(models.Model):
 
     class Meta:
         verbose_name_plural = 'Companies'
+
+    @property
+    def settings(self):
+        return json.loads(self._settings) if self._settings else {}
+
+    @settings.setter
+    def settings(self, value):
+        self._settings = json.dumps(value)
+
+    @property
+    def is_static_site(self):
+        return self.use_case == 's'
 
 
 class PricePlan(models.Model):

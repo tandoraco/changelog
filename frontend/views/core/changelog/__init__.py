@@ -52,7 +52,7 @@ def _changelog_form(request, form, action, changelog_id=None, instance=None):
 
     changelog_id = f"/{str(changelog_id)}" if changelog_id else ""
 
-    return render(request, 'changelog-form.html',
+    return render(request, 'staff/changelogs/form.html',
                   {'form': form, 'action': f'/staff/{action}-changelog{changelog_id}', 'title': action.title()})
 
 

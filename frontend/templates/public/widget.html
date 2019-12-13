@@ -1,19 +1,18 @@
 {% extends "base.html" %}
 {% load humanize %}
-{% load frontend_tags %}
 {% block content %}
 <div id="c-banner" class="banner">
     <div class="container">
         <h1 class="logo-font">
-            {{ company_name }}
+            <a href="{{ company.website }}">{{ company.company_name }}</a>
         </h1>
-        <p style="text-align:center;">{{ terminology }} </p>
+        <p style="text-align:center;">{{ company.changelog_terminology }} </p>
     </div>
 </div>
 <div class="container page">
     {% for changelog in changelogs %}
     <div class="row">
-        <div class="col-md-9">
+        <div class="col-md-12">
             <div class="article-preview">
                 <!--div class="article-meta">
                         Mete
@@ -22,11 +21,12 @@
                     </div>
                     <span class="date">Date</span>
                 </div-->
-                <div class="preview-link">
-                    <h2><a href="/{{ company_name}}/{{ terminology }}/{{ changelog.slug }}">{{ changelog.title }}</a></h2>
+                <div>
+                    <h2><!--a href="/{{ company_name}}/{{ terminology }}/{{ changelog.slug }}"-->{{ changelog.title }}<!--/a--></h2>
+                    <span style="color: white; background-color: {{ changelog.category.color }};">&nbsp{{ changelog.category.name }}&nbsp</span><br>
                     <i><span style="color:grey;">Created: {{ changelog.created_at|naturaltime }}</span><br></i><br>
-                    <span>{{ changelog.content|extract_text_and_truncate }}</span>
-                    <span><a href="/{{ company_name}}/{{ terminology }}/{{ changelog.slug }}">Read more..</a></span>
+                    <span style="font-color:black;">{{ changelog.content|safe }}</span>
+                    <!--span><a href="/{{ company_name}}/{{ terminology }}/{{ changelog.slug }}">Read more..</a></span-->
                 </div>
             </div>
             <hr>
@@ -36,8 +36,12 @@
 </div>
 <script>
     let banner = document.getElementById('c-banner');
-    banner.style.backgroundColor = "{{ color }}";
+    banner.style.backgroundColor = "{{ widget.color }}";
     let body = document.getElementsByTagName('body')[0];
-    body.style.fontFamily = "Poppins";
+    body.style.fontFamily = "M PLUS 1p";
 </script>
+{{ widget.javascript|safe }}
+<style>
+{{ widget.css }}
+</style>
 {% endblock %}
