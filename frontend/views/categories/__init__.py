@@ -13,7 +13,7 @@ from v1.categories.models import Category
 
 @is_authenticated
 def category_form(request):
-    return TandoraForm(Category, CategoryForm, 'create', 'generic-after-login-form.html',
+    return TandoraForm(Category, CategoryForm, 'create', 'staff/form.html',
                        '/')\
         .get_form(request, success_message=CATEGORY_CREATED_OR_EDITED_SUCCESSFULLY,
                   error_message=CATEGORY_DOES_NOT_EXIST)
@@ -21,7 +21,7 @@ def category_form(request):
 
 @is_authenticated
 def edit_category(request, id):
-    return TandoraForm(Category, CategoryForm, 'edit', 'generic-after-login-form.html',
+    return TandoraForm(Category, CategoryForm, 'edit', 'staff/form.html',
                        '/')\
         .get_form(request,
                   success_message=CATEGORY_CREATED_OR_EDITED_SUCCESSFULLY,
@@ -35,7 +35,7 @@ def delete_category(request, id):
 
 
 class CategoryList(TandoraListViewMixin):
-    template_name = 'category-items.html'
+    template_name = 'staff/categories/index.html'
 
     def get_queryset(self):
         company_id = self.request.session['company-id']
