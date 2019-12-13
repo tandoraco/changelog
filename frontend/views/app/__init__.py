@@ -57,6 +57,7 @@ def view_changelog_as_public(request, company, changelog_terminology, slug):
             context.update({'changelog': changelog})
 
         return render(request, template, context=context)
+
     except (Company.DoesNotExist, Changelog.DoesNotExist):
         raise Http404
 
@@ -73,5 +74,6 @@ def public_index(request, company, changelog_terminology):
             context['changelogs'] = changelogs
 
         return render(request, template, context=context)
+
     except (Company.DoesNotExist, Changelog.DoesNotExist):
         raise Http404
