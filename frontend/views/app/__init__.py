@@ -7,6 +7,7 @@ from django.shortcuts import render
 from frontend.custom.decorators import is_authenticated
 from frontend.custom.utils import get_company_from_slug_and_changelog_terminology
 from frontend.custom.views import TandoraListViewMixin
+from frontend.views.app.public_helpers import get_context_and_template_name
 from v1.accounts.models import Company
 from v1.core.models import Changelog
 
@@ -21,7 +22,7 @@ class ChangeLogList(TandoraListViewMixin):
 
     def get_template_names(self):
         if int(self.request.GET.get('page', 1)) > 1:
-            return ['changelog_items.html']
+            return ['staff/changelogs/index.html']
         return ['app.html']
 
     def get_queryset(self):
@@ -34,7 +35,7 @@ def view_changelog(request, slug):
     try:
         company_id = request.session["company-id"]
         changelog = Changelog.objects.get(company__id=company_id, slug=unquote(slug))
-        return render(request, 'single-changelog.html',
+        return render(request, 'staff/changelogs/changelog.html',
                       context={'title': changelog.title, 'content': changelog.content})
     except Changelog.DoesNotExist:
         raise Http404
@@ -47,11 +48,16 @@ def view_changelog_as_public(request, company, changelog_terminology, slug):
         changelog = Changelog.objects.get(company=company, slug=unquote(slug), published=True, deleted=False)
         changelog.view_count += 1
         changelog.save()
-        return render(request, 'public-single-changelog.html',
-                      context={'company_name': company.company_name, 'terminology': changelog_terminology,
-                               'changelog': changelog,
-                               'hide_tandora_logo': True
-                               })
+
+        context, template = get_context_and_template_name(company, changelog=True)
+        if context.get('config'):
+            context['config']['home_page_title'] = changelog.title
+            context['config']['home_page_content'] = changelog.content
+        else:
+            context.update({'changelog': changelog})
+
+        return render(request, template, context=context)
+
     except (Company.DoesNotExist, Changelog.DoesNotExist):
         raise Http404
 
@@ -60,9 +66,14 @@ def public_index(request, company, changelog_terminology):
     try:
         company = get_company_from_slug_and_changelog_terminology(company, changelog_terminology)
         changelogs = Changelog.objects.filter(company=company, deleted=False, published=True).order_by('-created_at')
-        return render(request, 'public-index.html',
-                      context={'company_name': company.company_name, 'terminology': changelog_terminology,
-                               'changelogs': changelogs,
-                               'hide_tandora_logo': True})
+
+        context, template = get_context_and_template_name(company)
+        if context.get('config'):
+            context['config']['home_page_title'] = ''
+        else:
+            context['changelogs'] = changelogs
+
+        return render(request, template, context=context)
+
     except (Company.DoesNotExist, Changelog.DoesNotExist):
         raise Http404

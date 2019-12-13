@@ -18,6 +18,14 @@ def get_current_utc_time():
     return str(current_time.replace(tzinfo=pytz.utc))
 
 
+def create_changelog(changelog, category, company):
+    changelog['company'] = company
+    changelog['category'] = category
+    changelog['created_by'] = company.admin
+    changelog['last_edited_by'] = company.admin
+    return Changelog.objects.create(**changelog)
+
+
 class Command(BaseCommand):
     description = "Create a company and populate initial data."
 
@@ -29,6 +37,7 @@ class Command(BaseCommand):
         parser.add_argument('-w', '--website', type=str, help='Company website address')
         parser.add_argument('-ct', '--changelog_terminology', type=str, help='How the company wants to name changelog?')
         parser.add_argument('-ref', '--referral_code', type=str, help='Code to track conversion from affiliates.')
+        parser.add_argument('-uc', '--use_case', type=str, help='Purpose of using Tandora')
 
     @transaction.atomic
     def handle(self, *args, **options):
@@ -39,16 +48,30 @@ class Command(BaseCommand):
         website = options.get('website')
         terminology = options.get('changelog_terminology', CHANGELOG_TERMINOLOGY)
         referral_code = options.get('referral_code')
+        use_case = options.get('use_case')
 
-        if not (email and name and password and company_name and website and terminology):
+        arguments = [
+            email,
+            name,
+            password,
+            company_name,
+            website,
+            terminology,
+            use_case,
+        ]
+        if not all(arguments):
             raise AssertionError("All required arguments are not present.")
 
         self.stdout.write(f"Creating company ..")
+
+        if use_case == 's' and terminology == CHANGELOG_TERMINOLOGY:
+            terminology = 'website'
 
         data = {
             'company_name': company_name,
             'website': website,
             'changelog_terminology': terminology,
+            'use_case': use_case,
             'email': email,
             'name': name,
             'password': password
@@ -66,7 +89,9 @@ class Command(BaseCommand):
         self.stdout.write(f"Populating initial data ..")
 
         current_path = pathlib.Path(__file__).parent
-        initial_data_json = current_path / 'initial_data.json'
+        initial_data_json = current_path / 'initial_data_for_changelog.json'
+        if use_case == 's':
+            initial_data_json = current_path / 'initial_data_for_static_site.json'
 
         with open(initial_data_json) as initial_data:
             data = json.loads(initial_data.read())
@@ -78,14 +103,23 @@ class Command(BaseCommand):
 
             Category.objects.bulk_create(categories)
 
-            new_category = Category.objects.get(company=company, name='New')
+            if use_case == 'c':
+                new_category = Category.objects.get(company=company, name='New')
 
-            changelog = data['changelog']
-            changelog['company'] = company
-            changelog['category'] = new_category
-            changelog['created_by'] = company.admin
-            changelog['last_edited_by'] = company.admin
-            created_changelog = Changelog.objects.create(**changelog)
+                for changelog in data['changelogs']:
+                    create_changelog(changelog, new_category, company)
+            else:
+                for changelog in data['changelogs']:
+                    try:
+                        category = Category.objects.get(company=company, name__iexact=changelog['title'])
+                        content_file = changelog['title'].lower().replace(' ', '_') + '.txt'
+                        content = ''
+                        with open(current_path / content_file) as cf:
+                            content = cf.read()
+                        changelog['content'] = content
+                        create_changelog(changelog, category, company)
+                    except Category.DoesNotExist:
+                        raise RuntimeError('Category does not exist.')
 
         if referral_code:
             try:
@@ -96,8 +130,6 @@ class Command(BaseCommand):
 
         success_data = {
             'company_id': company.id,
-            'created_changelog_id': created_changelog.id,
-            'new_category_id': new_category.id
         }
 
         self.stdout.write(f"Done creating company .. {success_data}", style_func=self.style.SUCCESS)
