@@ -6,7 +6,15 @@ FONT_CHOICES = (
     ('https://fonts.googleapis.com/css?family=Lato&display=swap', 'Lato'),
     ('https://fonts.googleapis.com/css?family=Open+Sans&display=swap', 'Open Sans'),
     ('https://fonts.googleapis.com/css?family=Gupter&display=swap', 'Gupter'),
+    ('https://fonts.googleapis.com/css?family=Roboto&display=swap', 'Roboto'),
+    ('https://fonts.googleapis.com/css?family=Gelasio&display=swap', 'Gelasio'),
+    ('https://fonts.googleapis.com/css?family=Montserrat&display=swap', 'Montserrat'),
+    ('https://fonts.googleapis.com/css?family=Source+Sans+Pro&display=swap', 'Source Sans Pro'),
+    ('https://fonts.googleapis.com/css?family=Lilita+One&display=swap', 'Lilita One'),
+    ('https://fonts.googleapis.com/css?family=Oswald&display=swap', 'Oswald'),
+    ('https://fonts.googleapis.com/css?family=Playfair+Display&display=swap', 'Playfair+Display')
 )
+FONT_CHOICES = tuple(sorted(FONT_CHOICES, key=lambda f: f[1]))
 
 
 class StaticSiteForm(forms.Form):
