@@ -42,3 +42,4 @@ INVALID_REFERRAL_CODE = _('Invalid referral code.')
 
 STATIC_SITE_CONFIGURE_SUCCESS = _('Static site configuration saved successfully.')
 NOT_ALLOWED = _('Not allowed for this plan.')
+THEME_SET_SUCCESS = _('Theme for Static site set successfully.')

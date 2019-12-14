@@ -1,5 +1,8 @@
 from django import forms
+from django.db import transaction
 from tinymce.widgets import TinyMCE
+
+from v1.core.models import StaticSiteTheme
 
 FONT_CHOICES = (
     ('https://fonts.googleapis.com/css?family=Poppins&display=swap', 'Poppins'),
@@ -17,10 +20,9 @@ FONT_CHOICES = (
 FONT_CHOICES = tuple(sorted(FONT_CHOICES, key=lambda f: f[1]))
 
 
-class StaticSiteForm(forms.Form):
+class DefaultStaticSiteForm(forms.Form):
     company_name = forms.CharField(max_length=50)
     tag_line = forms.CharField(max_length=100)
-    # company_logo_link = forms.URLField(required=False)
     font = forms.ChoiceField(choices=FONT_CHOICES, required=True)
     menu_1_title = forms.CharField(max_length=50, required=False)
     menu_1_link = forms.URLField(max_length=100, required=False)
@@ -28,10 +30,6 @@ class StaticSiteForm(forms.Form):
     menu_2_link = forms.URLField(max_length=100, required=False)
     menu_3_title = forms.CharField(max_length=50, required=False)
     menu_3_link = forms.URLField(max_length=100, required=False)
-    # menu_4_title = forms.CharField(max_length=50, required=False)
-    # menu_4_link = forms.URLField(max_length=50, required=False)
-    # menu_5_title = forms.CharField(max_length=50, required=False)
-    # menu_5_link = forms.URLField(max_length=50, required=False)
     home_page_content = forms.CharField(widget=TinyMCE)
     image_slide_show_link_1 = forms.URLField(required=True)
     image_slide_show_link_2 = forms.URLField(required=True)
@@ -39,3 +37,33 @@ class StaticSiteForm(forms.Form):
     twitter_profile = forms.URLField(required=False)
     privacy_policy_link = forms.URLField(required=True)
     terms_of_service_link = forms.URLField(required=True)
+
+
+class StaticSiteForm(forms.Form):
+
+    def __init__(self, fields, *args, **kwargs):
+        super(StaticSiteForm, self).__init__(*args, **kwargs)
+
+        self.fields['font'] = forms.ChoiceField(choices=FONT_CHOICES, required=True)
+        self.fields['home_page_content'] = forms.CharField(widget=TinyMCE)
+
+        for field in fields:
+            name, field = field.get_form_field_and_name()
+            self.fields[name] = field
+
+
+class ThemeForm(forms.Form):
+    theme = forms.ModelChoiceField(queryset=StaticSiteTheme.objects.all())
+
+    def __init__(self, company, *args, **kwargs):
+        super(ThemeForm, self).__init__(*args, **kwargs)
+        self.company = company
+
+    @transaction.atomic
+    def save(self):
+        data = self.cleaned_data
+        theme_name = data['theme'].name
+        settings = self.company.settings
+        settings['theme'] = theme_name
+        self.company.settings = settings
+        self.company.save()

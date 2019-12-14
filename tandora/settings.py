@@ -190,7 +190,10 @@ if DEBUG:
         'debug_toolbar',
     ]
 
-    MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']
+    MIDDLEWARE += [
+        'debug_toolbar.middleware.DebugToolbarMiddleware',
+        # 'querycount.middleware.QueryCountMiddleware',
+    ]
     INTERNAL_IPS = ('127.0.0.1', 'localhost')
 
     def show_toolbar(request):

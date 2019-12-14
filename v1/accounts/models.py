@@ -76,6 +76,36 @@ class Company(models.Model):
     def settings_formatted(self):
         return prettify_json(self.settings)
 
+    @property
+    def theme(self):
+        return self.settings.get('theme')
+
+    def theme_meta(self, return_fields=True):
+        from v1.core import models as core_models
+        theme_name = self.settings.get('theme', 'default')
+        theme_type = 'default'
+        theme = 'public/static-site.html'
+        fields = []
+
+        try:
+            static_site_theme = core_models.StaticSiteTheme.objects.filter(name__iexact=theme_name)[0]
+            if static_site_theme.template_file:
+                theme_type = 'file'
+                theme = static_site_theme.template_file
+            if static_site_theme.template_content:
+                theme_type = 'content'
+                theme = static_site_theme.template_content
+            if return_fields:
+                fields = static_site_theme.staticsitethemeconfig.fields.all()
+        except (core_models.StaticSiteTheme.DoesNotExist, KeyError):
+            pass
+
+        return {
+            'theme_type': theme_type,
+            'theme': theme,
+            'fields': fields
+        }
+
 
 class PricePlan(models.Model):
     name = models.CharField(max_length=100)
