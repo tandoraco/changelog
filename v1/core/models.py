@@ -4,7 +4,6 @@ from django.db.models.signals import pre_save
 from tinymce.models import HTMLField
 from tinymce.widgets import TinyMCE
 
-from v1.accounts.models import User, Company
 from v1.categories.models import Category
 from v1.core.signals import get_or_populate_slug_field, snake_case_field_name
 
@@ -16,6 +15,8 @@ STATIC_SITE_FIELD_CHOICES = (
 
 
 class Changelog(models.Model):
+    from v1.accounts.models import User, Company
+
     company = models.ForeignKey(Company, null=False, on_delete=models.DO_NOTHING)
     title = models.CharField(blank=False, max_length=200, db_index=True)
     slug = models.SlugField(blank=True, max_length=200, db_index=True)
@@ -38,7 +39,7 @@ class Changelog(models.Model):
 class StaticSiteTheme(models.Model):
     name = models.CharField(max_length=50)
     template_file = models.CharField(max_length=100, blank=True, null=True)
-    template_content = HTMLField(blank=True, null=True)
+    template_content = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return self.name
