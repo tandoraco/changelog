@@ -1,5 +1,8 @@
 from django import forms
+from django.db import transaction
 from tinymce.widgets import TinyMCE
+
+from v1.core.models import StaticSiteTheme
 
 FONT_CHOICES = (
     ('https://fonts.googleapis.com/css?family=Poppins&display=swap', 'Poppins'),
@@ -47,3 +50,20 @@ class StaticSiteForm(forms.Form):
         for field in fields:
             name, field = field.get_form_field_and_name()
             self.fields[name] = field
+
+
+class ThemeForm(forms.Form):
+    theme = forms.ModelChoiceField(queryset=StaticSiteTheme.objects.all())
+
+    def __init__(self, company, *args, **kwargs):
+        super(ThemeForm, self).__init__(*args, **kwargs)
+        self.company = company
+
+    @transaction.atomic
+    def save(self):
+        data = self.cleaned_data
+        theme_name = data['theme'].name
+        settings = self.company.settings
+        settings['theme'] = theme_name
+        self.company.settings = settings
+        self.company.save()
