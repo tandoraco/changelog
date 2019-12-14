@@ -27,6 +27,7 @@ urlpatterns = [
     path('staff/manage/profile/company', auth.company_form, name="frontend-company-form"),
     path('staff/manage/profile/myself', auth.profile_form, name="frontend-profile-form"),
     path('staff/manage/widget', widget.widget_form, name="frontend-manage-widget"),
+    path('staff/manage/theme', static_site.theme_form, name="frontend-manage-theme"),
     path('staff/manage/static-site', static_site.static_site_form, name="frontend-manage-static-site"),
     path('<str:company>/<str:changelog_terminology>/widget/1', widget.public_widget, name="frontend-public-widget"),
     path('<str:company>/<str:changelog_terminology>/<slug:slug>', app.view_changelog_as_public,

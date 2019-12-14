@@ -7,7 +7,7 @@ from django.shortcuts import render
 from frontend.custom.decorators import is_authenticated
 from frontend.custom.utils import get_company_from_slug_and_changelog_terminology
 from frontend.custom.views import TandoraListViewMixin
-from frontend.views.app.public_helpers import get_context_and_template_name
+from frontend.views.app.public_helpers import get_context_and_template_name, render_custom_theme
 from v1.accounts.models import Company
 from v1.core.models import Changelog
 
@@ -53,10 +53,10 @@ def view_changelog_as_public(request, company, changelog_terminology, slug):
         if context.get('config'):
             context['config']['home_page_title'] = changelog.title
             context['config']['home_page_content'] = changelog.content
+            return render_custom_theme(company, context, request)
         else:
             context.update({'changelog': changelog})
-
-        return render(request, template, context=context)
+            return render(request, template, context=context)
 
     except (Company.DoesNotExist, Changelog.DoesNotExist):
         raise Http404
@@ -70,10 +70,10 @@ def public_index(request, company, changelog_terminology):
         context, template = get_context_and_template_name(company)
         if context.get('config'):
             context['config']['home_page_title'] = ''
+            return render_custom_theme(company, context, request)
         else:
             context['changelogs'] = changelogs
-
-        return render(request, template, context=context)
+            return render(request, template, context=context)
 
     except (Company.DoesNotExist, Changelog.DoesNotExist):
         raise Http404
