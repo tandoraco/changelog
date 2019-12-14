@@ -1,3 +1,5 @@
+import re
+
 from django import forms
 from django.db import models
 from django.db.models.signals import pre_save
@@ -10,8 +12,11 @@ from v1.core.signals import get_or_populate_slug_field, snake_case_field_name
 STATIC_SITE_FIELD_CHOICES = (
     ('c', 'char'),
     ('t', 'text'),
-    ('u', 'link')
+    ('u', 'link'),
+    ('e', 'email'),
+    ('p', 'phone'),
 )
+PHONE_NUMBER_REGEXP = re.compile(r"^[\+]?\d{6,29}$")
 
 
 class Changelog(models.Model):
@@ -61,8 +66,12 @@ class StaticSiteField(models.Model):
             return self.name, forms.CharField(max_length=self.max_length or 50, required=self.required)
         elif field_type == 'text':
             return self.name, forms.CharField(widget=TinyMCE, required=self.required)
-        else:
+        elif field_type == 'link':
             return self.name, forms.URLField(max_length=self.max_length or 100, required=self.required)
+        elif field_type == 'email':
+            return self.name, forms.EmailField(required=self.required)
+        else:
+            return self.name, forms.RegexField(regex=PHONE_NUMBER_REGEXP)
 
 
 class StaticSiteThemeConfig(models.Model):

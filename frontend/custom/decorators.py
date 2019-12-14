@@ -36,7 +36,7 @@ def requires_static_site(func):
         company = Company.objects.get(id=company_id)
 
         if not company.is_static_site:
-            messages.info(request, NOT_ALLOWED)
+            messages.warning(request, NOT_ALLOWED)
             return HttpResponseRedirect('/')
 
         return func(*args, **kwargs)
