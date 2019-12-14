@@ -3,15 +3,12 @@ import json
 from django.contrib.auth.models import AbstractBaseUser
 from django.db import models
 from django.db.models.signals import post_save
-from django.utils.safestring import mark_safe
 from django.utils.text import slugify
-from pygments import highlight
-from pygments.formatters.html import HtmlFormatter
-from pygments.lexers.data import JsonLexer
 
 from v1.accounts.constants import CHANGELOG_TERMINOLOGY, MAX_EMAIL_LENGTH, USE_CASE_CHOICES
 from v1.accounts.utils import UserManager
 from v1.notifications.email import send_forgot_password_mail
+from v1.utils import prettify_json
 
 
 class User(AbstractBaseUser):
@@ -76,6 +73,9 @@ class Company(models.Model):
     def is_static_site(self):
         return self.use_case == 's'
 
+    def settings_formatted(self):
+        return prettify_json(self.settings)
+
 
 class PricePlan(models.Model):
     name = models.CharField(max_length=100)
@@ -133,14 +133,7 @@ class AngelUser(models.Model):
         return self.email
 
     def data_formatted(self):
-        data = json.dumps(self.data, indent=2)
-
-        formatter = HtmlFormatter(style='colorful')
-        response = highlight(data, JsonLexer(), formatter)
-
-        style = f'<style>{formatter.get_style_defs()}+</style></br>'
-
-        return mark_safe(f'{style}{response}')
+        return prettify_json(self.data)
 
 
 class Affiliate(models.Model):

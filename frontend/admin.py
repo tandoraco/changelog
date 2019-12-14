@@ -5,6 +5,7 @@ from django.utils.translation import ugettext as _
 
 from frontend.forms.auth import TandoraAdminLoginForm
 from v1.accounts import models as v1_account_models
+from v1.core import models as v1_core_models
 from v1.accounts.utils import hash_password
 
 
@@ -23,6 +24,20 @@ class ReadOnlyModelAdmin(admin.ModelAdmin):
         return False
 
     def has_change_permission(self, request, obj=None):
+        return False
+
+
+class CreateOnlyModelAdmin(admin.ModelAdmin):
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+
+class CreateUpdateModelAdmin(admin.ModelAdmin):
+    def has_delete_permission(self, request, obj=None):
         return False
 
 
@@ -62,3 +77,6 @@ admin_site.register(v1_account_models.AngelUser, AngelUserAdmin)
 admin_site.register(v1_account_models.Affiliate)
 admin_site.register(v1_account_models.Referral, ReferralAdmin)
 admin_site.register(v1_account_models.CustomDomain)
+admin_site.register(v1_core_models.StaticSiteTheme)
+admin_site.register(v1_core_models.StaticSiteField, CreateUpdateModelAdmin)
+admin_site.register(v1_core_models.StaticSiteThemeConfig, CreateOnlyModelAdmin)
