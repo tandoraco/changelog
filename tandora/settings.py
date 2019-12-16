@@ -29,7 +29,7 @@ SECRET_KEY = '4r&ns-8mjg_s_^fh9z&7*up8n3w1jgbvj(yc(z12cay12&$+(i'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(os.environ.get("DEBUG", False))
-
+TESTING = False
 
 ALLOWED_HOSTS = ['*']
 

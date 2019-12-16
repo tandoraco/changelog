@@ -1,11 +1,13 @@
+import uuid
 from datetime import timedelta
 
 from django.contrib import messages
 from django.utils import timezone
+from django.utils.text import slugify
 
 from frontend.constants import NOT_LOGGED_IN_ERROR, FREE_TRIAL_PERIOD_IN_DAYS, LOGIN_AGAIN_INFO, \
     TRIAL_UPGRADE_WARNING, TRIAL_ENDS_TODAY
-from v1.accounts.models import ClientToken, Company
+from v1.accounts.models import ClientToken, Company, User
 
 
 def is_valid_auth_token_and_email(request):
@@ -49,3 +51,17 @@ def is_trial_expired(request):
         elif days_left_in_trial > 0:
             messages.info(request, message=TRIAL_UPGRADE_WARNING.format(days=days_left_in_trial), fail_silently=True)
     return False
+
+
+def create_session(email, request):
+    user = User.objects.get(email=email)
+    token = str(uuid.uuid4())
+    ClientToken.objects.create(token=token, user=user)
+    request.session["auth-token"] = token
+    request.session["email"] = user.email
+    request.session["user-id"] = user.id
+    request.session["company-id"] = user.company.id
+
+    company_slug = slugify(user.company.company_name)
+    changelog_terminology = slugify(user.company.changelog_terminology)
+    request.session["public-page-url"] = f'/{company_slug}/{changelog_terminology}'
