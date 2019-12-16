@@ -11,7 +11,7 @@ from v1.widget.models import Embed
 @pytest.mark.django_db
 class TestWidgetViews:
     client = APIClient()
-    url = reverse('v1-embed-widget')
+    url = '/api/v1/embed-widget/'
 
     def test_embed_all_actions_with_no_auth(self, embed_data):
         response = self.client.get(self.url)
@@ -36,7 +36,8 @@ class TestWidgetViews:
         response = self.client.get(self.url)
         response_data = response.data
         assert response.status_code == status.HTTP_200_OK
-        assert response_data["html"] == embed.get_default_embed_script()
+        assert response_data['css'] == embed.css
+        assert response_data['javascript'] == embed.javascript
         assert response_data["color"] == embed.color
 
     def test_embed_create_with_no_data(self, user, embed_data):
@@ -45,7 +46,8 @@ class TestWidgetViews:
         response_data = response.data
         embed = Embed.objects.get()
         assert response.status_code == status.HTTP_201_CREATED
-        assert response_data["html"] == embed.get_default_embed_script()
+        assert response_data['css'] == embed.css
+        assert response_data['javascript'] == embed.javascript
         assert response_data["color"] == embed.color
 
     def test_embed_create_with_data(self, user, embed):
@@ -71,9 +73,7 @@ class TestWidgetViews:
             'css': 'css'
         }
         response = self.client.patch(self.url, data)
-        response_data = response.data
         assert response.status_code == status.HTTP_200_OK
-        assert response_data['html'] == f"{data['css']} {data['javascript']}"
 
     def test_embed_delete_with_data(self, user, embed):
         self.client.force_authenticate(user)
