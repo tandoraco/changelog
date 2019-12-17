@@ -24,7 +24,7 @@ def widget_form(request):
     company = Company.objects.get(id=company_id)
     if company.is_static_site:
         messages.info(request, NOT_ALLOWED)
-        return HttpResponseRedirect('/')
+        return HttpResponseRedirect('/staff/changelogs')
 
     if Embed.objects.filter(company__id=company_id).count() == 0:
         action = 'create'

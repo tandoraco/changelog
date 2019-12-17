@@ -10,7 +10,7 @@ from v1.accounts.constants import PASSWORD_INCORRECT_ERROR, CHANGELOG_TERMINOLOG
     MAX_EMAIL_LENGTH
 from v1.accounts.models import ForgotPassword, User
 from v1.accounts.utils import hash_password, verify_password
-from v1.accounts.validators import password_validator
+from v1.accounts.validators import password_validator, no_symbols_validator
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -28,11 +28,11 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class CompanySerializer(UserSerializer):
-    company_name = serializers.CharField(max_length=100, required=True)
+    company_name = serializers.CharField(max_length=100, required=True, validators=[no_symbols_validator])
     website = serializers.URLField(max_length=200, required=True, validators=[
         UniqueValidator(account_models.Company.objects.all())
     ])
-    changelog_terminology = serializers.CharField(max_length=50, required=False)
+    changelog_terminology = serializers.CharField(max_length=50, required=False, validators=[no_symbols_validator])
 
     def create(self, validated_data):
         company_name = validated_data.pop("company_name")
