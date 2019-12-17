@@ -85,7 +85,7 @@ def valid_company_data(valid_password):
             'email': fake.email(),
             'name': fake.name(),
             'password': valid_password,
-            'company_name': fake.company(),
+            'company_name': 'Test company',
             'website': fake.url()
         })
     return data
