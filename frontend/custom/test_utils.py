@@ -9,6 +9,12 @@ from frontend.forms.auth.utils import create_session
 
 class TandoraTestClient(Client):
 
+    def get_public_page_url(self, company):
+        return f'/{company.company_name}/{company.changelog_terminology}'
+
+    def get_public_widget_url(self, company):
+        return f'{self.get_public_page_url(company)}/widget/1'
+
     def force_login(self, user, backend=None):
         # Took this code from Client.force_login and modified to use our create_session
         # Create a fake request to store login details.

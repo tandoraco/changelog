@@ -5,7 +5,7 @@ from django.db import models
 from django.db.models.signals import pre_save
 from tinymce.widgets import TinyMCE
 
-from v1.static_site.signals import snake_case_field_name
+from v1.static_site.signals import snake_case_field_name, either_template_name_or_template_content_is_required
 
 STATIC_SITE_FIELD_CHOICES = (
     ('c', 'char'),
@@ -59,3 +59,4 @@ class StaticSiteThemeConfig(models.Model):
 
 
 pre_save.connect(snake_case_field_name, sender=StaticSiteField)
+pre_save.connect(either_template_name_or_template_content_is_required, sender=StaticSiteTheme)

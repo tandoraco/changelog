@@ -2,17 +2,12 @@ import pytest
 from django.urls import reverse
 from rest_framework import status
 
-from frontend.constants import NOT_ALLOWED
 from frontend.custom.test_utils import TandoraTestClient
-from frontend.forms.widget import WidgetForm
 
 
 @pytest.mark.django_db
 class TestWidgetViews:
     client = TandoraTestClient()
-
-    def get_public_widget_url(self, company):
-        return f'/{company.company_name}/{company.changelog_terminology}/widget/1'
 
     def test_manage_widget_view(self, company, user, widget):
         if company.is_trial_account:
@@ -35,16 +30,18 @@ class TestWidgetViews:
         assert not widget.enabled
 
         # if widget is not enabled, public widget page should return 404
-        url = self.get_public_widget_url(company)
+        url = self.client.get_public_widget_url(company)
         response = self.client.get(url)
         assert response.status_code == status.HTTP_404_NOT_FOUND
 
     def test_public_widget_view_when_widget_enabled(self, company, user, widget):
+        company.use_case = 'c'
+        company.save()
         widget.enabled = True
         widget.save()
         widget.refresh_from_db()
 
-        response = self.client.get(self.get_public_widget_url(company))
+        response = self.client.get(self.client.get_public_widget_url(company))
         assert response.status_code == status.HTTP_200_OK
 
     def test_widget_not_allowed_when_static_site_is_enabled(self, company, user, widget):

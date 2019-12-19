@@ -41,14 +41,14 @@ def is_trial_expired(request):
         return False
 
     now = timezone.now()
-    if company.is_trial_account and (company.created_time + timedelta(days=FREE_TRIAL_PERIOD_IN_DAYS) < now):
+    if company.is_trial_account and (now > company.created_time + timedelta(days=FREE_TRIAL_PERIOD_IN_DAYS)):
         return True
 
     if company.is_trial_account:
         days_left_in_trial = ((company.created_time + timedelta(days=FREE_TRIAL_PERIOD_IN_DAYS)) - now).days
         if days_left_in_trial == 0:
             messages.warning(request, message=TRIAL_ENDS_TODAY, fail_silently=True)
-        elif days_left_in_trial > 0:
+        elif days_left_in_trial > 0 and (days_left_in_trial < FREE_TRIAL_PERIOD_IN_DAYS - 1):
             messages.info(request, message=TRIAL_UPGRADE_WARNING.format(days=days_left_in_trial), fail_silently=True)
     return False
 
