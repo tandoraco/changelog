@@ -20,7 +20,7 @@ urlpatterns = [
     path('staff/delete-changelog/<int:id>', changelog.delete_changelog, name="frontend-delete-changelog"),
     path('staff/changelog/<slug:slug>', app.view_changelog, name="frontend-view-changelog"),
     path('staff/manage/categories', categories.CategoryList.as_view(), name="frontend-view-categories"),
-    path('staff/manage/categories/create-category', categories.category_form, name="frontend-category-form"),
+    path('staff/manage/categories/create-category', categories.category_form, name="frontend-create-category"),
     path('staff/manage/categories/edit-category/<int:id>', categories.edit_category, name="frontend-edit-category"),
     path('staff/manage/categories/delete-category/<int:id>', categories.delete_category,
          name="frontend-delete-category"),

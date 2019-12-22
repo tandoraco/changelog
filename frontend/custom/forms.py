@@ -4,6 +4,7 @@ from django.shortcuts import render
 
 ACTION_CREATE = "create"
 ACTION_EDIT = "edit"
+ID_NOT_PROVIDED_ERROR = "Form edit. Id not provided"
 
 
 class TandoraForm:
@@ -21,7 +22,11 @@ class TandoraForm:
         try:
             if hasattr(self.model, "company"):
                 company_id = request.session['company-id']
+                if hasattr(self.model, 'deleted'):
+                    return self.model.objects.get(company__id=company_id, id=id, deleted=False)
                 return self.model.objects.get(company__id=company_id, id=id)
+            elif hasattr(self.model, 'deleted'):
+                return self.model.objects.get(id=id, deleted=False)
             else:
                 return self.model.objects.get(id=id)
         except self.model.DoesNotExist:
@@ -50,7 +55,7 @@ class TandoraForm:
 
             if self.action == ACTION_EDIT:
                 if not id:
-                    raise RuntimeError("Form edit. Id not provided")
+                    raise RuntimeError(ID_NOT_PROVIDED_ERROR)
 
                 post_data = request.POST.copy()
                 post_data["id"] = id
