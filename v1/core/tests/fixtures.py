@@ -1,8 +1,10 @@
 import copy
+import random
 
 import pytest
 from faker import Faker
 
+from v1.core.models import Changelog
 from v1.core.serializers import ChangelogSerializer
 
 fake = Faker()
@@ -72,3 +74,13 @@ def published_changelog(published_changelog_data, user):
 @pytest.fixture
 def unpublished_changelog(unpublished_changelog_data, admin):
     return create_changelog(with_audit_entries(unpublished_changelog_data, admin))
+
+
+@pytest.fixture
+def changelogs(published_changelog, unpublished_changelog):
+    return Changelog.objects.all()
+
+
+@pytest.fixture
+def changelog(changelogs):
+    return random.choice(changelogs)
