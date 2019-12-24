@@ -8,7 +8,7 @@ from rest_framework import status
 
 from frontend.constants import PASSWORD_DOES_NOT_MATCH
 from frontend.custom.test_utils import TandoraTestClient
-from v1.accounts.constants import EMAIL_NOT_FOUND_ERROR, PASSWORD_INCORRECT_ERROR, PASSWORD_CONSTRAINTS_NOT_MET
+from v1.accounts.constants import EMAIL_NOT_FOUND_ERROR, PASSWORD_INCORRECT_ERROR, PASSWORD_CONSTRAINS_NOT_MET
 from v1.accounts.models import ForgotPassword
 
 
@@ -100,7 +100,7 @@ class TestAuthViews:
         }
         response = self.client.post(reset_password_url, data=data)
         response_content = response.content.decode()
-        assert PASSWORD_CONSTRAINTS_NOT_MET in response_content
+        assert PASSWORD_CONSTRAINS_NOT_MET in response_content
 
         new_password = 'Pytest123.'
         data = {
