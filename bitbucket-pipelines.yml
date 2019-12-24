@@ -23,6 +23,13 @@ pipelines:
             - pip install -r requirements_dev.txt
             - pytest -m integration
       - step:
+          name: Run Frontend tests
+          caches:
+            - pip
+          script:
+            - pip install -r requirements_dev.txt
+            - pytest frontend
+      - step:
           name: Style checks (flake8)
           caches:
             - pip
