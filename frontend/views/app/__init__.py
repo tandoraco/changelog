@@ -34,7 +34,7 @@ class ChangeLogList(TandoraListViewMixin):
 def view_changelog(request, slug):
     try:
         company_id = request.session["company-id"]
-        changelog = Changelog.objects.get(company__id=company_id, slug=unquote(slug))
+        changelog = Changelog.objects.get(company__id=company_id, slug=unquote(slug), deleted=False)
         return render(request, 'staff/changelogs/changelog.html',
                       context={'title': changelog.title, 'content': changelog.content})
     except Changelog.DoesNotExist:

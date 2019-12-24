@@ -1,5 +1,6 @@
 import pytest
 from django.urls import reverse
+from rest_framework import status
 
 from frontend.custom.test_utils import FrontEndFormViewTestBase, test_url
 
@@ -31,3 +32,20 @@ class TestFrontEndChangelogViews:
             instance=changelog
         )
 
+    def test_frontend_get_single_changelog(self, user, company, changelog):
+        url = reverse('frontend-view-changelog', kwargs={'slug': changelog.slug})
+        from frontend.custom.test_utils import TandoraTestClient
+        client = TandoraTestClient()
+        client.force_login(user)
+
+        response = client.get(url)
+        assert response.status_code == status.HTTP_200_OK
+        response_content = response.content.decode()
+        assert changelog.title in response_content
+        assert changelog.content in response_content
+
+        changelog.deleted = True
+        changelog.save()
+        changelog.refresh_from_db()
+        response = client.get(url)
+        assert response.status_code == status.HTTP_404_NOT_FOUND
