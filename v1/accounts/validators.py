@@ -3,7 +3,7 @@ import string
 from django import forms
 from rest_framework import serializers
 
-from v1.accounts.constants import (PASSWORD_CONSTRAINTS_NOT_MET,
+from v1.accounts.constants import (PASSWORD_CONSTRAINS_NOT_MET,
                                    PASSWORD_LENGTH_VALIDATION_FAILED,
                                    MIN_PASSWORD_LENGTH,
                                    MAX_PASSWORD_LENGTH, SPECIAL_CHARACTERS_NOT_ALLOWED)
@@ -25,7 +25,7 @@ def password_validator(password, form=False):
 
     if password_not_contains(LOWERCASE_LETTERS) or password_not_contains(UPPERCASE_LETTERS) or\
             password_not_contains(NUMBERS) or password_not_contains(SYMBOLS):
-        raise validation_error(PASSWORD_CONSTRAINTS_NOT_MET)
+        raise validation_error(PASSWORD_CONSTRAINS_NOT_MET)
 
     return password
 
