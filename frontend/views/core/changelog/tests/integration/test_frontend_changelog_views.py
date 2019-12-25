@@ -3,6 +3,7 @@ from django.urls import reverse
 from rest_framework import status
 
 from frontend.custom.test_utils import FrontEndFormViewTestBase, test_url
+from v1.core.models import Changelog
 
 VIEW_CHANGELOGS = 'frontend-staff-index'
 CREATE_CHANGELOG = 'frontend-create-changelog'
@@ -48,4 +49,33 @@ class TestFrontEndChangelogViews:
         changelog.save()
         changelog.refresh_from_db()
         response = client.get(url)
+        assert response.status_code == status.HTTP_404_NOT_FOUND
+
+    def test_frontend_create__update_changelog(self, user, published_changelog_data, unpublished_changelog_data):
+        url = reverse('frontend-create-changelog')
+
+        from frontend.custom.test_utils import TandoraTestClient
+        client = TandoraTestClient()
+        client.force_login(user)
+
+        client.post(url, data=published_changelog_data)
+
+        assert Changelog.objects.count() == 1
+
+        client.post(url, data=unpublished_changelog_data)
+
+        assert Changelog.objects.count() == 2
+
+        changelog = Changelog.objects.first()
+        url = reverse('frontend-edit-changelog', kwargs={'id': changelog.id})
+
+        assert changelog.title != 'Test title 123'
+        published_changelog_data['title'] = 'Test title 123'
+        client.post(url, data=published_changelog_data)
+
+        changelog.refresh_from_db()
+        assert changelog.title == 'Test title 123'
+
+        url = reverse('frontend-edit-changelog', kwargs={'id': 100})
+        response = client.post(url, data=unpublished_changelog_data)
         assert response.status_code == status.HTTP_404_NOT_FOUND
