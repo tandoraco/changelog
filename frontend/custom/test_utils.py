@@ -6,6 +6,7 @@ import pytest
 from django.conf import settings
 from django.http import HttpRequest
 from django.test import Client
+from faker import Faker
 from rest_framework import status
 
 from frontend.forms.auth.utils import create_session
@@ -54,6 +55,7 @@ class TandoraTestClient(Client):
 
 @pytest.mark.django_db
 class FrontEndFormViewTestBase:
+    fake = Faker()
 
     def __init__(self, model_name, urls, fields, view_exclude_fields, user, company, queryset, instance):
         self.model_name = model_name
