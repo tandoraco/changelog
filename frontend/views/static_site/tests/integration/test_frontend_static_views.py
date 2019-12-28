@@ -43,4 +43,5 @@ class TestFrontendStaticViews:
 
         response_content = response.content.decode()
         for field_name, field_value in static_site_field_values.items():
-            assert field_name in response_content
+            if field_name != 'font':
+                assert field_name in response_content
