@@ -2,11 +2,14 @@ import functools
 
 from django.contrib import messages
 from django.http import HttpResponseRedirect
+from django.urls import reverse
 
-from frontend.constants import FREE_TRIAL_EXPIRED, NOT_ALLOWED
+from frontend.constants import FREE_TRIAL_EXPIRED, NOT_ALLOWED, PLAN_LIMIT_REACHED_MESSAGE
 from frontend.custom.utils import redirect_to_login
-from frontend.forms.auth.utils import is_valid_auth_token_and_email, is_trial_expired
+from frontend.forms.auth.utils import is_valid_auth_token_and_email, is_trial_expired, DEFAULT_PLAN_FEATURES_LIMIT
 from v1.accounts.models import Company
+from v1.categories.models import Category
+from v1.core.models import Changelog
 
 
 def is_authenticated(func):
@@ -42,3 +45,41 @@ def requires_static_site(func):
         return func(*args, **kwargs)
 
     return wrapper
+
+
+def is_limit_reached(feature_name, plan_features, company_id):
+    model = None
+    if feature_name == 'changelogs':
+        model = Changelog
+    elif feature_name == 'categories':
+        model = Category
+
+    if model:
+        count = len(model.objects.filter(company_id=company_id, deleted=False))
+        return not count < plan_features.get(feature_name)
+    else:
+        return False
+
+
+def is_allowed(feature_name):
+
+    def real_decorator(func):
+
+        def wrapper(*args, **kwargs):
+            request = args[0]
+            company_id = request.session["company-id"]
+            try:
+                plan_features = request.session['plan-features']
+            except KeyError:
+                plan_features = DEFAULT_PLAN_FEATURES_LIMIT
+
+            if feature_name in {'changelogs', 'categories'} and is_limit_reached(
+                    feature_name, plan_features, company_id):
+                messages.info(request, PLAN_LIMIT_REACHED_MESSAGE)
+                return HttpResponseRedirect(reverse('frontend-staff-index'))
+
+            return func(*args, **kwargs)
+
+        return wrapper
+
+    return real_decorator
