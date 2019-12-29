@@ -1,3 +1,4 @@
+import json
 import uuid
 from datetime import timedelta
 
@@ -7,7 +8,13 @@ from django.utils.text import slugify
 
 from frontend.constants import NOT_LOGGED_IN_ERROR, FREE_TRIAL_PERIOD_IN_DAYS, LOGIN_AGAIN_INFO, \
     TRIAL_UPGRADE_WARNING, TRIAL_ENDS_TODAY
-from v1.accounts.models import ClientToken, Company, User
+from v1.accounts.models import ClientToken, Company, User, Subscription
+
+
+DEFAULT_PLAN_FEATURES_LIMIT = {
+    'changelogs': 500,
+    'categories': 5
+}
 
 
 def is_valid_auth_token_and_email(request):
@@ -62,6 +69,13 @@ def create_session(email, request):
     request.session["user-id"] = user.id
     request.session["company-id"] = user.company.id
 
+    try:
+        subscription = Subscription.objects.get(company_id=user.company.id)
+        plan_features = json.loads(subscription.plan.plan_features)
+    except Subscription.DoesNotExist:
+        plan_features = DEFAULT_PLAN_FEATURES_LIMIT
+
+    request.session['plan-features'] = plan_features
     company_slug = slugify(user.company.company_name)
     changelog_terminology = slugify(user.company.changelog_terminology)
     request.session["public-page-url"] = f'/{company_slug}/{changelog_terminology}'
