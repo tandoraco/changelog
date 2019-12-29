@@ -17,3 +17,4 @@ gunicorn==19.9.0
 django-dynamic-db-router==0.3.0
 django-ace==1.0.5
 django-ses==0.8.12
+bs4==0.0.1

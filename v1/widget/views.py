@@ -1,6 +1,6 @@
 from knox.auth import TokenAuthentication
 from rest_framework import status
-from rest_framework.generics import UpdateAPIView, DestroyAPIView, CreateAPIView, ListAPIView
+from rest_framework.generics import CreateAPIView, ListAPIView, DestroyAPIView, UpdateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
@@ -12,13 +12,21 @@ from v1.widget.serializers import EmbedSerializer
 
 class EmbedView(CreateAPIView, ListAPIView, DestroyAPIView, UpdateAPIView):
     serializer_class = EmbedSerializer
-    queryset = Embed.objects.all()
-    authentication_classes = [TokenAuthentication, ]
-    permission_classes = [IsAuthenticated, ]
+    permission_classes = (IsAuthenticated, )
+    authentication_classes = (TokenAuthentication, )
 
-    def _create_and_return_data(self, data, status_code):
+    def get_queryset(self):
+        return Embed.objects.filter(company=self.request.user.company)
 
-        serializer = self.serializer_class(data=data)
+    def create_or_update_data(self, data, status_code, instance=None):
+        data = data.copy()
+        data['company'] = self.request.user.company.id
+
+        if not instance:
+            serializer = self.serializer_class(data=data)
+        else:
+            serializer = self.serializer_class(instance=instance, data=data)
+
         if serializer.is_valid():
             serializer.save()
             return Response(status=status_code, data=serializer.data)
@@ -26,31 +34,28 @@ class EmbedView(CreateAPIView, ListAPIView, DestroyAPIView, UpdateAPIView):
 
     def list(self, request, *args, **kwargs):
 
-        if self.queryset.count() > 0:
-            serializer = self.serializer_class(self.queryset.first())
+        if self.get_queryset().count() > 0:
+            serializer = self.serializer_class(self.get_queryset().first())
             return Response(status=status.HTTP_200_OK, data=serializer.data)
 
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def create(self, request, *args, **kwargs):
 
-        if self.queryset.count() > 0:
+        if self.get_queryset().count() > 0:
             return unprocessable_entity(ONLY_ONE_EMBED_SCRIPT_ALLOWED)
 
-        return self._create_and_return_data(request.data, status.HTTP_201_CREATED)
+        return self.create_or_update_data(request.data, status.HTTP_201_CREATED)
 
     def destroy(self, request, *args, **kwargs):
 
-        self.queryset.delete()
+        self.get_queryset().delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def update(self, request, *args, **kwargs):
 
-        # Since only one embed script can exist for an account, whenever we want to update
-        # we delete the old one and create new embed script.
-        # this is a bit of hack, since we do not want to expost primary key in endpoint
-        if self.queryset.count() > 0:
-            self.queryset.delete()
-            return self._create_and_return_data(request.data, status.HTTP_200_OK)
+        if self.get_queryset().count() > 0:
+            instance = self.get_queryset().first()
+            return self.create_or_update_data(request.data, status.HTTP_200_OK, instance=instance)
 
         return unprocessable_entity(EMBED_DOES_NOT_EXIST)
