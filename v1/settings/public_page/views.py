@@ -6,7 +6,7 @@ from v1.utils.viewsets import TandoraModelViewSet
 
 
 class PublicPageViewSet(TandoraModelViewSet):
-    queryset = PublicPage.objects.all()
+    model_class = PublicPage
     serializer_class = PublicPageSerializer
 
     def create(self, request, *args, **kwargs):

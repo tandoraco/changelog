@@ -15,7 +15,7 @@ method = namedtuple("method", "shorthand action")
 GET = method(shorthand="g", action={"get": "list"})
 RETRIEVE = method(shorthand="r", action={"get": "retrieve"})
 CREATE = method(shorthand="c", action={"post": "create"})
-UPDATE = method(shorthand="u", action={"patch": "update"})
+UPDATE = method(shorthand="u", action={"put": "update"})
 PARTIAL_UPDATE = method(shorthand="p", action={"patch": "partial_update"})
 DELETE = method(shorthand="d", action={"delete": "destroy"})
 
@@ -124,6 +124,7 @@ class ModelViewSetTestBase(object):
         self._run_unauthorized_assertion(request, view)
 
         request_data = random.choice(self.queryset)
+        request = self.factory.patch(self.url, valid_data)
         request = self._authenticate_request(user, request, token=token)
         response = view(request, pk=request_data.pk, test=True)
         assert response.status_code == status.HTTP_200_OK

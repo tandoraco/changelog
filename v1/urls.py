@@ -7,4 +7,5 @@ urlpatterns = [
     path(r'', include('v1.core.urls')),
     path(r'', include('v1.settings.urls')),
     path(r'', include('v1.widget.urls')),
+    path(r'', include('v1.static_site.urls')),
 ]

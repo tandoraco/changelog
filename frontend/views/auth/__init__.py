@@ -1,10 +1,7 @@
-import uuid
-
 from django.contrib import messages
 from django.db import transaction
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.utils.text import slugify
 from rest_framework.decorators import api_view, authentication_classes
 from rest_framework.response import Response
 
@@ -16,7 +13,7 @@ from frontend.custom.forms import TandoraForm
 from frontend.custom.utils import set_redirect_in_session
 from frontend.forms.auth import LoginForm, CompanyForm, UserForm, ForgotPasswordForm, ResetPasswordForm, \
     CompanySignupForm, AffiliateSignupForm
-from frontend.forms.auth.utils import clear_request_session
+from frontend.forms.auth.utils import clear_request_session, create_session
 from frontend.views.auth.utils import save_subscription_details
 from v1.accounts.models import User, ClientToken, Company, ForgotPassword, Affiliate
 from v1.accounts.serializers import ResetPasswordSerializer
@@ -28,17 +25,7 @@ def login(request):
     if request.method == "POST":
         form = LoginForm(request.POST)
         if form.is_valid():
-            user = User.objects.get(email=form.data['email'])
-            token = str(uuid.uuid4())
-            ClientToken.objects.create(token=token, user=user)
-            request.session["auth-token"] = token
-            request.session["email"] = user.email
-            request.session["user-id"] = user.id
-            request.session["company-id"] = user.company.id
-
-            company_slug = slugify(user.company.company_name)
-            changelog_terminology = slugify(user.company.changelog_terminology)
-            request.session["public-page-url"] = f'/{company_slug}/{changelog_terminology}'
+            create_session(form.data['email'], request)
 
             if redirect_to:
                 return HttpResponseRedirect(redirect_to)

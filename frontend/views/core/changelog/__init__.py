@@ -21,7 +21,7 @@ def changelog_form(request):
 def edit_changelog(request, id):
     try:
         company_id = request.session["company-id"]
-        changelog = Changelog.objects.get(company__id=company_id, pk=id)
+        changelog = Changelog.objects.get(company__id=company_id, pk=id, deleted=False)
         data = {'published': changelog.published, 'request': request}
         form = ChangelogForm(instance=changelog, initial=data)
         return _changelog_form(request, form, "edit", changelog_id=id, instance=changelog)
@@ -59,7 +59,7 @@ def _changelog_form(request, form, action, changelog_id=None, instance=None):
 @is_authenticated
 def delete_changelog(request, id):
     try:
-        changelog = Changelog.objects.get(id=id)
+        changelog = Changelog.objects.get(id=id, deleted=False)
         changelog.deleted = True
         changelog.last_edited_by = User.objects.get(pk=request.session["user-id"])
         changelog.save()
