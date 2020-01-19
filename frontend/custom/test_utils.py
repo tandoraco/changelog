@@ -4,6 +4,7 @@ from importlib import import_module
 
 import pytest
 from django.conf import settings
+from django.contrib.messages import get_messages
 from django.http import HttpRequest
 from django.test import Client
 from faker import Faker
@@ -21,6 +22,19 @@ class TandoraTestClient(Client):
 
     def get_public_widget_url(self, company):
         return f'{self.get_public_page_url(company)}/widget/1'
+
+    def _get_messages(self, response):
+        return list(get_messages(response.wsgi_request))
+
+    def assert_response_message(self, response, message):
+        assert str(self._get_messages(response)[-1]) == message
+
+    def assert_response_message_contains(self, response, message):
+        assert message in str(self._get_messages(response)[-1])
+
+    def assert_response_message_icontains(self, response, message):
+        # Case insensitive message assertion
+        assert message.lower() in str(self._get_messages(response)[-1]).lower()
 
     def force_login(self, user, backend=None):
         # Took this code from Client.force_login and modified to use our create_session

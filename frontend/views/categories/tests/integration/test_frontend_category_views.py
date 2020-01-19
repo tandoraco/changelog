@@ -1,11 +1,14 @@
 import random
 
 import pytest
+from django.contrib.messages import get_messages
 from django.forms import model_to_dict
 from django.urls import reverse
 from rest_framework import status
 
+from frontend.constants import PLAN_LIMIT_REACHED_MESSAGE
 from frontend.custom.test_utils import FrontEndFormViewTestBase, test_url
+from frontend.forms.auth.utils import DEFAULT_PLAN_FEATURES_LIMIT
 from v1.categories.constants import DELETED_CATEGORY
 from v1.categories.models import Category
 
@@ -70,3 +73,42 @@ class TestFrontEndCategoryViews:
         url = reverse('frontend-edit-category', kwargs={'id': 100})
         response = client.post(url, data=data)
         assert response.status_code == status.HTTP_404_NOT_FOUND
+
+    def test_category_plan_limits(self, user):
+        # Default category limit is 5
+        category_names = [
+            'Test 1',
+            'Test 2',
+            'Test 3',
+            'Test 4',
+            'Test 5',
+            'Test 6',
+        ]
+        colors = [
+            '#000001',
+            '#000002',
+            '#000003',
+            '#000004',
+            '#000005',
+            '#000006',
+        ]
+
+        from frontend.custom.test_utils import TandoraTestClient
+        client = TandoraTestClient()
+        client.force_login(user)
+        url = reverse('frontend-create-category')
+
+        for i in range(DEFAULT_PLAN_FEATURES_LIMIT['categories']):
+            data = {
+                'name': category_names[i],
+                'color': colors[i]
+            }
+            response = client.post(url, data=data)
+            client.assert_response_message_icontains(response, 'successfully create category')
+
+        data = {
+            'name': category_names[-1],
+            'color': colors[-1]
+        }
+        response = client.post(url, data=data)
+        client.assert_response_message(response, PLAN_LIMIT_REACHED_MESSAGE)
