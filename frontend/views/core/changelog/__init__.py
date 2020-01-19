@@ -4,7 +4,7 @@ from django.shortcuts import render
 
 from frontend.constants import CHANGELOG_DOES_NOT_EXIST_ERROR, CHANGELOG_CREATED_OR_EDITED_SUCCESSFULLY, \
     CHANGELOG_DELETED_SUCCESSFULLY
-from frontend.custom.decorators import is_authenticated
+from frontend.custom.decorators import is_authenticated, is_allowed
 from frontend.forms.core.changelog import ChangelogForm
 from v1.accounts.models import User
 from v1.core.models import Changelog
@@ -12,6 +12,7 @@ from v1.core.serializers import ChangelogSerializer
 
 
 @is_authenticated
+@is_allowed('changelogs')
 def changelog_form(request):
     data = {'request': request}
     return _changelog_form(request, ChangelogForm(initial=data), "create")
