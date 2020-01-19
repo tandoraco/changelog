@@ -1,8 +1,11 @@
+import mock
 import pytest
 from django.urls import reverse
 from rest_framework import status
 
+from frontend.constants import PLAN_LIMIT_REACHED_MESSAGE
 from frontend.custom.test_utils import FrontEndFormViewTestBase, test_url
+from frontend.forms.auth.utils import CHANGELOG_TESTING_LIMIT
 from v1.core.models import Changelog
 
 VIEW_CHANGELOGS = 'frontend-staff-index'
@@ -79,3 +82,22 @@ class TestFrontEndChangelogViews:
         url = reverse('frontend-edit-changelog', kwargs={'id': 100})
         response = client.post(url, data=unpublished_changelog_data)
         assert response.status_code == status.HTTP_404_NOT_FOUND
+
+    def test_frontend_changelog_limits(self, user, category):
+        url = reverse('frontend-create-changelog')
+        data = {
+            'title': 'Test title',
+            'content': 'Test category',
+            'category': category.id
+        }
+
+        from frontend.custom.test_utils import TandoraTestClient
+        client = TandoraTestClient()
+        client.force_login(user)
+
+        for i in range(CHANGELOG_TESTING_LIMIT):
+            response = client.post(url, data=data)
+            client.assert_response_message_icontains(response, 'success')
+
+        response = client.post(url, data=data)
+        client.assert_response_message(response, PLAN_LIMIT_REACHED_MESSAGE)

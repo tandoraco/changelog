@@ -3,7 +3,7 @@ from django.urls import reverse
 from frontend.constants import (CATEGORY_CREATED_OR_EDITED_SUCCESSFULLY,
                                 CATEGORY_DELETED_SUCCESSFULLY,
                                 CATEGORY_DOES_NOT_EXIST)
-from frontend.custom.decorators import is_authenticated
+from frontend.custom.decorators import is_authenticated, is_allowed
 from frontend.custom.forms import TandoraForm
 from frontend.custom.utils import delete_model
 from frontend.custom.views import TandoraListViewMixin
@@ -12,6 +12,7 @@ from v1.categories.models import Category
 
 
 @is_authenticated
+@is_allowed('categories')
 def category_form(request):
     return TandoraForm(Category, CategoryForm, 'create', 'staff/form.html',
                        '/')\
