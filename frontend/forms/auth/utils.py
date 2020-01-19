@@ -2,6 +2,7 @@ import json
 import uuid
 from datetime import timedelta
 
+from django.conf import settings
 from django.contrib import messages
 from django.utils import timezone
 from django.utils.text import slugify
@@ -10,9 +11,9 @@ from frontend.constants import NOT_LOGGED_IN_ERROR, FREE_TRIAL_PERIOD_IN_DAYS, L
     TRIAL_UPGRADE_WARNING, TRIAL_ENDS_TODAY
 from v1.accounts.models import ClientToken, Company, User, Subscription
 
-
+CHANGELOG_TESTING_LIMIT = 5
 DEFAULT_PLAN_FEATURES_LIMIT = {
-    'changelogs': 500,
+    'changelogs': 500 if not settings.TESTING else CHANGELOG_TESTING_LIMIT,
     'categories': 5
 }
 
