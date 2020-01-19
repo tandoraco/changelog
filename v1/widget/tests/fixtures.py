@@ -18,3 +18,8 @@ def embed(embed_data):
     serializer = EmbedSerializer(data=embed_data)
     serializer.is_valid()
     return serializer.save()
+
+
+@pytest.fixture
+def widget(embed):
+    return embed

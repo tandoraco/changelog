@@ -2,7 +2,7 @@ from django import forms
 from django.db import transaction
 from tinymce.widgets import TinyMCE
 
-from v1.core.models import StaticSiteTheme
+from v1.static_site.models import StaticSiteTheme
 
 FONT_CHOICES = (
     ('https://fonts.googleapis.com/css?family=Poppins&display=swap', 'Poppins'),
@@ -15,7 +15,7 @@ FONT_CHOICES = (
     ('https://fonts.googleapis.com/css?family=Source+Sans+Pro&display=swap', 'Source Sans Pro'),
     ('https://fonts.googleapis.com/css?family=Lilita+One&display=swap', 'Lilita One'),
     ('https://fonts.googleapis.com/css?family=Oswald&display=swap', 'Oswald'),
-    ('https://fonts.googleapis.com/css?family=Playfair+Display&display=swap', 'Playfair+Display')
+    ('https://fonts.googleapis.com/css?family=Playfair+Display&display=swap', 'Playfair Display')
 )
 FONT_CHOICES = tuple(sorted(FONT_CHOICES, key=lambda f: f[1]))
 
