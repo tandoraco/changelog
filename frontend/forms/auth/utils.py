@@ -1,11 +1,21 @@
+import json
+import uuid
 from datetime import timedelta
 
+from django.conf import settings
 from django.contrib import messages
 from django.utils import timezone
+from django.utils.text import slugify
 
 from frontend.constants import NOT_LOGGED_IN_ERROR, FREE_TRIAL_PERIOD_IN_DAYS, LOGIN_AGAIN_INFO, \
     TRIAL_UPGRADE_WARNING, TRIAL_ENDS_TODAY
-from v1.accounts.models import ClientToken, Company
+from v1.accounts.models import ClientToken, Company, User, Subscription
+
+CHANGELOG_TESTING_LIMIT = 5
+DEFAULT_PLAN_FEATURES_LIMIT = {
+    'changelogs': 500 if not settings.TESTING else CHANGELOG_TESTING_LIMIT,
+    'categories': 5
+}
 
 
 def is_valid_auth_token_and_email(request):
@@ -39,13 +49,34 @@ def is_trial_expired(request):
         return False
 
     now = timezone.now()
-    if company.is_trial_account and (company.created_time + timedelta(days=FREE_TRIAL_PERIOD_IN_DAYS) < now):
+    if company.is_trial_account and (now > company.created_time + timedelta(days=FREE_TRIAL_PERIOD_IN_DAYS)):
         return True
 
     if company.is_trial_account:
         days_left_in_trial = ((company.created_time + timedelta(days=FREE_TRIAL_PERIOD_IN_DAYS)) - now).days
         if days_left_in_trial == 0:
             messages.warning(request, message=TRIAL_ENDS_TODAY, fail_silently=True)
-        elif days_left_in_trial > 0:
+        elif days_left_in_trial > 0 and (days_left_in_trial < FREE_TRIAL_PERIOD_IN_DAYS - 1):
             messages.info(request, message=TRIAL_UPGRADE_WARNING.format(days=days_left_in_trial), fail_silently=True)
     return False
+
+
+def create_session(email, request):
+    user = User.objects.get(email=email)
+    token = str(uuid.uuid4())
+    ClientToken.objects.create(token=token, user=user)
+    request.session["auth-token"] = token
+    request.session["email"] = user.email
+    request.session["user-id"] = user.id
+    request.session["company-id"] = user.company.id
+
+    try:
+        subscription = Subscription.objects.get(company_id=user.company.id)
+        plan_features = json.loads(subscription.plan.plan_features)
+    except Subscription.DoesNotExist:
+        plan_features = DEFAULT_PLAN_FEATURES_LIMIT
+
+    request.session['plan-features'] = plan_features
+    company_slug = slugify(user.company.company_name)
+    changelog_terminology = slugify(user.company.changelog_terminology)
+    request.session["public-page-url"] = f'/{company_slug}/{changelog_terminology}'

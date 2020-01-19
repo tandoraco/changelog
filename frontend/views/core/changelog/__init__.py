@@ -4,7 +4,7 @@ from django.shortcuts import render
 
 from frontend.constants import CHANGELOG_DOES_NOT_EXIST_ERROR, CHANGELOG_CREATED_OR_EDITED_SUCCESSFULLY, \
     CHANGELOG_DELETED_SUCCESSFULLY
-from frontend.custom.decorators import is_authenticated
+from frontend.custom.decorators import is_authenticated, is_allowed
 from frontend.forms.core.changelog import ChangelogForm
 from v1.accounts.models import User
 from v1.core.models import Changelog
@@ -12,6 +12,7 @@ from v1.core.serializers import ChangelogSerializer
 
 
 @is_authenticated
+@is_allowed('changelogs')
 def changelog_form(request):
     data = {'request': request}
     return _changelog_form(request, ChangelogForm(initial=data), "create")
@@ -21,7 +22,7 @@ def changelog_form(request):
 def edit_changelog(request, id):
     try:
         company_id = request.session["company-id"]
-        changelog = Changelog.objects.get(company__id=company_id, pk=id)
+        changelog = Changelog.objects.get(company__id=company_id, pk=id, deleted=False)
         data = {'published': changelog.published, 'request': request}
         form = ChangelogForm(instance=changelog, initial=data)
         return _changelog_form(request, form, "edit", changelog_id=id, instance=changelog)
@@ -59,7 +60,7 @@ def _changelog_form(request, form, action, changelog_id=None, instance=None):
 @is_authenticated
 def delete_changelog(request, id):
     try:
-        changelog = Changelog.objects.get(id=id)
+        changelog = Changelog.objects.get(id=id, deleted=False)
         changelog.deleted = True
         changelog.last_edited_by = User.objects.get(pk=request.session["user-id"])
         changelog.save()

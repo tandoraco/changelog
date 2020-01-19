@@ -6,7 +6,7 @@ from frontend.constants import STATIC_SITE_CONFIGURE_SUCCESS, THEME_SET_SUCCESS
 from frontend.custom.decorators import is_authenticated, requires_static_site
 from frontend.custom.utils import get_company_from_request
 from frontend.forms.static_site import StaticSiteForm, DefaultStaticSiteForm, ThemeForm
-from v1.core.models import StaticSiteTheme
+from v1.static_site.models import StaticSiteTheme
 
 
 @is_authenticated

@@ -10,7 +10,9 @@ def delete_model(request, model, id, success_redirect_path, error_redirect_path,
         instance = model.objects.get(id=id)
         if hasattr(instance, 'deleted'):
             setattr(instance, 'deleted', True)
-        instance.save()
+            instance.save()
+        else:
+            instance.delete()
 
         msgs.success(request, message=success_message)
     except model.DoesNotExist:
