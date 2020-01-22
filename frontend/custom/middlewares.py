@@ -5,7 +5,6 @@ from django.shortcuts import get_object_or_404
 from django.utils.deprecation import MiddlewareMixin
 from django.utils.text import slugify
 
-from frontend.views.app.public_helpers import render_html_string_without_context
 from v1.accounts.models import CustomDomain
 
 
@@ -34,7 +33,7 @@ class CustomDomainMiddleware(MiddlewareMixin):
                     print('1')
                     print(response)
                     print(response.content)
-                    return render_html_string_without_context(response.content)
+                    return response
                 elif company_name in request_path and changelog_terminology in request_path:
                     path = request.path
                     if path.startswith('/'):
@@ -44,7 +43,7 @@ class CustomDomainMiddleware(MiddlewareMixin):
                     print(2)
                     print(response)
                     print(response.content)
-                    return render_html_string_without_context(response.content)
+                    return response
                 else:
                     pass
             else:
