@@ -46,6 +46,11 @@ def render_html_from_string(request, template_string, context):
     return HttpResponse(html, content_type='text/html')
 
 
+def render_html_string_without_context(template_string):
+    template = Template(template_string)
+    return HttpResponse(template, content_type='text/html')
+
+
 def render_custom_theme(company, context, request):
     theme_meta = company.theme_meta(return_fields=False)
 
