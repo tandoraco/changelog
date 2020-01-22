@@ -2,10 +2,11 @@ import random
 import uuid
 
 import pytest
+from django.conf import settings
 from faker import Faker
 
 from v1.accounts.constants import MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH
-from v1.accounts.models import User, ForgotPassword
+from v1.accounts.models import User, ForgotPassword, CustomDomain
 from v1.accounts.serializers import CompanySerializer, UserSerializer
 
 
@@ -110,6 +111,13 @@ def invalid_company_data(invalid_password):
 def forgot_password(user, user_data):
     return ForgotPassword.objects.create(email=user_data['email'], token=str(uuid.uuid4()))
 
+
+@pytest.fixture
+def custom_domain(company):
+    tandora_url = settings.HOST + f'{company.company_name.lower()}/' + company.changelog_terminology.lower()
+    return CustomDomain.objects.create(company=company,
+                                       domain_name='https://test.tandora.co',
+                                       tandora_url=tandora_url)
 
 @pytest.fixture
 def razorpay_webhook_data():
