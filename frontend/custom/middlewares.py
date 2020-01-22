@@ -18,6 +18,8 @@ class CustomDomainMiddleware(MiddlewareMixin):
                 host_domain = request.META['HTTP_HOST']
             except KeyError:
                 host_domain = request.META.get('HOST')
+            print(f'host domain {host_domain}')
+            print(f'request path {request.path}')
             if host_domain and 'app.tandora.co' not in host_domain:
                 host_domain = host_domain.replace('http://', '').replace('https://', '').split('/')[0]
                 custom_domain = get_object_or_404(CustomDomain, domain_name__contains=host_domain)
