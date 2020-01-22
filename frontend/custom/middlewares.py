@@ -3,6 +3,7 @@ from django.conf import settings
 from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.utils.deprecation import MiddlewareMixin
+from django.utils.text import slugify
 
 from frontend.views.app.public_helpers import render_html_string_without_context
 from v1.accounts.models import CustomDomain
@@ -23,17 +24,23 @@ class CustomDomainMiddleware(MiddlewareMixin):
             if host_domain and 'app.tandora.co' not in host_domain:
                 host_domain = host_domain.replace('http://', '').replace('https://', '').split('/')[0]
                 custom_domain = get_object_or_404(CustomDomain, domain_name__contains=host_domain)
-                if request.path.startswith('/staff') or request.path.startswith('staff'):
+                company_name = slugify(custom_domain.company.company_name.lower())
+                changelog_terminology = slugify(custom_domain.company.changelog_terminology.lower())
+                request_path = request.path.lower()
+                if request_path.startswith('/staff') or request_path.startswith('staff'):
                     raise Http404
-                elif request.path == '' or request.path == '/':
-                    public_index = f'{custom_domain.company.company_name}/' \
-                        f'{custom_domain.company.changelog_terminology}' \
-                        .lower()
-                    response = requests.get(f'{settings.HOST}{public_index}')
+                elif request_path == '' or request_path == '/':
+                    response = requests.get(custom_domain.tandora_url)
+                    return render_html_string_without_context(response.content)
+                elif company_name in request_path and changelog_terminology in request_path:
+                    path = request.path
+                    if path.startswith('/'):
+                        path = path[1:]
+                    url = f'{settings.HOST}{path}'
+                    response = requests.get(url)
                     return render_html_string_without_context(response.content)
                 else:
-                    response = requests.get(request.path)
-                    return render_html_string_without_context(response.content)
+                    pass
             else:
                 pass
 
