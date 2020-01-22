@@ -10,6 +10,14 @@ from v1.accounts.models import CustomDomain
 
 class CustomDomainMiddleware(MiddlewareMixin):
 
+    def frame_response(self, response):
+        if response.ok:
+            return HttpResponse(response.content, status=response.status_code, content_type='text/html')
+        elif response.status_code == 404:
+            raise Http404
+
+        return response
+
     def process_request(self, request):
         if settings.DEBUG or settings.TESTING:
             pass
@@ -18,8 +26,6 @@ class CustomDomainMiddleware(MiddlewareMixin):
                 host_domain = request.META['HTTP_HOST']
             except KeyError:
                 host_domain = request.META.get('HOST')
-            print(f'host domain {host_domain}')
-            print(f'request path {request.path}')
             if host_domain and 'app.tandora.co' not in host_domain:
                 host_domain = host_domain.replace('http://', '').replace('https://', '').split('/')[0]
                 custom_domain = get_object_or_404(CustomDomain, domain_name__contains=host_domain)
@@ -30,20 +36,14 @@ class CustomDomainMiddleware(MiddlewareMixin):
                     raise Http404
                 elif request_path == '' or request_path == '/':
                     response = requests.get(custom_domain.tandora_url)
-                    print('1')
-                    print(response)
-                    print(response.content)
-                    return response
+                    return self.frame_response(response)
                 elif company_name in request_path and changelog_terminology in request_path:
                     path = request.path
                     if path.startswith('/'):
                         path = path[1:]
                     url = f'{settings.HOST}{path}'
                     response = requests.get(url)
-                    print(2)
-                    print(response)
-                    print(response.content)
-                    return response
+                    return self.frame_response(response)
                 else:
                     pass
             else:
