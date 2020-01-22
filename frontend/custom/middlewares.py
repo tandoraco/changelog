@@ -11,12 +11,7 @@ from v1.accounts.models import CustomDomain
 class CustomDomainMiddleware(MiddlewareMixin):
 
     def frame_response(self, response):
-        if response.ok:
-            return HttpResponse(response.content, status=response.status_code, content_type='text/html')
-        elif response.status_code == 404:
-            raise Http404
-
-        return response
+        return HttpResponse(response.content, status=response.status_code, content_type='text/html', charset='utf-8')
 
     def process_request(self, request):
         if settings.DEBUG or settings.TESTING:
@@ -26,12 +21,16 @@ class CustomDomainMiddleware(MiddlewareMixin):
                 host_domain = request.META['HTTP_HOST']
             except KeyError:
                 host_domain = request.META.get('HOST')
+
             if host_domain and 'app.tandora.co' not in host_domain:
                 host_domain = host_domain.replace('http://', '').replace('https://', '').split('/')[0]
                 custom_domain = get_object_or_404(CustomDomain, domain_name__contains=host_domain)
+
                 company_name = slugify(custom_domain.company.company_name.lower())
                 changelog_terminology = slugify(custom_domain.company.changelog_terminology.lower())
+
                 request_path = request.path.lower()
+
                 if request_path.startswith('/staff') or request_path.startswith('staff'):
                     raise Http404
                 elif request_path == '' or request_path == '/':
@@ -41,6 +40,7 @@ class CustomDomainMiddleware(MiddlewareMixin):
                     path = request.path
                     if path.startswith('/'):
                         path = path[1:]
+
                     url = f'{settings.HOST}{path}'
                     response = requests.get(url)
                     return self.frame_response(response)
