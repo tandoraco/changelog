@@ -31,6 +31,9 @@ class CustomDomainMiddleware(MiddlewareMixin):
                     raise Http404
                 elif request_path == '' or request_path == '/':
                     response = requests.get(custom_domain.tandora_url)
+                    print('1')
+                    print(response)
+                    print(response.content)
                     return render_html_string_without_context(response.content)
                 elif company_name in request_path and changelog_terminology in request_path:
                     path = request.path
@@ -38,6 +41,9 @@ class CustomDomainMiddleware(MiddlewareMixin):
                         path = path[1:]
                     url = f'{settings.HOST}{path}'
                     response = requests.get(url)
+                    print(2)
+                    print(response)
+                    print(response.content)
                     return render_html_string_without_context(response.content)
                 else:
                     pass
