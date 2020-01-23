@@ -40,7 +40,7 @@ def static_site_form(request):
 
     return render(request, 'staff/form.html', {
         'form': form,
-        'title': 'Configure static site'
+        'title': 'Configure Website'
     })
 
 
@@ -63,5 +63,5 @@ def theme_form(request):
 
     return render(request, 'staff/form.html', {
         'form': form,
-        'title': 'Set Static site Theme'
+        'title': 'Set Website Theme'
     })
