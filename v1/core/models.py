@@ -24,6 +24,8 @@ class Changelog(models.Model):
     last_edited_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name="last_edited_by")
     view_count = models.PositiveIntegerField(default=0)
 
+    created_at.editable = True
+
     def __str__(self):
         return f"{self.title}\n{self.id}"
 

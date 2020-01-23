@@ -1,8 +1,8 @@
 from urllib.parse import unquote
 
 from django.db import transaction
-from django.http import Http404
-from django.shortcuts import render
+from django.http import Http404, HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404
 
 from frontend.custom.decorators import is_authenticated
 from frontend.custom.utils import get_company_from_slug_and_changelog_terminology
@@ -39,6 +39,12 @@ def view_changelog(request, slug):
                       context={'title': changelog.title, 'content': changelog.content})
     except Changelog.DoesNotExist:
         raise Http404
+
+
+def company_public_index(request, company):
+    company_object = get_object_or_404(Company, company_name__iexact=company)
+    company = company.lower()
+    return HttpResponseRedirect(f'/{company}/{company_object.changelog_terminology.lower().replace(" ", "-")}')
 
 
 @transaction.atomic
