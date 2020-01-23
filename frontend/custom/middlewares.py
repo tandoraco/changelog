@@ -11,7 +11,11 @@ from v1.accounts.models import CustomDomain
 class CustomDomainMiddleware(MiddlewareMixin):
 
     def frame_response(self, response):
-        return HttpResponse(response.content, status=response.status_code, content_type='text/html', charset='utf-8')
+        html = response.content.decode('utf-8')
+        # for proper rendering of non english characters
+        html = html.replace('<head>', '<head>\n<meta charset="UTF-8">')
+        html = bytes(html, 'utf-8')
+        return HttpResponse(html, status=response.status_code, content_type='text/html', charset='utf-8')
 
     def process_request(self, request):
         if settings.DEBUG or settings.TESTING:
