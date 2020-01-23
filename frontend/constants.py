@@ -40,8 +40,8 @@ ACCOUNT_CREATED_MESSAGE = _('Your account is created. Please login to start usin
 AFFILIATE_CREATED_SUCCESSFULLY = _('Your request is received. We will contact you shortly.')
 INVALID_REFERRAL_CODE = _('Invalid referral code.')
 
-STATIC_SITE_CONFIGURE_SUCCESS = _('Static site configuration saved successfully.')
+STATIC_SITE_CONFIGURE_SUCCESS = _('Website configuration saved successfully.')
 NOT_ALLOWED = _('Not allowed for this plan.')
-THEME_SET_SUCCESS = _('Theme for Static site set successfully.')
+THEME_SET_SUCCESS = _('Theme for Website set successfully.')
 
 PLAN_LIMIT_REACHED_MESSAGE = _('You cannot perform this action, since the plan limit is reached. Contact support.')
