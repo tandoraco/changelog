@@ -1,0 +1,25 @@
+import pytest
+from django.urls import reverse
+
+from frontend.custom.test_utils import TandoraTestClient
+
+
+@pytest.mark.django_db
+class TestTemplateContent:
+    client = TandoraTestClient()
+    url = reverse('frontend-staff-index')
+
+    def _run_brand_test(self, user, product_name):
+        self.client.force_login(user)
+        response = self.client.get(self.url)
+
+        response_content = response.content.decode()
+        assert f'<a class="navbar-brand" href="/">{product_name}</a>' in response_content
+
+    def test_brand_name_for_tandora_changelog_product(self, company, user):
+        self._run_brand_test(user, 'Tandora Changelog')
+
+    def test_brand_name_for_tandora_web_builder_product(self, company, user):
+        company.use_case = 's'
+        company.save()
+        self._run_brand_test(user, 'Tandora Web builder')

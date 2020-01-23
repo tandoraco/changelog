@@ -1,5 +1,5 @@
 body {
-    font-family: 'Red Hat Display', sans-serif;
+    font-family: 'Lato', 'Red Hat Display', sans-serif;
 }
 
 .container{
@@ -103,7 +103,6 @@ p {
 }
 
 .changelog-content {
- font-family: 'M PLUS 1p', serif;
  font-size: 1.2rem;
  line-height: 1.8rem;
  margin-bottom: 2rem;
@@ -114,7 +113,6 @@ font-size: inherit;
 color: inherit;
 border: initial;
 padding: initial;
-font-family: inherit;
 display: flex;
 white-space: pre-wrap;
 word-break: break-word;
@@ -171,10 +169,6 @@ word-break: break-word;
   font-size: 0.8rem !important;
   padding-top: 0px !important;
   padding-bottom: 0px !important;
-}
-
-span {
-  font-family: 'M PLUS 1p', sans-serif;
 }
 
 .CodeMirror {

@@ -2,14 +2,24 @@
 {% load frontend_tags %}
 <html>
 <head>
-    <title>Tandora</title>
+    {% if request.user.company.use_case == 'c' %}
+        <title>{{ request.user.company.company_name }} Changelog</title>
+    {% endif %}
+    {% if request.user.company.use_case == 's' %}
+        <title>{{ request.user.company.company_name }} Web builder</title>
+    {% endif %}
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <link href="https://fonts.googleapis.com/css?family=Red+Hat+Display&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Red+Hat+Display|Lato&display=swap" rel="stylesheet">
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-  <a class="navbar-brand" href="/">Tandora</a>
+    {% if request.user.company.use_case == 'c' %}
+        <a class="navbar-brand" href="/">Tandora Changelog</a>
+    {% endif %}
+    {% if request.user.company.use_case == 's' %}
+        <a class="navbar-brand" href="/">Tandora Web builder</a>
+    {% endif %}
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -95,8 +105,7 @@
 </script>
 <script>
     let body = document.getElementsByTagName('body')[0];
-    //body.style.fontFamily = "Duru Sans";
-    body.style.fontFamily = "M PLUS 1p";
+    body.style.fontFamily = "Lato";
 </script>
 <script src="https://cdn.tinymce.com/4/tinymce.min.js"></script>
     <script>tinymce.init({
