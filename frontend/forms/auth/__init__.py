@@ -48,7 +48,7 @@ class CompanySignupForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput, min_length=MIN_PASSWORD_LENGTH,
                                max_length=MAX_PASSWORD_LENGTH)
     website = forms.URLField(max_length=200, required=True)
-    use_case = forms.ChoiceField(choices=USE_CASE_CHOICES, required=True)
+    use_case = forms.ChoiceField(choices=USE_CASE_CHOICES, required=True, label='Product')
     company_name = forms.CharField(max_length=100)
     referral_code = forms.CharField(max_length=50, required=False, label=REFERRAL_CODE)
     # changelog_terminology = forms.CharField(max_length=50, initial='', required=False)
