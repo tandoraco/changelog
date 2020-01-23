@@ -29,6 +29,7 @@ urlpatterns = [
     path('staff/manage/widget', widget.widget_form, name="frontend-manage-widget"),
     path('staff/manage/theme', static_site.theme_form, name="frontend-manage-theme"),
     path('staff/manage/static-site', static_site.static_site_form, name="frontend-manage-static-site"),
+    path('<str:company>', app.company_public_index, name="frontend-company-public-index"),
     path('<str:company>/<str:changelog_terminology>/widget/1', widget.public_widget, name="frontend-public-widget"),
     path('<str:company>/<str:changelog_terminology>/<slug:slug>', app.view_changelog_as_public,
          name="frontend-view-changelog-as-public"),
