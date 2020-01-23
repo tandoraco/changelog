@@ -52,3 +52,29 @@ class TestFrontendStaticViews:
         response = self.client.get(url)
         assert response.status_code == status.HTTP_302_FOUND
         assert response['Location'].lower() == f'/{company.company_name}/{company.changelog_terminology}'.lower().replace(' ', '-')
+
+    def test_manage_widget_not_present_for_tandora_web_builder_product(self, company, user):
+        company.use_case = 's'
+        company.save()
+        url = reverse('frontend-staff-index')
+        self.client.force_login(user)
+
+        response = self.client.get(url)
+        response_content = response.content.decode()
+
+        assert reverse('frontend-manage-widget') not in response_content
+        assert reverse('frontend-manage-theme') in response_content
+        assert reverse('frontend-manage-static-site') in response_content
+
+    def test_manage_static_site_is_not_in_tandora_changelog_product(self, company, user):
+        assert company.use_case == 'c'
+
+        url = reverse('frontend-staff-index')
+        self.client.force_login(user)
+
+        response = self.client.get(url)
+        response_content = response.content.decode()
+
+        assert reverse('frontend-manage-widget') in response_content
+        assert reverse('frontend-manage-theme') not in response_content
+        assert reverse('frontend-manage-static-site') not in response_content

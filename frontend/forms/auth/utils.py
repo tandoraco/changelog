@@ -29,6 +29,7 @@ def is_valid_auth_token_and_email(request):
         ct = ClientToken.objects.get(token=token)
         assert ct.user.email == email
         assert request.session["user-id"]
+        request.user = ct.user
     except (ClientToken.DoesNotExist, AssertionError):
         messages.error(request, message=NOT_LOGGED_IN_ERROR)
         return False
