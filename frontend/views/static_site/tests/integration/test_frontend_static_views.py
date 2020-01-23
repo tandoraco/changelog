@@ -45,3 +45,10 @@ class TestFrontendStaticViews:
         # for field_name, field_value in static_site_field_values.items():
         #     if field_name != 'font':
         #         assert field_name in response_content
+
+    def test_company_name_alone_in_url_redirects_to_public_company_index(self, company):
+        url = f'/{company.company_name.lower()}'
+
+        response = self.client.get(url)
+        assert response.status_code == status.HTTP_302_FOUND
+        assert response['Location'].lower() == f'/{company.company_name}/{company.changelog_terminology}'.lower().replace(' ', '-')
