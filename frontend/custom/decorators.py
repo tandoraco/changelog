@@ -40,7 +40,7 @@ def requires_static_site(func):
 
         if not company.is_static_site:
             messages.warning(request, NOT_ALLOWED)
-            return HttpResponseRedirect('/staff/changelogs')
+            return HttpResponseRedirect('/staff')
 
         return func(*args, **kwargs)
 

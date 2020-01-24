@@ -49,7 +49,7 @@ def _changelog_form(request, form, action, changelog_id=None, instance=None):
         if serializer.is_valid():
             serializer.save()
             messages.success(request, message=CHANGELOG_CREATED_OR_EDITED_SUCCESSFULLY.format(f"{action}"))
-            return HttpResponseRedirect("/staff/changelogs")
+            return HttpResponseRedirect("/staff")
 
     changelog_id = f"/{str(changelog_id)}" if changelog_id else ""
 

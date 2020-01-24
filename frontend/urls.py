@@ -6,7 +6,7 @@ from frontend.views import auth, app, categories, widget, static_site
 from frontend.views.core import changelog
 
 urlpatterns = [
-    path('', RedirectView.as_view(url='staff/changelogs'), name="frontend-index"),
+    path('', RedirectView.as_view(url='staff'), name="frontend-index"),
     url(r'^login', auth.login, name="frontend-login"),
     url(r'^logout', auth.logout, name="frontend-logout"),
     url(r'^signup', auth.signup, name="frontend-signup"),
@@ -14,11 +14,15 @@ urlpatterns = [
     url(r'^forgot-password', auth.forgot_password_form, name="frontend-forgot-password"),
     url(r'^reset-password/(?P<token>[0-9A-Fa-f-]+)', auth.reset_password_form, name="frontend-reset-password"),
     path('webhook/razorpay', auth.razorpay_webhook, name="razorpay-webhook"),
-    path('staff/changelogs', app.ChangeLogList.as_view(), name="frontend-staff-index"),
+    path('staff', app.ChangeLogList.as_view(), name="frontend-staff-index"),
     path('staff/create-changelog', changelog.changelog_form, name="frontend-create-changelog"),
     path('staff/edit-changelog/<int:id>', changelog.edit_changelog, name="frontend-edit-changelog"),
     path('staff/delete-changelog/<int:id>', changelog.delete_changelog, name="frontend-delete-changelog"),
     path('staff/changelog/<slug:slug>', app.view_changelog, name="frontend-view-changelog"),
+    path('staff/create-page', changelog.changelog_form, name="frontend-create-page"),
+    path('staff/edit-page/<int:id>', changelog.edit_changelog, name="frontend-edit-page"),
+    path('staff/delete-page/<int:id>', changelog.delete_changelog, name="frontend-delete-page"),
+    path('staff/page/<slug:slug>', app.view_changelog, name="frontend-view-page"),
     path('staff/manage/categories', categories.CategoryList.as_view(), name="frontend-view-categories"),
     path('staff/manage/categories/create-category', categories.category_form, name="frontend-create-category"),
     path('staff/manage/categories/edit-category/<int:id>', categories.edit_category, name="frontend-edit-category"),

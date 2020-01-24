@@ -57,7 +57,7 @@ class TestWidgetViews:
         response = self.client.get(url)
         assert response.status_code == status.HTTP_302_FOUND
         assert response.url != url
-        assert response.url == '/staff/changelogs'
+        assert response.url == '/staff'
 
     def test_manage_widget_shows_widget_create_form_when_company_has_no_widget(self, company, user):
         url = reverse('frontend-manage-widget')
