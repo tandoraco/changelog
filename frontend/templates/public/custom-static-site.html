@@ -1,2 +1,29 @@
 {% load static %}
-    {{ html|escape }}
+{{ html|escape }}
+<style>
+    .footer-tandora-branding {
+    margin-top: auto;
+    bottom: 0px;
+    width: 100%;
+    text-align: center;
+    background: #FAFAFA;
+    padding: 20px;
+}
+</style>
+{% if plan_features.show_tandora_branding_at_footer %}
+<script>
+    var footer = document.getElementsByTagName("footer");
+    if(footer && footer.length == 1) {
+        footer = footer[0];
+        var tandoraBranding = document.createElement('div');
+        tandoraBranding.classList.add('footer-tandora-branding')
+        tandoraBranding.innerHTML='Powered by <a href="https://tandora.co">Tandora</a>';
+        footer.append(tandoraBranding);
+    } else {
+        footer = document.createElement('footer');
+        footer.classList.add('footer-tandora-branding');
+        footer.innerHTML = 'Powered by <a href="https://tandora.co">Tandora</a>';
+        document.body.append(footer);
+    }
+</script>
+{% endif %}

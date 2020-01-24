@@ -175,3 +175,12 @@ word-break: break-word;
   border: 1px solid #000;
   height: auto;
 }
+
+footer {
+  margin-top: auto;
+  bottom: 0px;
+  width: 100%;
+  text-align: center;
+  background: #FAFAFA;
+  padding: 20px;
+}

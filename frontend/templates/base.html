@@ -19,5 +19,10 @@
 {% endif %}
 {% block content %}
 {% endblock %}
+{% if plan_features.show_tandora_branding_at_footer %}
+    <footer>
+        Powered by <a href="https://tandora.co">Tandora</a>
+    </footer>
+{% endif %}
 </body>
 </html>

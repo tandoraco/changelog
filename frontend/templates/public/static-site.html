@@ -18,6 +18,14 @@
           body {
             font-family: "{{ font_name }}", sans-serif;
           }
+          .footer-tandora-branding {
+            margin-top: auto;
+            bottom: 0px;
+            width: 100%;
+            text-align: center;
+            background: #FAFAFA;
+            padding: 20px;
+          }
       </style>
   </head>
   <body>
@@ -187,6 +195,11 @@
                 {% endif %}
             </p>
             <p>&copy; {{ year }} {{ config.company_name }}. &middot; <a href="{{ config.privacy_policy_link }}">Privacy</a> &middot; <a href="{{ config.terms_of_service_link }}">Terms</a></p>
+            {% if plan_features.show_tandora_branding_at_footer %}
+            <div class="footer-tandora-branding">
+              Powered by <a href="https://tandora.co">Tandora</a>
+            </div>
+            {% endif %}
         </footer>
       </div>
 
