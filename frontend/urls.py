@@ -13,6 +13,7 @@ urlpatterns = [
     url(r'^affiliate-signup', auth.affiliate_signup, name="frontend-affiliate-signup"),
     url(r'^forgot-password', auth.forgot_password_form, name="frontend-forgot-password"),
     url(r'^reset-password/(?P<token>[0-9A-Fa-f-]+)', auth.reset_password_form, name="frontend-reset-password"),
+    url(r'^verify-user/(?P<token>[0-9A-Fa-f-]+)', auth.verify_user, name='frontend-verify-user'),
     path('webhook/razorpay', auth.razorpay_webhook, name="razorpay-webhook"),
     path('staff', app.ChangeLogList.as_view(), name="frontend-staff-index"),
     path('staff/create-changelog', changelog.changelog_form, name="frontend-create-changelog"),

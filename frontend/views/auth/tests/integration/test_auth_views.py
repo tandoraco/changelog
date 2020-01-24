@@ -6,10 +6,11 @@ from django.urls import reverse
 from faker import Faker
 from rest_framework import status
 
-from frontend.constants import PASSWORD_DOES_NOT_MATCH
+from frontend.constants import PASSWORD_DOES_NOT_MATCH, USER_VERIFICATION_SUCCESS, USER_VERIFICATION_FAILED
 from frontend.custom.test_utils import TandoraTestClient
-from v1.accounts.constants import EMAIL_NOT_FOUND_ERROR, PASSWORD_INCORRECT_ERROR, PASSWORD_CONSTRAINS_NOT_MET
-from v1.accounts.models import ForgotPassword
+from v1.accounts.constants import EMAIL_NOT_FOUND_ERROR, PASSWORD_INCORRECT_ERROR, PASSWORD_CONSTRAINS_NOT_MET, \
+    INACTIVE_USER_ERROR
+from v1.accounts.models import ForgotPassword, PendingUser
 
 
 @pytest.mark.django_db
@@ -17,17 +18,37 @@ class TestAuthViews:
     client = TandoraTestClient()
     fake = Faker()
 
+    def _test_inactive_user_login(self, data):
+        url = reverse('frontend-login')
+
+        response = self.client.post(url, data=data)
+        # user will be inactive, as soon as the user is created. Should display inactive message.
+        assert response.status_code == status.HTTP_200_OK
+        assert response.context['form'].errors['email'][0] == INACTIVE_USER_ERROR
+
     def test_login_logout(self, user, user_data):
+        assert not user.is_active
+
         data = {
             'email': user.email,
             'password': user_data['password']
         }
 
         url = reverse('frontend-login')
+
+        self._test_inactive_user_login(data)
+
+        user.is_active = True
+        user.save()
+
         response = self.client.post(url, data=data)
         # on successful login, redirect to staff changelogs page
         assert response.status_code == status.HTTP_302_FOUND
         assert response.url == '/staff'
+
+        self.client.force_login(user)
+        response = self.client.get('/staff')
+        assert response.status_code == status.HTTP_200_OK
 
         # Incorrect email
         data['email'] = self.fake.email()
@@ -55,6 +76,9 @@ class TestAuthViews:
         assert response.status_code == status.HTTP_200_OK
 
     def test_forgot_reset_password(self, user, PASSWORD_CONSTRAINTS_NOT_MET=None):
+        user.is_active = True
+        user.save()
+
         forgot_password_url = reverse('frontend-forgot-password')
 
         # ensuring that no forgot password token exists, so we can
@@ -129,3 +153,29 @@ class TestAuthViews:
         # on successful login, redirect to staff changelogs page
         assert response.status_code == status.HTTP_302_FOUND
         assert response.url == '/staff'
+
+    def test_user_account_verification(self, company, company_data):
+        assert not company.admin.is_active
+
+        assert PendingUser.objects.count() == 1
+        pending_user = PendingUser.objects.get()
+
+        data = {
+            'email': company.admin.email,
+            'password': company_data['password']
+        }
+        self._test_inactive_user_login(data)
+
+        url = reverse('frontend-verify-user', args=(pending_user.uuid, ))
+        response = self.client.get(url)
+        assert 'login' in response['Location']
+        self.client.assert_response_message(response, USER_VERIFICATION_SUCCESS)
+
+        # After successful verification, the corresponding pending user will be deleted.
+        assert PendingUser.objects.count() == 0
+        with pytest.raises(PendingUser.DoesNotExist):
+            PendingUser.objects.get(uuid=pending_user.uuid)
+
+        # once an user is verified, the same verification link will become invalid
+        response = self.client.get(url)
+        self.client.assert_response_message(response, USER_VERIFICATION_FAILED)

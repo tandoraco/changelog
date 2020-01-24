@@ -8,7 +8,7 @@ from django.utils.translation import ugettext as _
 
 from frontend.constants import PASSWORD_DOES_NOT_MATCH, EMAIL_EXISTS_ERROR, WEBSITE_EXISTS_ERROR, INVALID_REFERRAL_CODE
 from v1.accounts.constants import MAX_EMAIL_LENGTH, PASSWORD_INCORRECT_ERROR, EMAIL_NOT_FOUND_ERROR, \
-    MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH, USE_CASE_CHOICES
+    MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH, USE_CASE_CHOICES, INACTIVE_USER_ERROR
 from v1.accounts.models import User, Company, ForgotPassword, Affiliate, Referral
 from v1.accounts.utils import verify_password
 from v1.accounts.validators import form_password_validator, form_no_symbols_validator
@@ -23,7 +23,9 @@ class LoginForm(forms.Form):
     def clean_email(self):
         email = self.cleaned_data['email']
         try:
-            User.objects.get(email=email)
+            user = User.objects.get(email=email)
+            if not user.is_active:
+                raise forms.ValidationError(INACTIVE_USER_ERROR)
         except User.DoesNotExist:
             raise forms.ValidationError(_(EMAIL_NOT_FOUND_ERROR))
 

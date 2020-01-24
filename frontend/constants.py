@@ -36,7 +36,7 @@ PASSWORD_RESET_TOKEN_INVALID = _('Reset password link is expired or does not exi
 EMAIL_EXISTS_ERROR = _('Email is already present in our records. Please enter a different email.')
 WEBSITE_EXISTS_ERROR = _('Website is already present in our records. Please enter a different website.')
 
-ACCOUNT_CREATED_MESSAGE = _('Your account is created. Please login to start using your free trial.')
+ACCOUNT_CREATED_MESSAGE = _('Your account is created. Check your email for instructions to verify your account.')
 AFFILIATE_CREATED_SUCCESSFULLY = _('Your request is received. We will contact you shortly.')
 INVALID_REFERRAL_CODE = _('Invalid referral code.')
 
@@ -45,3 +45,6 @@ NOT_ALLOWED = _('Not allowed for this plan.')
 THEME_SET_SUCCESS = _('Theme for Website set successfully.')
 
 PLAN_LIMIT_REACHED_MESSAGE = _('You cannot perform this action, since the plan limit is reached. Contact support.')
+
+USER_VERIFICATION_FAILED = _('Account verification failed. Please contact support@tandora.co')
+USER_VERIFICATION_SUCCESS = _('Your account is successfully verified. Please login.')

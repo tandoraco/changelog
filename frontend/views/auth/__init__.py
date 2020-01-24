@@ -7,7 +7,8 @@ from rest_framework.response import Response
 
 from frontend.constants import COMPANY_CREATED_OR_EDITED_SUCCESSFULLY, COMPANY_DOES_NOT_EXIST, \
     PASSWORD_RESET_INITIATED, \
-    PASSWORD_RESET_SUCCESS, PASSWORD_RESET_TOKEN_INVALID, ACCOUNT_CREATED_MESSAGE, AFFILIATE_CREATED_SUCCESSFULLY
+    PASSWORD_RESET_SUCCESS, PASSWORD_RESET_TOKEN_INVALID, ACCOUNT_CREATED_MESSAGE, AFFILIATE_CREATED_SUCCESSFULLY, \
+    USER_VERIFICATION_FAILED, USER_VERIFICATION_SUCCESS
 from frontend.custom.decorators import is_authenticated
 from frontend.custom.forms import TandoraForm
 from frontend.custom.utils import set_redirect_in_session
@@ -15,8 +16,13 @@ from frontend.forms.auth import LoginForm, CompanyForm, UserForm, ForgotPassword
     CompanySignupForm, AffiliateSignupForm
 from frontend.forms.auth.utils import clear_request_session, create_session
 from frontend.views.auth.utils import save_subscription_details
-from v1.accounts.models import User, ClientToken, Company, ForgotPassword, Affiliate
+from v1.accounts.models import User, ClientToken, Company, ForgotPassword, Affiliate, PendingUser
 from v1.accounts.serializers import ResetPasswordSerializer
+
+
+def redirect_to_login_with_message(level, request, message):
+    getattr(messages, level)(request, message=message)
+    return HttpResponseRedirect("/login")
 
 
 def login(request):
@@ -152,5 +158,19 @@ def reset_password_form(request, token):
             'title': 'Reset Password'
         })
     except ForgotPassword.DoesNotExist:
-        messages.info(request, message=PASSWORD_RESET_TOKEN_INVALID)
-        return HttpResponseRedirect("/login")
+        return redirect_to_login_with_message('info', request, PASSWORD_RESET_TOKEN_INVALID)
+
+
+@transaction.atomic
+def verify_user(request, token):
+    try:
+        pending_user = PendingUser.objects.get(uuid=token)
+
+        pending_user.user.is_active = True
+        pending_user.user.save()
+
+        pending_user.delete()
+
+        return redirect_to_login_with_message('success', request, USER_VERIFICATION_SUCCESS)
+    except PendingUser.DoesNotExist:
+        return redirect_to_login_with_message('info', request, USER_VERIFICATION_FAILED)
