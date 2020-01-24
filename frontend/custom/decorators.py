@@ -6,7 +6,7 @@ from django.urls import reverse
 
 from frontend.constants import FREE_TRIAL_EXPIRED, NOT_ALLOWED, PLAN_LIMIT_REACHED_MESSAGE
 from frontend.custom.utils import redirect_to_login
-from frontend.forms.auth.utils import is_valid_auth_token_and_email, is_trial_expired, DEFAULT_PLAN_FEATURES_LIMIT
+from frontend.forms.auth.utils import is_valid_auth_token_and_email, is_trial_expired, DEFAULT_PLAN_FEATURES
 from v1.accounts.models import Company
 from v1.categories.models import Category
 from v1.core.models import Changelog
@@ -71,7 +71,7 @@ def is_allowed(feature_name):
             try:
                 plan_features = request.session['plan-features']
             except KeyError:
-                plan_features = DEFAULT_PLAN_FEATURES_LIMIT
+                plan_features = DEFAULT_PLAN_FEATURES
 
             if feature_name in {'changelogs', 'categories'} and is_limit_reached(
                     feature_name, plan_features, company_id):

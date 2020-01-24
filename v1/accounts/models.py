@@ -122,6 +122,7 @@ class PricePlan(models.Model):
 class Subscription(models.Model):
     company = models.OneToOneField(Company, null=True, on_delete=models.CASCADE)
     plan = models.ForeignKey(PricePlan, null=True, on_delete=models.DO_NOTHING)
+    extra_plan_features = models.TextField(null=True, blank=True)
     is_recurring = models.BooleanField(default=False)
     is_yearly = models.BooleanField(default=True)
     razorpay_account_id = models.CharField(max_length=50, unique=True, db_index=True)
