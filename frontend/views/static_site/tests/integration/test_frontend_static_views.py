@@ -18,7 +18,7 @@ class TestFrontendStaticViews:
         response = self.client.get(url)
         assert response.status_code == status.HTTP_302_FOUND
         assert response.url != url
-        assert response.url == '/staff/changelogs'
+        assert response.url == '/staff'
 
     def test_404_when_static_site_is_not_configured(self, company):
         company.use_case = 's'
