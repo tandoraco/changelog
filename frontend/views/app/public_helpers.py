@@ -63,12 +63,12 @@ def render_html_from_string(request, template_string, context):
             footer = footer[0];
             var tandoraBranding = document.createElement('div');
             tandoraBranding.classList.add('footer-tandora-branding')
-            tandoraBranding.innerHTML='Powered by <a href="https://tandora.co">Tandora</a>';
+            tandoraBranding.innerHTML='Powered by <a href="https://www.tandora.co">Tandora</a>';
             footer.append(tandoraBranding);
         } else {
             footer = document.createElement('footer');
             footer.classList.add('footer-tandora-branding');
-            footer.innerHTML = 'Powered by <a href="https://tandora.co">Tandora</a>';
+            footer.innerHTML = 'Powered by <a href="https://www.tandora.co">Tandora</a>';
             document.body.append(footer);
         }
         </script>
