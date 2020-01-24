@@ -48,3 +48,11 @@ PLAN_LIMIT_REACHED_MESSAGE = _('You cannot perform this action, since the plan l
 
 USER_VERIFICATION_FAILED = _('Account verification failed. Please contact support@tandora.co')
 USER_VERIFICATION_SUCCESS = _('Your account is successfully verified. Please login.')
+
+ONLY_ADMIN_CAN_PERFORM_THIS_ACTION_ERROR = _('Only the company administrator can perform this action.')
+
+USER_CREATED_OR_EDITED_SUCCESSFULLY = _('Successfully {} user: {}')
+USER_DELETED_SUCCESSFULLY = _('User delete success.')
+USER_DOES_NOT_EXIST = _('User does not exist.')
+USER_DEACTIVATED_SUCCESSFULLY = _('User deactivation success.')
+USER_ACTIVATED_SUCCESSFULLY = _('User activation success.')

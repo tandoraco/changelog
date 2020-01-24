@@ -33,7 +33,7 @@ class TandoraForm:
             raise Http404
 
     def get_form(self, request, success_message=None, error_message=None, id=None, extra=None,
-                 title=None):
+                 title=None, post_data=None):
         form = self.form() if not self.initial else self.form(initial=self.initial)
 
         if not success_message:
@@ -62,12 +62,15 @@ class TandoraForm:
                 form = self.form(post_data, instance=self._get_instance(id, request, error_message))
 
             if form.is_valid():
-                obj = form.save(commit=False)
+                try:
+                    obj = form.save(commit=False)
 
-                if self.action == ACTION_CREATE and hasattr(self.model, "company"):
-                    setattr(obj, "company_id", request.session['company-id'])
+                    if self.action == ACTION_CREATE and hasattr(self.model, "company"):
+                        setattr(obj, "company_id", request.session['company-id'])
 
-                obj.save()
+                    obj.save()
+                except TypeError:  # This happens, when the passed form is not a ModelForm
+                    obj = form.save()
 
                 messages.success(request, message=success_message.format(self.action, str(obj)))
                 return HttpResponseRedirect(self.response_redirect_path)
