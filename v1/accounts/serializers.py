@@ -7,7 +7,7 @@ from rest_framework.validators import UniqueValidator
 from v1.accounts import models as account_models
 from v1.accounts.constants import PASSWORD_INCORRECT_ERROR, CHANGELOG_TERMINOLOGY, EMAIL_NOT_FOUND_ERROR, \
     RESET_TOKEN_INVALID, \
-    MAX_EMAIL_LENGTH
+    MAX_EMAIL_LENGTH, INACTIVE_USER_ERROR
 from v1.accounts.models import ForgotPassword, User
 from v1.accounts.utils import hash_password, verify_password
 from v1.accounts.validators import password_validator, no_symbols_validator
@@ -59,6 +59,8 @@ class LoginSerializer(serializers.Serializer):
 
         try:
             user = get_object_or_404(account_models.User, email=email)
+            if not user.is_active:
+                raise ValidationError(INACTIVE_USER_ERROR)
         except Http404:
             raise ValidationError(EMAIL_NOT_FOUND_ERROR)
 

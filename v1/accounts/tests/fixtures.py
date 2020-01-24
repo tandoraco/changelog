@@ -60,6 +60,15 @@ def user(create_user, user_data):
 
 
 @pytest.fixture
+def active_user(user):
+    assert not user.is_active
+    user.is_active = True
+    user.save()
+    user.refresh_from_db()
+    return user
+
+
+@pytest.fixture
 def trial_user(admin):
     admin.company.is_trial_account = True
     admin.company.save()

@@ -9,6 +9,7 @@ from django.utils.text import slugify
 
 from frontend.constants import NOT_LOGGED_IN_ERROR, FREE_TRIAL_PERIOD_IN_DAYS, LOGIN_AGAIN_INFO, \
     TRIAL_UPGRADE_WARNING, TRIAL_ENDS_TODAY
+from v1.accounts.constants import INACTIVE_USER_ERROR
 from v1.accounts.models import ClientToken, Company, User, Subscription
 
 CHANGELOG_TESTING_LIMIT = 5
@@ -31,6 +32,10 @@ def is_valid_auth_token_and_email(request):
         assert ct.user.email == email
         assert request.session["user-id"]
         request.user = ct.user
+
+        if not request.user.is_active:
+            messages.error(request, message=INACTIVE_USER_ERROR)
+            return False
     except (ClientToken.DoesNotExist, AssertionError):
         messages.error(request, message=NOT_LOGGED_IN_ERROR)
         return False
