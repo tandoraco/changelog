@@ -1,0 +1,26 @@
+{% extends "staff/base.html" %}
+{% block content %}
+<center>
+  <h2>Manage users</h2>
+</center>
+<center> <a class="card-link" href="/staff/manage/users/create-user">Create user</a></center>
+<div class="container page">
+    {% for user in object_list %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="article-preview">
+                <div class="preview-link">
+                    <h3>{{ user.name }} - {{ user.email }}</h3>
+                </div>
+                <a class="card-link" href="/staff/manage/users/edit-user/{{ user.id }}">Edit</a>
+                {% if user.is_active %}
+                    <a class="card-link" href="/staff/manage/users/deactivate-user/{{ user.id }}">Deactivate</a>
+                {% else %}
+                    <a class="card-link" href="/staff/manage/users/activate-user/{{ user.id }}">Activate</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

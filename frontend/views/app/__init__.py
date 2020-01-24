@@ -1,14 +1,19 @@
 from urllib.parse import unquote
 
+from django.contrib import messages
 from django.db import transaction
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
+from django.urls import reverse
 
-from frontend.custom.decorators import is_authenticated
+from frontend import constants as frontend_constants
+from frontend.custom.decorators import is_authenticated, is_admin
+from frontend.custom.forms import TandoraForm
 from frontend.custom.utils import get_company_from_slug_and_changelog_terminology
-from frontend.custom.views import TandoraListViewMixin
+from frontend.custom import views as custom_views
+from frontend.forms.auth import UserForm, StaffNewUserForm
 from frontend.views.app.public_helpers import get_context_and_template_name, render_custom_theme
-from v1.accounts.models import Company
+from v1.accounts.models import Company, User
 from v1.core.models import Changelog
 
 
@@ -16,7 +21,7 @@ def index(request):
     return render(request, 'app.html')
 
 
-class ChangeLogList(TandoraListViewMixin):
+class ChangeLogList(custom_views.TandoraListViewMixin):
     paginate_by = 20
     template_name = 'app.html'
 
@@ -83,3 +88,57 @@ def public_index(request, company, changelog_terminology):
 
     except (Company.DoesNotExist, Changelog.DoesNotExist):
         raise Http404
+
+
+class UserList(custom_views.TandoraAdminListViewMixin):
+    template_name = 'staff/users/index.html'
+
+    def get_queryset(self):
+        from v1.accounts.models import User
+        company_id = self.request.session['company-id']
+        return User.objects.filter(company__id=company_id).exclude(id=self.request.user.id)
+
+
+@is_authenticated
+@is_admin
+def create_user(request):
+    initial = {
+        'company': request.user.company
+    }
+    return TandoraForm(User, StaffNewUserForm, 'create', 'staff/form.html',
+                       reverse('frontend-view-users'), initial=initial) \
+        .get_form(request,
+                  success_message=frontend_constants.USER_CREATED_OR_EDITED_SUCCESSFULLY,
+                  error_message=frontend_constants.USER_DOES_NOT_EXIST)
+
+
+@is_authenticated
+@is_admin
+def edit_user(request, id):
+    return TandoraForm(User, UserForm, 'edit', 'staff/form.html',
+                       reverse('frontend-view-users'))\
+        .get_form(request,
+                  success_message=frontend_constants.USER_CREATED_OR_EDITED_SUCCESSFULLY,
+                  error_message=frontend_constants.USER_DOES_NOT_EXIST, id=id)
+
+
+def _set_user_is_active(is_active, id):
+    user = get_object_or_404(User, pk=id)
+    user.is_active = is_active
+    user.save()
+
+
+@is_authenticated
+@is_admin
+def deactivate_user(request, id):
+    _set_user_is_active(False, id)
+    messages.success(request, message=frontend_constants.USER_DEACTIVATED_SUCCESSFULLY)
+    return HttpResponseRedirect(reverse('frontend-view-users'))
+
+
+@is_authenticated
+@is_admin
+def activate_user(request, id):
+    _set_user_is_active(True, id)
+    messages.success(request, message=frontend_constants.USER_ACTIVATED_SUCCESSFULLY)
+    return HttpResponseRedirect(reverse('frontend-view-users'))

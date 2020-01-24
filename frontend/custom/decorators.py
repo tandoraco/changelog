@@ -4,7 +4,8 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
-from frontend.constants import FREE_TRIAL_EXPIRED, NOT_ALLOWED, PLAN_LIMIT_REACHED_MESSAGE
+from frontend.constants import FREE_TRIAL_EXPIRED, NOT_ALLOWED, PLAN_LIMIT_REACHED_MESSAGE, \
+    ONLY_ADMIN_CAN_PERFORM_THIS_ACTION_ERROR
 from frontend.custom.utils import redirect_to_login
 from frontend.forms.auth.utils import is_valid_auth_token_and_email, is_trial_expired, DEFAULT_PLAN_FEATURES
 from v1.accounts.models import Company
@@ -26,6 +27,21 @@ def is_authenticated(func):
             return redirect_to_login(request)
 
         return func(*args, **kwargs)
+
+    return wrapper
+
+
+def is_admin(func):
+
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        request = args[0]
+
+        if request.user.company.admin == request.user:
+            return func(*args, **kwargs)
+        else:
+            messages.warning(request, ONLY_ADMIN_CAN_PERFORM_THIS_ACTION_ERROR)
+            return HttpResponseRedirect('/staff')
 
     return wrapper
 
