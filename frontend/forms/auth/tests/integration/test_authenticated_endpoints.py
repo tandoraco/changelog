@@ -9,7 +9,7 @@ from rest_framework import status
 from frontend.constants import FREE_TRIAL_PERIOD_IN_DAYS
 
 AUTHENTICATED_ENDPOINTS = [
-    '/staff/changelogs',
+    '/staff',
     '/staff/create-changelog',
     '/staff/manage/categories',
     '/staff/manage/categories/create-category',

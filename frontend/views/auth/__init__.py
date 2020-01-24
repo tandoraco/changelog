@@ -30,7 +30,7 @@ def login(request):
             if redirect_to:
                 return HttpResponseRedirect(redirect_to)
 
-            return HttpResponseRedirect('/staff/changelogs')
+            return HttpResponseRedirect('/staff')
     else:
         clear_request_session(request)
         form = LoginForm()

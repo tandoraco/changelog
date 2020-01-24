@@ -5,6 +5,7 @@ from django.http import Http404, HttpResponse
 from django.shortcuts import render
 from django.template import Template, RequestContext
 
+from frontend.forms.auth.utils import get_plan_features
 from frontend.forms.static_site import FONT_CHOICES
 
 
@@ -36,10 +37,45 @@ def get_context_and_template_name(company, changelog=False):
             'hide_tandora_logo': True
         }
 
+    context.update({'plan_features': get_plan_features(company.id)})
+
     return context, template
 
 
 def render_html_from_string(request, template_string, context):
+    style = '''
+    <style>
+        .footer-tandora-branding {
+            margin-top: auto;
+            bottom: 0px;
+            width: 100%;
+            text-align: center;
+            background: #FAFAFA;
+            padding: 20px;
+        }
+    </style>
+    '''
+    tandora_branding = '''
+    {% if plan_features.show_tandora_branding_at_footer %}
+    <script>
+        var footer = document.getElementsByTagName("footer");
+        if(footer && footer.length == 1) {
+            footer = footer[0];
+            var tandoraBranding = document.createElement('div');
+            tandoraBranding.classList.add('footer-tandora-branding')
+            tandoraBranding.innerHTML='Powered by <a href="https://tandora.co">Tandora</a>';
+            footer.append(tandoraBranding);
+        } else {
+            footer = document.createElement('footer');
+            footer.classList.add('footer-tandora-branding');
+            footer.innerHTML = 'Powered by <a href="https://tandora.co">Tandora</a>';
+            document.body.append(footer);
+        }
+        </script>
+    {% endif %}
+    '''
+    template_string = template_string.replace('</head>', style + '\n</head>')
+    template_string = template_string.replace('</body>', tandora_branding + '\n</body>')
     template = Template(template_string)
     request_context = RequestContext(request, context)
     html = unescape(template.render(request_context))

@@ -10,6 +10,7 @@ from frontend.constants import (WIDGET_DOES_NOT_EXIST,
 from frontend.custom.decorators import is_authenticated
 from frontend.custom.forms import TandoraForm
 from frontend.custom.utils import get_company_from_slug_and_changelog_terminology
+from frontend.forms.auth.utils import get_plan_features
 from frontend.forms.widget import WidgetForm
 from v1.accounts.models import Company
 from v1.core.models import Changelog
@@ -24,7 +25,7 @@ def widget_form(request):
     company = Company.objects.get(id=company_id)
     if company.is_static_site:
         messages.info(request, NOT_ALLOWED)
-        return HttpResponseRedirect('/staff/changelogs')
+        return HttpResponseRedirect('/staff')
 
     if Embed.objects.filter(company__id=company_id).count() == 0:
         action = 'create'
@@ -61,7 +62,8 @@ def public_widget(request, company, changelog_terminology):
                           'company': company,
                           'widget': widget,
                           'changelogs': changelogs,
-                          'hide_tandora_logo': True
+                          'hide_tandora_logo': True,
+                          'plan_features': get_plan_features(company.id)
                       })
     except (Company.DoesNotExist, Embed.DoesNotExist):
         raise Http404
