@@ -8,7 +8,7 @@ from rest_framework import status
 
 from frontend.constants import PLAN_LIMIT_REACHED_MESSAGE
 from frontend.custom.test_utils import FrontEndFormViewTestBase, test_url
-from frontend.forms.auth.utils import DEFAULT_PLAN_FEATURES_LIMIT
+from frontend.forms.auth.utils import DEFAULT_PLAN_FEATURES
 from v1.categories.constants import DELETED_CATEGORY
 from v1.categories.models import Category
 
@@ -98,7 +98,7 @@ class TestFrontEndCategoryViews:
         client.force_login(user)
         url = reverse('frontend-create-category')
 
-        for i in range(DEFAULT_PLAN_FEATURES_LIMIT['categories']):
+        for i in range(DEFAULT_PLAN_FEATURES['categories']):
             data = {
                 'name': category_names[i],
                 'color': colors[i]

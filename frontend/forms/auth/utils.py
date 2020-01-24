@@ -12,9 +12,10 @@ from frontend.constants import NOT_LOGGED_IN_ERROR, FREE_TRIAL_PERIOD_IN_DAYS, L
 from v1.accounts.models import ClientToken, Company, User, Subscription
 
 CHANGELOG_TESTING_LIMIT = 5
-DEFAULT_PLAN_FEATURES_LIMIT = {
+DEFAULT_PLAN_FEATURES = {
     'changelogs': 500 if not settings.TESTING else CHANGELOG_TESTING_LIMIT,
-    'categories': 5
+    'categories': 5,
+    'show_tandora_branding_at_footer': True
 }
 
 
@@ -62,6 +63,24 @@ def is_trial_expired(request):
     return False
 
 
+def get_plan_features(company_id):
+    try:
+        subscription = Subscription.objects.get(company_id=company_id)
+        plan_features = json.loads(subscription.plan.plan_features)
+    except Subscription.DoesNotExist:
+        subscription = None
+        plan_features = DEFAULT_PLAN_FEATURES
+
+    if subscription and subscription.extra_plan_features:
+        plan_features.update(json.loads(subscription.extra_plan_features))
+
+    for plan_feature in DEFAULT_PLAN_FEATURES:
+        if plan_feature not in plan_features:
+            plan_features[plan_feature] = DEFAULT_PLAN_FEATURES[plan_feature]
+
+    return plan_features
+
+
 def create_session(email, request):
     user = User.objects.get(email=email)
     token = str(uuid.uuid4())
@@ -70,14 +89,7 @@ def create_session(email, request):
     request.session["email"] = user.email
     request.session["user-id"] = user.id
     request.session["company-id"] = user.company.id
-
-    try:
-        subscription = Subscription.objects.get(company_id=user.company.id)
-        plan_features = json.loads(subscription.plan.plan_features)
-    except Subscription.DoesNotExist:
-        plan_features = DEFAULT_PLAN_FEATURES_LIMIT
-
-    request.session['plan-features'] = plan_features
+    request.session['plan-features'] = get_plan_features(user.company.id)
     company_slug = slugify(user.company.company_name)
     changelog_terminology = slugify(user.company.changelog_terminology)
     request.session["public-page-url"] = f'/{company_slug}/{changelog_terminology}'

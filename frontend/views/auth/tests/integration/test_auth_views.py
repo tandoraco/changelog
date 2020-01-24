@@ -27,7 +27,7 @@ class TestAuthViews:
         response = self.client.post(url, data=data)
         # on successful login, redirect to staff changelogs page
         assert response.status_code == status.HTTP_302_FOUND
-        assert response.url == '/staff/changelogs'
+        assert response.url == '/staff'
 
         # Incorrect email
         data['email'] = self.fake.email()
@@ -128,4 +128,4 @@ class TestAuthViews:
         response = self.client.post(url, data=data)
         # on successful login, redirect to staff changelogs page
         assert response.status_code == status.HTTP_302_FOUND
-        assert response.url == '/staff/changelogs'
+        assert response.url == '/staff'
