@@ -9,7 +9,7 @@ from django.urls import reverse
 
 from frontend import constants as frontend_constants
 from frontend.constants import PASSWORD_RESET_INITIATED
-from frontend.custom.decorators import is_authenticated, is_admin
+from frontend.custom.decorators import is_authenticated, is_admin, is_allowed
 from frontend.custom.forms import TandoraForm
 from frontend.custom.utils import get_company_from_slug_and_changelog_terminology
 from frontend.custom import views as custom_views
@@ -104,6 +104,7 @@ class UserList(custom_views.TandoraAdminListViewMixin):
 
 @is_authenticated
 @is_admin
+@is_allowed('users', redirect_to='frontend-view-users')
 def create_user(request):
     initial = {
         'company': request.user.company

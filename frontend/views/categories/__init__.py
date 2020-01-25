@@ -12,7 +12,7 @@ from v1.categories.models import Category
 
 
 @is_authenticated
-@is_allowed('categories')
+@is_allowed('categorys')
 def category_form(request):
     return TandoraForm(Category, CategoryForm, 'create', 'staff/form.html',
                        '/')\

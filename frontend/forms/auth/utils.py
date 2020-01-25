@@ -15,8 +15,9 @@ from v1.accounts.models import ClientToken, Company, User, Subscription
 CHANGELOG_TESTING_LIMIT = 5
 DEFAULT_PLAN_FEATURES = {
     'changelogs': 500 if not settings.TESTING else CHANGELOG_TESTING_LIMIT,
-    'categories': 5,
-    'show_tandora_branding_at_footer': True
+    'categorys': 5,
+    'show_tandora_branding_at_footer': True,
+    'users': 1
 }
 
 
@@ -94,7 +95,6 @@ def create_session(email, request):
     request.session["email"] = user.email
     request.session["user-id"] = user.id
     request.session["company-id"] = user.company.id
-    request.session['plan-features'] = get_plan_features(user.company.id)
     company_slug = slugify(user.company.company_name)
     changelog_terminology = slugify(user.company.changelog_terminology)
     request.session["public-page-url"] = f'/{company_slug}/{changelog_terminology}'
