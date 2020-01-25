@@ -152,3 +152,19 @@ class FrontEndFormViewTestBase:
         for url in self.urls:
             print(f'Running tests for {url.name} -> {self.model_name}')
             getattr(self, f'test_{url.name}')(url.url)
+
+
+@pytest.mark.django_db
+class FrontEndTestBase(object):
+    faker = Faker()
+    client = TandoraTestClient()
+
+    def run_admin_endpoint_test(self, url, admin, user):
+        self.client.force_login(admin)
+
+        response = self.client.get(url)
+        assert response.status_code == status.HTTP_200_OK
+
+        self.client.force_login(user)
+        response = self.client.get(url)
+        assert response.status_code == status.HTTP_403_FORBIDDEN
