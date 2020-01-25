@@ -3,7 +3,7 @@ import json
 
 from django.apps import apps
 from django.contrib import messages
-from django.http import HttpResponseRedirect, HttpResponseForbidden
+from django.http import HttpResponseRedirect
 from django.urls import reverse
 
 from frontend.constants import FREE_TRIAL_EXPIRED, NOT_ALLOWED, PLAN_LIMIT_REACHED_MESSAGE, \
@@ -57,7 +57,8 @@ def is_admin(func):
         if request.user.company.admin == request.user:
             return func(*args, **kwargs)
         else:
-            return HttpResponseForbidden(ONLY_ADMIN_CAN_PERFORM_THIS_ACTION_ERROR)
+            messages.warning(request, ONLY_ADMIN_CAN_PERFORM_THIS_ACTION_ERROR)
+            return HttpResponseRedirect('/staff')
 
     return wrapper
 
@@ -94,7 +95,6 @@ def is_limit_reached(feature_name, plan_features, company_id):
 
 
 def is_allowed(feature_name, redirect_to=None):
-    from v1.accounts.models import Subscription
 
     def real_decorator(func):
 
@@ -102,11 +102,7 @@ def is_allowed(feature_name, redirect_to=None):
             request = args[0]
             company_id = request.session["company-id"]
 
-            try:
-                subscription = request.user.company.subscription
-            except Subscription.DoesNotExist:
-                subscription = None
-
+            subscription = request.user.company.subscription
             if subscription and subscription.plan and subscription.plan.plan_features:
                 plan_features = json.loads(subscription.plan.plan_features)
 
