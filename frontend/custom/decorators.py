@@ -3,7 +3,7 @@ import json
 
 from django.apps import apps
 from django.contrib import messages
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.urls import reverse
 
 from frontend.constants import FREE_TRIAL_EXPIRED, NOT_ALLOWED, PLAN_LIMIT_REACHED_MESSAGE, \
@@ -57,8 +57,7 @@ def is_admin(func):
         if request.user.company.admin == request.user:
             return func(*args, **kwargs)
         else:
-            messages.warning(request, ONLY_ADMIN_CAN_PERFORM_THIS_ACTION_ERROR)
-            return HttpResponseRedirect('/staff')
+            return HttpResponseForbidden(ONLY_ADMIN_CAN_PERFORM_THIS_ACTION_ERROR)
 
     return wrapper
 

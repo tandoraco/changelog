@@ -16,6 +16,7 @@ AUTHENTICATED_ENDPOINTS = [
     '/staff/manage/profile/company',
     '/staff/manage/profile/myself',
     '/staff/manage/widget',
+    '/staff/manage/users',
 ]
 
 

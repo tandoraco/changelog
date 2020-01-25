@@ -98,7 +98,7 @@ class TestFrontEndCategoryViews:
         client.force_login(active_user)
         url = reverse('frontend-create-category')
 
-        for i in range(DEFAULT_PLAN_FEATURES['categories']):
+        for i in range(DEFAULT_PLAN_FEATURES['categorys']):
             data = {
                 'name': category_names[i],
                 'color': colors[i]
