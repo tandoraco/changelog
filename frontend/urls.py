@@ -29,6 +29,7 @@ urlpatterns = [
     path('staff/manage/users/edit-user/<int:id>', app.edit_user, name="frontend-edit-user"),
     path('staff/manage/users/deactivate-user/<int:id>', app.deactivate_user, name="frontend-deactivate-user"),
     path('staff/manage/users/activate-user/<int:id>', app.activate_user, name="frontend-activate-user"),
+    path('staff/manage/users/reset-password/<int:id>', app.reset_password, name="frontend-reset-password"),
     path('staff/manage/categories', categories.CategoryList.as_view(), name="frontend-view-categories"),
     path('staff/manage/categories/create-category', categories.category_form, name="frontend-create-category"),
     path('staff/manage/categories/edit-category/<int:id>', categories.edit_category, name="frontend-edit-category"),
