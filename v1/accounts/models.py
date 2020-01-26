@@ -1,4 +1,5 @@
 import json
+import uuid
 
 from django.contrib.auth.models import AbstractBaseUser
 from django.db import models
@@ -7,8 +8,12 @@ from django.utils.text import slugify
 
 from v1.accounts.constants import CHANGELOG_TERMINOLOGY, MAX_EMAIL_LENGTH, USE_CASE_CHOICES
 from v1.accounts.utils import UserManager
-from v1.notifications.email import send_forgot_password_mail
+from v1.notifications import email as notification_email
 from v1.utils import prettify_json
+
+
+def random_uuid():
+    return str(uuid.uuid4())
 
 
 class User(AbstractBaseUser):
@@ -21,6 +26,7 @@ class User(AbstractBaseUser):
     created_time = models.DateTimeField(auto_now_add=True)
     is_admin = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=False)
 
     REQUIRED_FIELDS = ["name"]
     USERNAME_FIELD = 'email'
@@ -145,6 +151,14 @@ class ForgotPassword(models.Model):
         unique_together = ('email', 'created_date')
 
 
+class PendingUser(models.Model):
+    uuid = models.UUIDField(db_index=True, default=random_uuid)
+    user = models.OneToOneField('User', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{str(self.uuid)} - {self.user}'
+
+
 class ClientToken(models.Model):
     token = models.UUIDField(db_index=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -210,4 +224,5 @@ class CustomDomain(models.Model):
         return f'{self.domain_name} -> {self.tandora_url}'
 
 
-post_save.connect(send_forgot_password_mail, sender=ForgotPassword)
+post_save.connect(notification_email.send_forgot_password_mail, sender=ForgotPassword)
+post_save.connect(notification_email.send_user_verification_email, sender=User)

@@ -17,17 +17,33 @@ class TestLoginSerializer(SerializerTestBase):
         fake = Faker()
         fake_email = fake.email()
         data = list()
+
+        # When user is created for first time, user will be inactive. If user is inactive, login will fail
+        data.append(SerializerTestData(data={'email': company_data['email'], 'password': company_data['password']},
+                                       is_valid=False))
+        data.append(
+            SerializerTestData(data={'email': user_data['email'], 'password': user_data['password']}, is_valid=False))
+        self.run_data_assertions(test_data=data)
+
+        data = list()
+
+        company.admin.is_active = True
+        company.admin.save()
+
+        create_user.is_active = True
+        create_user.save()
+
         data.append(SerializerTestData(data={'email': company_data['email'], 'password': company_data['password']},
                                        is_valid=True))
         data.append(
             SerializerTestData(data={'email': user_data['email'], 'password': user_data['password']}, is_valid=True))
+
         data.append(SerializerTestData(data={'email': fake_email, 'password': "Hello123"},
                                        is_valid=False))  # email does not exist in db
         data.append(
             SerializerTestData(data={'email': user_data['email'], 'password': invalid_password}, is_valid=False))
         data.append(
             SerializerTestData(data={'email': company_data['email'], 'password': invalid_password}, is_valid=False))
-
         self.run_data_assertions(test_data=data)
 
 

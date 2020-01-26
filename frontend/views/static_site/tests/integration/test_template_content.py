@@ -16,10 +16,10 @@ class TestTemplateContent:
         response_content = response.content.decode()
         assert f'<a class="navbar-brand" href="/">{product_name}</a>' in response_content
 
-    def test_brand_name_for_tandora_changelog_product(self, company, user):
-        self._run_brand_test(user, 'Tandora Changelog')
+    def test_brand_name_for_tandora_changelog_product(self, company, active_user):
+        self._run_brand_test(active_user, 'Tandora Changelog')
 
-    def test_brand_name_for_tandora_web_builder_product(self, company, user):
+    def test_brand_name_for_tandora_web_builder_product(self, company, active_user):
         company.use_case = 's'
         company.save()
-        self._run_brand_test(user, 'Tandora Web builder')
+        self._run_brand_test(active_user, 'Tandora Web builder')

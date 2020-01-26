@@ -9,13 +9,15 @@ from django.utils.text import slugify
 
 from frontend.constants import NOT_LOGGED_IN_ERROR, FREE_TRIAL_PERIOD_IN_DAYS, LOGIN_AGAIN_INFO, \
     TRIAL_UPGRADE_WARNING, TRIAL_ENDS_TODAY
+from v1.accounts.constants import INACTIVE_USER_ERROR
 from v1.accounts.models import ClientToken, Company, User, Subscription
 
 CHANGELOG_TESTING_LIMIT = 5
 DEFAULT_PLAN_FEATURES = {
     'changelogs': 500 if not settings.TESTING else CHANGELOG_TESTING_LIMIT,
-    'categories': 5,
-    'show_tandora_branding_at_footer': True
+    'categorys': 5,
+    'show_tandora_branding_at_footer': True,
+    'users': 1
 }
 
 
@@ -31,6 +33,10 @@ def is_valid_auth_token_and_email(request):
         assert ct.user.email == email
         assert request.session["user-id"]
         request.user = ct.user
+
+        if not request.user.is_active:
+            messages.error(request, message=INACTIVE_USER_ERROR)
+            return False
     except (ClientToken.DoesNotExist, AssertionError):
         messages.error(request, message=NOT_LOGGED_IN_ERROR)
         return False
@@ -89,7 +95,6 @@ def create_session(email, request):
     request.session["email"] = user.email
     request.session["user-id"] = user.id
     request.session["company-id"] = user.company.id
-    request.session['plan-features'] = get_plan_features(user.company.id)
     company_slug = slugify(user.company.company_name)
     changelog_terminology = slugify(user.company.changelog_terminology)
     request.session["public-page-url"] = f'/{company_slug}/{changelog_terminology}'
