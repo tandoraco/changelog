@@ -118,15 +118,19 @@
         height: 300,
         menubar: true,
         plugins: [
-            'advlist autolink lists link image charmap print preview anchor textcolor',
+            'advlist autolink lists link image imagetools charmap print preview anchor textcolor',
             'searchreplace visualblocks code fullscreen',
             'insertdatetime media table paste code help wordcount'
         ],
-        toolbar: 'undo redo | formatselect | bold italic forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
+        toolbar: 'undo redo | formatselect | bold italic forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | image | help',
         content_css: [
             '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
             '//www.tiny.cloud/css/codepen.min.css'
-        ]
+        ],
+        imagetools_cors_hosts: ['app.tandora.co', 'localhost:8000'],
+        images_upload_url: '/api/v1/inline-image/',
+        automatic_uploads: true,
+        paste_data_images: true
         });
     }
 </script>
