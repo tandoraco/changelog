@@ -32,6 +32,9 @@ class FrontEndTokenAuthentication(BasicAuthentication):
         email = request.session.get("email", None)
 
         if not (token or email):
+            # I am returning None here, because when authentication classes are chained,
+            # DRF expects to return None for chained authentication classes to be called.
+            # I am planning to use this class with TokenAuthentication in inline-image api
             return None
 
         try:
