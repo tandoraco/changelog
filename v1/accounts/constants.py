@@ -16,6 +16,7 @@ PASSWORD_CONSTRAINS_NOT_MET = _("""Password should contain atleast one uppercase
  one digit and one special character.""")
 EMAIL_OR_PASSWORD_INVALID = _("Email or Password is invalid.")
 SPECIAL_CHARACTERS_NOT_ALLOWED = _('Special characters are not allowed for this field.')
+INVALID_TOKEN = _('Token is invalid')
 
 CHANGELOG_TERMINOLOGY = _("Changelog")
 
