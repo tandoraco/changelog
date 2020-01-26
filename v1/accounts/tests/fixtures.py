@@ -1,3 +1,4 @@
+import json
 import random
 import uuid
 
@@ -5,8 +6,9 @@ import pytest
 from django.conf import settings
 from faker import Faker
 
+from frontend.forms.auth.utils import DEFAULT_PLAN_FEATURES
 from v1.accounts.constants import MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH
-from v1.accounts.models import User, ForgotPassword, CustomDomain
+from v1.accounts.models import User, ForgotPassword, CustomDomain, PricePlan, Subscription
 from v1.accounts.serializers import CompanySerializer, UserSerializer
 
 
@@ -57,6 +59,23 @@ def create_user(user_data):
 @pytest.fixture
 def user(create_user, user_data):
     return User.objects.get(email=user_data.get('email'))
+
+
+@pytest.fixture
+def active_admin(admin):
+    admin.is_active = True
+    admin.save()
+    admin.refresh_from_db()
+    return admin
+
+
+@pytest.fixture
+def active_user(user):
+    assert not user.is_active
+    user.is_active = True
+    user.save()
+    user.refresh_from_db()
+    return user
 
 
 @pytest.fixture
@@ -118,6 +137,31 @@ def custom_domain(company):
     return CustomDomain.objects.create(company=company,
                                        domain_name='https://test.tandora.co',
                                        tandora_url=tandora_url)
+
+
+@pytest.fixture
+def price_plan():
+    data = {
+        'name': 'Test plan',
+        'monthly_price': 1.0,
+        'yearly_price': 1.0 * 12,
+        'plan_features': json.dumps(DEFAULT_PLAN_FEATURES)
+    }
+    return PricePlan.objects.create(**data)
+
+
+@pytest.fixture
+def subscription(price_plan, company):
+    data = {
+        'company': company,
+        'plan': price_plan,
+        'extra_plan_features': json.dumps({
+            'users': 3
+        })
+    }
+
+    return Subscription.objects.create(**data)
+
 
 @pytest.fixture
 def razorpay_webhook_data():

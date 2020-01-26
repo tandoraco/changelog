@@ -21,7 +21,7 @@ DELETE_CATEGORY = 'frontend-delete-category'
 @pytest.mark.django_db
 class TestFrontEndCategoryViews:
 
-    def test_category_frontend_views(self, user, company, categories, category):
+    def test_category_frontend_views(self, active_user, company, categories, category):
         urls = [
             test_url('create', reverse(CREATE_CATEGORY)),
             test_url('edit', reverse(EDIT_CATEGORY, kwargs={'id': category.id})),
@@ -34,25 +34,26 @@ class TestFrontEndCategoryViews:
             urls=urls,
             fields=['name', 'color'],
             view_exclude_fields={'color'},
-            user=user,
+            user=active_user,
             company=company,
             queryset=categories,
             instance=category
         )
 
-    def test_frontend_create_category(self, user, category_data):
+    def test_frontend_create_category(self, active_user, category_data):
         url = reverse('frontend-create-category')
 
         from frontend.custom.test_utils import TandoraTestClient
         client = TandoraTestClient()
-        client.force_login(user)
+        client.force_login(active_user)
 
         for data in category_data:
+            data['company'] = active_user.company.id
             client.post(url, data=data)
 
         assert Category.objects.count() == len(category_data)
 
-    def test_frontend_update_category(self, user, category, categories):
+    def test_frontend_update_category(self, active_user, category, categories):
         url = reverse('frontend-edit-category', kwargs={'id': category.id})
 
         old_category_name = category.name
@@ -62,7 +63,7 @@ class TestFrontEndCategoryViews:
 
         from frontend.custom.test_utils import TandoraTestClient
         client = TandoraTestClient()
-        client.force_login(user)
+        client.force_login(active_user)
 
         client.post(url, data=data)
 
@@ -74,7 +75,7 @@ class TestFrontEndCategoryViews:
         response = client.post(url, data=data)
         assert response.status_code == status.HTTP_404_NOT_FOUND
 
-    def test_category_plan_limits(self, user):
+    def test_category_plan_limits(self, active_user):
         # Default category limit is 5
         category_names = [
             'Test 1',
@@ -95,13 +96,14 @@ class TestFrontEndCategoryViews:
 
         from frontend.custom.test_utils import TandoraTestClient
         client = TandoraTestClient()
-        client.force_login(user)
+        client.force_login(active_user)
         url = reverse('frontend-create-category')
 
-        for i in range(DEFAULT_PLAN_FEATURES['categories']):
+        for i in range(DEFAULT_PLAN_FEATURES['categorys']):
             data = {
                 'name': category_names[i],
-                'color': colors[i]
+                'color': colors[i],
+                'company': active_user.company.id
             }
             response = client.post(url, data=data)
             client.assert_response_message_icontains(response, 'successfully create category')

@@ -22,7 +22,7 @@ class TestCategoriesViewSet(ModelViewSetTestBase):
         create_data["valid_data"] = {"company": user.company.id, "name": name, "color": "#00ff00"}
 
         update_data = dict()
-        update_data["valid_data"] = {"name": fake.name()}
+        update_data["valid_data"] = {"company": user.company.id, "name": fake.name()}
         update_data["invalid_data"] = {"color": "12345565"}
 
         keys = ["name", "color"]

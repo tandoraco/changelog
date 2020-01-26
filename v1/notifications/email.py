@@ -2,6 +2,7 @@ from urllib.parse import urljoin
 
 from django.conf import settings
 from django.core.mail import send_mail
+from django.db import transaction
 
 from v1.notifications.email_templates.json_templates import TEMPLATES
 
@@ -32,9 +33,22 @@ class Email(object):
             pass
 
 
+def send_verification_mail(template_name, link, instance):
+    template = TEMPLATES[template_name]
+    template['body'] = template['body'].format(link=link)
+    Email.send_mail(template, instance)
+
+
 def send_forgot_password_mail(sender, instance, created, **kwargs):
     if created:
-        template = TEMPLATES['forgot_password']
         reset_password_link = urljoin(settings.HOST, f'reset-password/{instance.token}')
-        template['body'] = template['body'].format(link=reset_password_link)
-        Email.send_mail(template, instance)
+        send_verification_mail('forgot_password', reset_password_link, instance)
+
+
+@transaction.atomic
+def send_user_verification_email(sender, instance, created, **kwargs):
+    if created:
+        from v1.accounts.models import PendingUser
+        pending_user = PendingUser.objects.create(user=instance)
+        user_verification_link = urljoin(settings.HOST, f'verify-user/{pending_user.uuid}')
+        send_verification_mail('user_verification', user_verification_link, pending_user)

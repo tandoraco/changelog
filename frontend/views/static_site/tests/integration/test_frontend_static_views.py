@@ -9,12 +9,12 @@ from frontend.custom.test_utils import TandoraTestClient
 class TestFrontendStaticViews:
     client = TandoraTestClient()
 
-    def test_static_site_not_allowed_when_company_use_case_is_changelog(self, company, user, widget):
+    def test_static_site_not_allowed_when_company_use_case_is_changelog(self, company, active_user, widget):
         assert company.use_case == 'c'
 
         # When company use case is changelog, static site is not allowed
         url = reverse('frontend-manage-static-site')
-        self.client.force_login(user)
+        self.client.force_login(active_user)
         response = self.client.get(url)
         assert response.status_code == status.HTTP_302_FOUND
         assert response.url != url
@@ -53,11 +53,11 @@ class TestFrontendStaticViews:
         assert response.status_code == status.HTTP_302_FOUND
         assert response['Location'].lower() == f'/{company.company_name}/{company.changelog_terminology}'.lower().replace(' ', '-')
 
-    def test_manage_widget_not_present_for_tandora_web_builder_product(self, company, user):
+    def test_manage_widget_not_present_for_tandora_web_builder_product(self, company, active_user):
         company.use_case = 's'
         company.save()
         url = reverse('frontend-staff-index')
-        self.client.force_login(user)
+        self.client.force_login(active_user)
 
         response = self.client.get(url)
         response_content = response.content.decode()
@@ -66,11 +66,11 @@ class TestFrontendStaticViews:
         assert reverse('frontend-manage-theme') in response_content
         assert reverse('frontend-manage-static-site') in response_content
 
-    def test_manage_static_site_is_not_in_tandora_changelog_product(self, company, user):
+    def test_manage_static_site_is_not_in_tandora_changelog_product(self, company, active_user):
         assert company.use_case == 'c'
 
         url = reverse('frontend-staff-index')
-        self.client.force_login(user)
+        self.client.force_login(active_user)
 
         response = self.client.get(url)
         response_content = response.content.decode()

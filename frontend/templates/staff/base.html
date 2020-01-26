@@ -42,6 +42,9 @@
           Manage
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          {% if request.user.company.admin == request.user %}
+            <a class="dropdown-item" href="/staff/manage/users">Users</a>
+          {% endif %}
           <a class="dropdown-item" href="/staff/manage/categories">Categories</a>
           {% if request.user.company.use_case == 'c' %}
             <a class="dropdown-item" href="/staff/manage/widget">Widget</a>
@@ -108,21 +111,24 @@
     body.style.fontFamily = "Lato";
 </script>
 <script src="https://cdn.tinymce.com/4/tinymce.min.js"></script>
-    <script>tinymce.init({
-      selector: 'textarea',
-      height: 300,
-      menubar: true,
-      plugins: [
-        'advlist autolink lists link image charmap print preview anchor textcolor',
-        'searchreplace visualblocks code fullscreen',
-        'insertdatetime media table paste code help wordcount'
-      ],
-      toolbar: 'undo redo | formatselect | bold italic forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
-      content_css: [
-        '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
-        '//www.tiny.cloud/css/codepen.min.css'
-      ]
-});
+    <script>
+    if(!cssTextarea && !javascriptTextarea) {
+        tinymce.init({
+        selector: 'textarea',
+        height: 300,
+        menubar: true,
+        plugins: [
+            'advlist autolink lists link image charmap print preview anchor textcolor',
+            'searchreplace visualblocks code fullscreen',
+            'insertdatetime media table paste code help wordcount'
+        ],
+        toolbar: 'undo redo | formatselect | bold italic forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
+        content_css: [
+            '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
+            '//www.tiny.cloud/css/codepen.min.css'
+        ]
+        });
+    }
 </script>
 </body>
 </html>

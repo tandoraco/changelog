@@ -1,6 +1,7 @@
 from colorful.forms import RGBColorField
 from django import forms
 
+from frontend.constants import COMPANY_DOES_NOT_EXIST
 from v1.categories.models import Category
 from v1.utils.validators import validate_color, validate_category_name
 
@@ -23,7 +24,17 @@ class CategoryForm(forms.ModelForm):
 
             if category.name == cleaned_name:
                 return cleaned_name
-        except KeyError:
-            pass
 
-        return validate_category_name(self.cleaned_data['name'], serializer=False)
+            return validate_category_name(category.company, self.cleaned_data['name'], serializer=False)
+        except KeyError:
+            company = self.data['company']
+            try:
+                company = int(company)
+                try:
+                    from v1.accounts.models import Company
+                    company = Company.objects.get(pk=company)
+                    return validate_category_name(company, self.cleaned_data['name'], serializer=False)
+                except Company.DoesNotExist:
+                    raise
+            except (ValueError, Company.DoesNotExist):
+                raise forms.ValidationError(COMPANY_DOES_NOT_EXIST)
