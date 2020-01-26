@@ -14,10 +14,16 @@ from v1.categories.models import Category
 @is_authenticated
 @is_allowed('categorys')
 def category_form(request):
+    if request.method == 'POST':
+        post_data = request.POST.copy()
+        post_data['company'] = request.user.company.id
+    else:
+        post_data = None
+
     return TandoraForm(Category, CategoryForm, 'create', 'staff/form.html',
                        '/')\
         .get_form(request, success_message=CATEGORY_CREATED_OR_EDITED_SUCCESSFULLY,
-                  error_message=CATEGORY_DOES_NOT_EXIST)
+                  error_message=CATEGORY_DOES_NOT_EXIST, post_data=post_data)
 
 
 @is_authenticated

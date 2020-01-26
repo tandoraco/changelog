@@ -50,6 +50,9 @@ class Command(BaseCommand):
         referral_code = options.get('referral_code')
         use_case = options.get('use_case')
 
+        if use_case == 's' and terminology == CHANGELOG_TERMINOLOGY:
+            terminology = 'website'
+
         arguments = [
             email,
             name,
@@ -63,9 +66,6 @@ class Command(BaseCommand):
             raise AssertionError("All required arguments are not present.")
 
         self.stdout.write(f"Creating company ..")
-
-        if use_case == 's' and terminology == CHANGELOG_TERMINOLOGY:
-            terminology = 'website'
 
         data = {
             'company_name': company_name,

@@ -51,7 +51,10 @@ class TandoraForm:
         if request.method == 'POST':
 
             if self.action == ACTION_CREATE:
-                form = self.form(request.POST)
+                if not post_data:
+                    form = self.form(request.POST)
+                else:
+                    form = self.form(post_data)
 
             if self.action == ACTION_EDIT:
                 if not id:

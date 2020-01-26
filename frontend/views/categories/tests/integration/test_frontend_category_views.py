@@ -48,6 +48,7 @@ class TestFrontEndCategoryViews:
         client.force_login(active_user)
 
         for data in category_data:
+            data['company'] = active_user.company.id
             client.post(url, data=data)
 
         assert Category.objects.count() == len(category_data)
@@ -101,7 +102,8 @@ class TestFrontEndCategoryViews:
         for i in range(DEFAULT_PLAN_FEATURES['categorys']):
             data = {
                 'name': category_names[i],
-                'color': colors[i]
+                'color': colors[i],
+                'company': active_user.company.id
             }
             response = client.post(url, data=data)
             client.assert_response_message_icontains(response, 'successfully create category')
