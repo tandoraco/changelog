@@ -28,4 +28,13 @@ class Changelog(models.Model):
         return f"{self.title}\n{self.id}"
 
 
+class InlineImageAttachment(models.Model):
+    company = models.ForeignKey('Company', null=False, on_delete=models.CASCADE)
+    file = models.ImageField(null=False)
+    created_at = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return self.file.name
+
+
 pre_save.connect(get_or_populate_slug_field, sender=Changelog)
