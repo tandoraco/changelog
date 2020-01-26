@@ -2,7 +2,7 @@ import copy
 
 import pytest
 
-from v1.core.serializers import ChangelogSerializer
+from v1.core.serializers import ChangelogSerializer, InlineImageAttachmentSerializer
 from v1.utils.test_base import SerializerTestData
 from v1.utils.test_base.serializer_test_base import SerializerTestBase
 
@@ -14,7 +14,7 @@ class TestChangelogSerializer(SerializerTestBase):
     def test_changelog_serializer_invalid_data(self, published_changelog_data, unpublished_changelog_data,
                                                changelog_data_without_company
                                                ):
-        data = []
+        data = list()
         data.append(SerializerTestData(data=published_changelog_data,
                                        is_valid=False))  # without created and last edited by, so false
         data.append(SerializerTestData(data=unpublished_changelog_data, is_valid=False))
@@ -45,4 +45,24 @@ class TestChangelogSerializer(SerializerTestBase):
             SerializerTestData(data=data1, is_valid=True),
             SerializerTestData(data=data2, is_valid=True)
         ]
+        self.run_data_assertions(test_data=data)
+
+
+@pytest.mark.unit
+class TestInlineImageAttachmentSerializer(SerializerTestBase):
+    serializer_class = InlineImageAttachmentSerializer
+
+    def test_inline_image_serializer(self, admin, image, text_file):
+        data = [
+            SerializerTestData(data={}, is_valid=False),
+            SerializerTestData(data={'file': ''}, is_valid=False),
+            # File should not be null
+            SerializerTestData(data={'file': None}, is_valid=False),
+            # Non image files should not be accepted
+            SerializerTestData(data={'file': text_file, 'company': admin.company.id}, is_valid=False),
+            # Without company, valid images should not be accepted
+            SerializerTestData(data={'file': image}, is_valid=False),
+            SerializerTestData(data={'file': image, 'company': admin.company.id}, is_valid=True),
+        ]
+
         self.run_data_assertions(test_data=data)
