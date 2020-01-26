@@ -46,7 +46,7 @@ THEME_SET_SUCCESS = _('Theme for Website set successfully.')
 
 PLAN_LIMIT_REACHED_MESSAGE = _('You cannot perform this action, since the plan limit is reached. Contact support.')
 
-USER_VERIFICATION_FAILED = _('Account verification failed. Please contact support@tandora.co')
+USER_VERIFICATION_FAILED = _('Your account is either verified or the verification link is expired.')
 USER_VERIFICATION_SUCCESS = _('Your account is successfully verified. Please login.')
 
 ONLY_ADMIN_CAN_PERFORM_THIS_ACTION_ERROR = _('Only the company administrator can perform this action.')

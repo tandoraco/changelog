@@ -1,6 +1,7 @@
 from django import forms
 from rest_framework import serializers
 
+from frontend.constants import COMPANY_DOES_NOT_EXIST
 from v1.categories.constants import INVALID_HEX_CODE, CATEGORY_EXISTS, DELETED_CATEGORY
 from v1.categories.models import Category
 
@@ -21,11 +22,12 @@ def validate_color(color, serializer=True):
     return color
 
 
-def validate_category_name(name, serializer=True):
+def validate_category_name(company, name, serializer=True):
     obj = serializers if serializer else forms
-
+    if not company:
+        raise obj.ValidationError(COMPANY_DOES_NOT_EXIST)
     try:
-        category = Category.objects.get(name__iexact=name)
+        category = Category.objects.get(company=company, name__iexact=name)
         if category.deleted:
             raise obj.ValidationError(DELETED_CATEGORY)
         else:

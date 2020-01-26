@@ -14,4 +14,12 @@ class CategorySerializer(serializers.ModelSerializer):
         return validate_color(color)
 
     def validate_name(self, name):
-        return validate_category_name(name)
+        company = self.initial_data.get('company')
+        if isinstance(company, int):
+            from v1.accounts.models import Company
+            try:
+                company = Company.objects.get(pk=company)
+            except Company.DoesNotExist:
+                company = None
+
+        return validate_category_name(company, name)
