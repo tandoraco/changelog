@@ -1,7 +1,9 @@
 import copy
 import random
+from pathlib import Path
 
 import pytest
+from django.core.files.uploadedfile import SimpleUploadedFile
 from faker import Faker
 
 from v1.core.models import Changelog
@@ -84,3 +86,23 @@ def changelogs(published_changelog, unpublished_changelog):
 @pytest.fixture
 def changelog(changelogs):
     return random.choice(changelogs)
+
+
+@pytest.fixture
+def image():
+    path = Path(__file__)
+    image_file_path = f'{str(path.parent)}/test.png'
+
+    content = ''
+    with open(image_file_path, 'rb') as f:
+        content = f.read()
+
+    return SimpleUploadedFile(
+        "test.png", content, content_type="image/png")
+
+
+@pytest.fixture
+def text_file():
+    return SimpleUploadedFile(
+        'test.txt', b'Test image attachment', content_type='text/plain'
+    )

@@ -2,7 +2,7 @@ from rest_framework.authentication import BaseAuthentication
 from rest_framework.exceptions import AuthenticationFailed
 
 from v1.accounts.constants import EMAIL_OR_PASSWORD_INVALID
-from v1.accounts.models import User
+from v1.accounts.models import User, ClientToken
 from v1.accounts.serializers import LoginSerializer
 
 
@@ -23,3 +23,27 @@ class BasicAuthentication(BaseAuthentication):
             return user, user.email
         else:
             raise AuthenticationFailed(EMAIL_OR_PASSWORD_INVALID)
+
+
+class FrontEndTokenAuthentication(BasicAuthentication):
+
+    def authenticate(self, request):
+        token = request.session.get("auth-token", None)
+        email = request.session.get("email", None)
+
+        if not (token or email):
+            # I am returning None here, because when authentication classes are chained,
+            # DRF expects to return None for chained authentication classes to be called.
+            # I am planning to use this class with TokenAuthentication in inline-image api
+            return None
+
+        try:
+            ct = ClientToken.objects.get(token=token)
+            assert ct.user.email == email
+
+            if not ct.user.is_active:
+                return None
+
+            return ct.user, ct.user.email
+        except (ClientToken.DoesNotExist, AssertionError):
+            return None

@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'tinymce',
     'knox',
     'django_ace',
+    'storages',
     'v1',
     'frontend',
     'tandoramaster',
@@ -205,10 +206,23 @@ if DEBUG:
 
 if DEBUG:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+    MEDIA_ROOT = BASE_DIR + '/media/'
+    MEDIA_URL = '/media/'
 else:
     EMAIL_BACKEND = 'django_ses.SESBackend'
+    DEFAULT_FILE_STORAGE = 'tandora.storage_backends.MediaStorage'
 
 AWS_SES_ACCESS_KEY_ID = os.environ.get('AWS_SES_ACCESS_KEY_ID')
 AWS_SES_SECRET_ACCESS_KEY = os.environ.get('AWS_SES_SECRET_ACCESS_KEY')
+
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',
+}
+AWS_LOCATION = 'attachments'
+AWS_DEFAULT_ACL = 'public-read'
 
 HOST = "http://localhost:8000/" if DEBUG else os.environ.get('HOST')
