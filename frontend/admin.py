@@ -5,7 +5,6 @@ from django.utils.translation import ugettext as _
 
 from frontend.forms.auth import TandoraAdminLoginForm
 from v1.accounts import models as v1_account_models
-from v1.core import models as v1_core_models
 from v1.accounts.utils import hash_password
 from v1.static_site import models as v1_static_site_models
 
@@ -102,5 +101,3 @@ admin_site.register(v1_account_models.CustomDomain)
 admin_site.register(v1_static_site_models.StaticSiteTheme)
 admin_site.register(v1_static_site_models.StaticSiteField, CreateUpdateModelAdmin)
 admin_site.register(v1_static_site_models.StaticSiteThemeConfig, CreateUpdateModelAdmin)
-admin_site.register(v1_core_models.Changelog, ChangelogAdmin)
-admin_site.register(v1_core_models.InlineImageAttachment, CreateOnlyModelAdmin)
