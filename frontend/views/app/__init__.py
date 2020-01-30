@@ -44,7 +44,7 @@ def view_changelog(request, slug):
         company_id = request.session["company-id"]
         changelog = Changelog.objects.get(company__id=company_id, slug=unquote(slug), deleted=False)
         return render(request, 'staff/changelogs/changelog.html',
-                      context={'title': changelog.title, 'content': changelog.content})
+                      context={'changelog': changelog})
     except Changelog.DoesNotExist:
         raise Http404
 

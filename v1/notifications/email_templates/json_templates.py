@@ -5,6 +5,6 @@ TEMPLATES = {
     },
     'user_verification': {
         'subject': 'Tandora account verification',
-        'body': 'Your Tandora account is created. Click <a href="{link}">here</a> to verify your email.'
+        'body': 'Your Tandora account is created. Click this {link} to verify your email.'
     }
 }
