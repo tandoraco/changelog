@@ -1,9 +1,12 @@
 {% extends "staff/base.html" %}
+{% load humanize %}
 {% block content %}
 <div class="container">
-    <center><h1>{{ title }}</h1></center>
+    <center><h1>{{ changelog.title }}</h1></center>
+    <span style="color: white; background-color:{{ changelog.category.color }};">&nbsp{{ changelog.category.name }}&nbsp</span><br>
+    <i><span style="color:grey;">Created: {{ changelog.created_at|naturaltime }}</span><br></i>
     <div>
-        <span>{{ content|safe }}</span>
+        <span>{{ changelog.content|safe }}</span>
     </div>
 </div>
 {% endblock %}
