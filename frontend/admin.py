@@ -27,6 +27,12 @@ class ReadOnlyModelAdmin(admin.ModelAdmin):
         return False
 
 
+class CreateReadModelAdmin(ReadOnlyModelAdmin):
+
+    def has_add_permission(self, request):
+        return True
+
+
 class CreateOnlyModelAdmin(admin.ModelAdmin):
 
     def has_delete_permission(self, request, obj=None):
@@ -95,7 +101,7 @@ admin_site.register(v1_account_models.User, UserAdmin)
 admin_site.register(v1_account_models.PricePlan)
 admin_site.register(v1_account_models.Subscription, SubscriptionAdmin)
 admin_site.register(v1_account_models.AngelUser, AngelUserAdmin)
-admin_site.register(v1_account_models.Affiliate)
+admin_site.register(v1_account_models.Affiliate, CreateReadModelAdmin)
 admin_site.register(v1_account_models.Referral, ReferralAdmin)
 admin_site.register(v1_account_models.CustomDomain)
 admin_site.register(v1_static_site_models.StaticSiteTheme)

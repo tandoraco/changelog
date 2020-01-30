@@ -1,3 +1,5 @@
+{% load humanize %}
+{% load frontend_tags %}
 <div class="container page">
     {% for changelog in object_list %}
     <div class="row">
@@ -12,7 +14,9 @@
                 </div-->
                 <div class="preview-link">
                     <h2><a href="/staff/changelog/{{ changelog.slug }}">{{ changelog.title }}</a></h2>
-                    <span>{{ changelog.content|safe }}</span>
+                    <span style="font-size:16px; color: white; background-color: {{ changelog.category.color }};">&nbsp{{ changelog.category.name }}&nbsp</span><br>
+                    <i><span style="color:grey;">Created: {{ changelog.created_at|naturaltime }}</span><br></i><br>
+                    <span style="color:black;font-size:16px;">{{ changelog.content|safe|extract_text_and_truncate }} ...</span>
                 </div>
                 {% if request.user.company.use_case == 'c' %}
                     <a class="card-link" href="/staff/edit-changelog/{{ changelog.id }}">Edit</a>
