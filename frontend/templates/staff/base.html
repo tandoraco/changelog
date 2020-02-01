@@ -134,5 +134,23 @@
         });
     }
 </script>
+<script src="{% static 'js/modal.min.js' %}"></script>
+<script>
+var deleteLink = document.getElementsByClassName('delete-link');
+if(deleteLink && deleteLink.length > 0) {
+    for(var i=0; i<deleteLink.length; i++) {
+        var url = deleteLink[i].href;
+        deleteLink[i].href= '#';
+        deleteLink[i].addEventListener('click', function() {
+            var confirmModal = Modal.confirm('Are you sure to delete this ?');
+            confirmModal.show().once('dismiss', function(modal, ev, button) {
+                if (button && button.value) {
+                    window.location.href = url;
+                }
+            });
+        });
+    }
+}
+</script>
 </body>
 </html>

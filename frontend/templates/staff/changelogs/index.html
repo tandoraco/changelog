@@ -21,14 +21,16 @@
                 {% if request.user.company.use_case == 'c' %}
                     <a class="card-link" href="/staff/edit-changelog/{{ changelog.id }}">Edit</a>
                     <a class="card-link" href="/staff/changelog/{{ changelog.slug }}">View</a>
-                    <a class="card-link" href="/staff/delete-changelog/{{ changelog.id }}">Delete</a>
+                    <a class="delete-link card-link" href="/staff/delete-changelog/{{ changelog.id }}">Delete</a>
                 {% else %}
                     <a class="card-link" href="/staff/edit-page/{{ changelog.id }}">Edit</a>
                     <a class="card-link" href="/staff/page/{{ changelog.slug }}">View</a>
-                    <a class="card-link" href="/staff/delete-page/{{ changelog.id }}">Delete</a>
+                    <a class="delete-link card-link" href="/staff/delete-page/{{ changelog.id }}">Delete</a>
                 {% endif %}
             </div>
         </div>
     </div>
+    {% empty %}
+        <center><h3>It's very quite here. Go ahead and add something.</h3></center>
     {% endfor %}
 </div>
