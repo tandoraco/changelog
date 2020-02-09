@@ -16,12 +16,14 @@ def trigger_zapier_webhook(sender, instance, created, **kwargs):
     from v1.core.serializers import ChangelogSerializer
     if created:
         try:
-            if instance.company.zapier and instance.company.zapier.zapier_webhook_url:
-                zapier_webhook_url = instance.company.zapier.zapier_webhook_url
-                data = ChangelogSerializer(instance=instance).data
-                data['company'] = slugify(instance.company.company_name)
-                data['changelog_terminology'] = slugify(instance.company.changelog_terminology)
-                data['view_url'] = settings.HOST + f"{data['company']}/{data['changelog_terminology']}/{instance.slug}"
-                requests.post(zapier_webhook_url, data=data)
+            if instance.company.zapier:
+                zapier = instance.company.zapier
+                if zapier.active and zapier.zapier_webhook_url:
+                    data = ChangelogSerializer(instance=instance).data
+                    data['company'] = slugify(instance.company.company_name)
+                    data['changelog_terminology'] = slugify(instance.company.changelog_terminology)
+                    data['view_url'] = \
+                        f"{settings.HOST}{data['company']}/{data['changelog_terminology']}/{instance.slug}"
+                    requests.post(zapier.zapier_webhook_url, data=data)
         except Zapier.DoesNotExist:
             pass
