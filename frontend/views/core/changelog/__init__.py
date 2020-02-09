@@ -5,8 +5,8 @@ from django.shortcuts import render
 from frontend.constants import CHANGELOG_DOES_NOT_EXIST_ERROR, CHANGELOG_CREATED_OR_EDITED_SUCCESSFULLY, \
     CHANGELOG_DELETED_SUCCESSFULLY
 from frontend.custom.decorators import is_authenticated, is_allowed
+from frontend.custom.utils import delete_model
 from frontend.forms.core.changelog import ChangelogForm
-from v1.accounts.models import User
 from v1.core.models import Changelog
 from v1.core.serializers import ChangelogSerializer
 
@@ -59,14 +59,5 @@ def _changelog_form(request, form, action, changelog_id=None, instance=None):
 
 @is_authenticated
 def delete_changelog(request, id):
-    try:
-        changelog = Changelog.objects.get(id=id, deleted=False)
-        changelog.deleted = True
-        changelog.last_edited_by = User.objects.get(pk=request.session["user-id"])
-        changelog.save()
-
-        messages.success(request, message=CHANGELOG_DELETED_SUCCESSFULLY)
-    except Changelog.DoesNotExist:
-        messages.error(request, message=CHANGELOG_DOES_NOT_EXIST_ERROR)
-
-    return HttpResponseRedirect("/")
+    return delete_model(request, Changelog, id, '/', '/', CHANGELOG_DELETED_SUCCESSFULLY,
+                        CHANGELOG_DOES_NOT_EXIST_ERROR)

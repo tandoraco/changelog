@@ -15,10 +15,12 @@
                 </div>
                 <a class="card-link" href="/staff/manage/categories/edit-category/{{ category.id }}">Edit</a>
                 <!--a class="card-link" href="/changelog/{{ cateogry.slug }}">View</a-->
-                <a class="delete-link card-link" href="/staff/manage/categories/delete-category/{{ category.id }}">Delete</a>
+                <a class="card-link" style="color:red;" onclick="performDelete('/staff/manage/categories/delete-category/{{ category.id }}', 'category')">Delete</a>
             </div>
         </div>
     </div>
+    {% empty %}
+        <center><h3>No category exists.</h3></center>
     {% endfor %}
 </div>
 {% endblock %}
