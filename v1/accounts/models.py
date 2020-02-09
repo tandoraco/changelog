@@ -1,6 +1,7 @@
 import json
-import uuid
+from json import JSONDecodeError
 
+from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser
 from django.db import models
 from django.db.models.signals import post_save
@@ -9,11 +10,16 @@ from django.utils.text import slugify
 from v1.accounts.constants import CHANGELOG_TERMINOLOGY, MAX_EMAIL_LENGTH, USE_CASE_CHOICES
 from v1.accounts.utils import UserManager
 from v1.notifications import email as notification_email
-from v1.utils import prettify_json
+from v1.utils import prettify_json, random_uuid
 
+CHANGELOG_TESTING_LIMIT = 5
 
-def random_uuid():
-    return str(uuid.uuid4())
+DEFAULT_PLAN_FEATURES = {
+    'changelogs': 500 if not settings.TESTING else CHANGELOG_TESTING_LIMIT,
+    'categorys': 5,
+    'show_tandora_branding_at_footer': True,
+    'users': 1
+}
 
 
 class User(AbstractBaseUser):
@@ -134,6 +140,23 @@ class Subscription(models.Model):
     razorpay_account_id = models.CharField(max_length=50, unique=True, db_index=True)
     razorpay_data = models.TextField()
     last_paid_time = models.DateTimeField(null=True)
+
+    @property
+    def all_plan_features(self):
+        features = DEFAULT_PLAN_FEATURES
+        if self.plan and self.plan.plan_features:
+            try:
+                features.update(json.loads(self.plan.plan_features))
+            except JSONDecodeError:
+                pass
+
+        if self.extra_plan_features:
+            try:
+                features.update(json.loads(self.extra_plan_features))
+            except JSONDecodeError:
+                pass
+
+        return features
 
     def __str__(self):
         return f'{str(self.company)} is in {self.plan.name if self.plan else ""}'
