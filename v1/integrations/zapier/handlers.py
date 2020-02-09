@@ -81,7 +81,7 @@ class ZapierHandler(IntegrationHandlerBase):
         if request.method != 'POST':
             raise MethodNotAllowed(request.method)
 
-        data = request.data.get('inputData', {})
+        data = request.data.copy()
         data['company'] = self.company.id
         from v1.core.serializers import ChangelogSerializer
         serializer = ChangelogSerializer(data=data)
