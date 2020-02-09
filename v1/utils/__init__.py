@@ -1,4 +1,5 @@
 import json
+import uuid
 
 from django.utils.safestring import mark_safe
 from pygments import highlight
@@ -34,3 +35,7 @@ def prettify_json(data):
     style = f'<style>{formatter.get_style_defs()}+</style></br>'
 
     return mark_safe(f'{style}{response}')
+
+
+def random_uuid():
+    return str(uuid.uuid4())
