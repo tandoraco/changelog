@@ -116,6 +116,11 @@ class Command(BaseCommand):
                         content = ''
                         with open(current_path / content_file) as cf:
                             content = cf.read()
+                        content = content.replace('Website Name', company.company_name)
+                        content = content.replace('Company Name', company.company_name)
+                        content = content.replace('Email@Website.com', company.admin.email)
+                        content = content.replace('www.website.com', company.website)
+                        content = content.replace('Website.com', company.website)
                         changelog['content'] = content
                         create_changelog(changelog, category, company)
                     except Category.DoesNotExist:
