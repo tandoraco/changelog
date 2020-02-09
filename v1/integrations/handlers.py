@@ -65,3 +65,14 @@ class IntegrationSettingsHandlerBase(object):
                 return serializer_error_response(serializer)
         else:
             raise MethodNotAllowed
+
+
+class IntegrationHandlerBase(object):
+
+    def __init__(self, company):
+        self.company = company
+
+    @property
+    def integration(self):
+        object, _ = self.model.objects.get_or_create(company=self.company)
+        return object

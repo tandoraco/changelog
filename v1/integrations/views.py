@@ -6,6 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from v1.accounts.authentication import FrontEndTokenAuthentication
 from v1.accounts.permissions import IsAdmin
 from v1.integrations import INTEGRATION_MAP, INTEGRATION_SETTINGS_MAP
+from v1.integrations.zapier.authentication import ZapierAPIKeyAuthentication
 
 
 @api_view(['GET', 'PATCH'])
@@ -19,7 +20,8 @@ def integration_settings(request, integration_name):
         raise NotFound
 
 
-@authentication_classes([FrontEndTokenAuthentication, TokenAuthentication, ])
+@api_view(['GET', 'POST', 'PATCH', 'DELETE', ])
+@authentication_classes([ZapierAPIKeyAuthentication, FrontEndTokenAuthentication, TokenAuthentication, ])
 @permission_classes([IsAuthenticated, ])
 def integration_action(request, integration_name, action):
     try:
