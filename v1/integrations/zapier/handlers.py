@@ -90,6 +90,6 @@ class ZapierHandler(IntegrationHandlerBase):
 
         if serializer.is_valid():
             serializer.save()
-            return Response(status=status.HTTP_201_CREATED)
+            return Response(status=status.HTTP_201_CREATED, data={'success': True})
         else:
             return serializer_error_response(serializer)
