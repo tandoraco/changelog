@@ -5,6 +5,7 @@ from django.shortcuts import render
 ACTION_CREATE = "create"
 ACTION_EDIT = "edit"
 ID_NOT_PROVIDED_ERROR = "Form edit. Id not provided"
+ID_OR_INSTANCE_NOT_PROVIDED_ERROR = "Form edit. Either ID or instance is required."
 
 
 class TandoraForm:
@@ -33,7 +34,7 @@ class TandoraForm:
             raise Http404
 
     def get_form(self, request, success_message=None, error_message=None, id=None, extra=None,
-                 title=None, post_data=None):
+                 title=None, post_data=None, instance=None):
         form = self.form() if not self.initial else self.form(initial=self.initial)
 
         if not success_message:
@@ -44,6 +45,9 @@ class TandoraForm:
 
         if id:
             form = self.form(instance=self._get_instance(id, request, error_message))
+        if instance:
+            id = instance.id
+            form = self.form(instance=instance)
 
         if not title:
             title = f'{self.action.title()} {self.model.__name__}'
@@ -57,8 +61,8 @@ class TandoraForm:
                     form = self.form(post_data)
 
             if self.action == ACTION_EDIT:
-                if not id:
-                    raise RuntimeError(ID_NOT_PROVIDED_ERROR)
+                if not (id or instance):
+                    raise RuntimeError(ID_OR_INSTANCE_NOT_PROVIDED_ERROR)
 
                 post_data = request.POST.copy()
                 post_data["id"] = id

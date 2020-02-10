@@ -2,7 +2,7 @@ from django.conf.urls import url
 from django.urls import path
 from django.views.generic import RedirectView
 
-from frontend.views import auth, app, categories, widget, static_site
+from frontend.views import auth, app, categories, widget, static_site, integrations
 from frontend.views.core import changelog
 
 urlpatterns = [
@@ -35,6 +35,9 @@ urlpatterns = [
     path('staff/manage/categories/edit-category/<int:id>', categories.edit_category, name="frontend-edit-category"),
     path('staff/manage/categories/delete-category/<int:id>', categories.delete_category,
          name="frontend-delete-category"),
+    path('staff/manage/integrations', integrations.IntegrationList.as_view(), name="frontend-view-integrations"),
+    path('staff/manage/integrations/<str:integration>', integrations.integration_form,
+         name="frontend-edit-integrations"),
     path('staff/manage/profile/company', auth.company_form, name="frontend-company-form"),
     path('staff/manage/profile/myself', auth.profile_form, name="frontend-profile-form"),
     path('staff/manage/widget', widget.widget_form, name="frontend-manage-widget"),

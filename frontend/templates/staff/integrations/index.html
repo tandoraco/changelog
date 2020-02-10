@@ -1,0 +1,20 @@
+{% extends "staff/base.html" %}
+{% block content %}
+<center>
+  <h2>Manage integrations</h2>
+</center>
+<div class="container page">
+    {% for integration in object_list %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="article-preview">
+                <div class="preview-link">
+                    <h3>{{ integration|title }}</h3>
+                </div>
+                <a class="card-link" href="/staff/manage/integrations/{{ integration }}">Edit</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

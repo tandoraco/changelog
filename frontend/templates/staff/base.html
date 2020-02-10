@@ -46,6 +46,9 @@
             <a class="dropdown-item" href="/staff/manage/users">Users</a>
           {% endif %}
           <a class="dropdown-item" href="/staff/manage/categories">Categories</a>
+          {% if request.user.company.admin == request.user %}
+            <a class="dropdown-item" href="/staff/manage/integrations">Integrations</a>
+          {% endif %}
           {% if request.user.company.use_case == 'c' %}
             <a class="dropdown-item" href="/staff/manage/widget">Widget</a>
           {% endif %}
