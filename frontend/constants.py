@@ -56,3 +56,8 @@ USER_DELETED_SUCCESSFULLY = _('User delete success.')
 USER_DOES_NOT_EXIST = _('User does not exist.')
 USER_DEACTIVATED_SUCCESSFULLY = _('User deactivation success.')
 USER_ACTIVATED_SUCCESSFULLY = _('User activation success.')
+
+INTEGRATION_NOT_AVAILABLE_FOR_PLAN_ERROR = "Your current subscription plan does not allow this integration." \
+                                           "Please contact support@tandora.co for more details. "
+INTEGRATION_EDITED_SUCCESSFULLY = _("Integration updated successfully.")
+INTEGRATION_EDIT_FAILED_ERROR = _("Integration editing failed. Please try again after some time.")
