@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 
 from frontend.constants import INTEGRATION_NOT_AVAILABLE_FOR_PLAN_ERROR, INTEGRATION_EDITED_SUCCESSFULLY, \
-    INTEGRATION_EDIT_FAILED_ERROR
+    INTEGRATION_EDIT_FAILED_ERROR, NOT_ALLOWED
 from frontend.custom import views as custom_views
 from frontend.custom.decorators import is_authenticated, is_admin
 from frontend.custom.forms import TandoraForm
@@ -39,6 +39,10 @@ class IntegrationList(custom_views.TandoraAdminListViewMixin):
 @is_authenticated
 @is_admin
 def integration_form(request, integration):
+    if request.user.company.is_static_site:
+        messages.info(request, NOT_ALLOWED)
+        return HttpResponseRedirect('/staff')
+
     try:
         subscription = request.user.company.subscription
         if not subscription.all_plan_features.get(integration):
