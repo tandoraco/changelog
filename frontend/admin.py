@@ -1,4 +1,5 @@
 # Register your models here.
+from django.apps import apps
 from django.contrib import admin
 from django.contrib.admin import AdminSite
 from django.utils.translation import ugettext as _
@@ -107,3 +108,5 @@ admin_site.register(v1_account_models.CustomDomain)
 admin_site.register(v1_static_site_models.StaticSiteTheme)
 admin_site.register(v1_static_site_models.StaticSiteField, CreateUpdateModelAdmin)
 admin_site.register(v1_static_site_models.StaticSiteThemeConfig, CreateUpdateModelAdmin)
+admin_site.register(apps.get_model('v1', 'Zapier'), ReadOnlyModelAdmin)
+admin_site.register(apps.get_model('v1', 'ZapierWebhookTrigger'), ReadOnlyModelAdmin)
