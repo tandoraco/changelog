@@ -22,5 +22,9 @@ class Embed(models.Model):
     def __str__(self):
         return f'Enabled: {"Yes" if self.enabled else "No"}'
 
+    class Meta:
+        verbose_name = 'Embed Widget'
+        verbose_name_plural = 'Embed Widget'
+
 
 pre_save.connect(remove_css_code_edit_warning, sender=Embed)
