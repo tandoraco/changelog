@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.translation import ugettext as _
 
 from v1.utils import random_uuid
 
@@ -6,10 +7,10 @@ CHANGELOG_PUBLISHED = 'pu'
 NEW_CHANGELOG = 'ne'
 
 ZAPIER_TRIGGER_CHOICES = (
-    (CHANGELOG_PUBLISHED, 'Whenever a changelog is published for the first time'),
-    (NEW_CHANGELOG, 'Whenever a changelog is created whether it is published or not')
+    (CHANGELOG_PUBLISHED, _('Whenever a changelog is published for the first time')),
+    (NEW_CHANGELOG, _('Whenever a changelog is created whether it is published or not'))
 )
-ZAPIER_TRIGGER_LABEL = ('When to trigger the zapier webhook?')
+ZAPIER_TRIGGER_LABEL = 'When to trigger the zapier webhook?'
 
 
 class Zapier(models.Model):
