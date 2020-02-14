@@ -64,7 +64,7 @@ def is_trial_expired(request):
         days_left_in_trial = ((company.created_time + timedelta(days=FREE_TRIAL_PERIOD_IN_DAYS)) - now).days
         if days_left_in_trial == 0:
             messages.warning(request, message=TRIAL_ENDS_TODAY, fail_silently=True)
-        elif days_left_in_trial > 0 and (days_left_in_trial < FREE_TRIAL_PERIOD_IN_DAYS - 1):
+        elif days_left_in_trial > 0 and (days_left_in_trial < FREE_TRIAL_PERIOD_IN_DAYS - 3):
             messages.info(request, message=TRIAL_UPGRADE_WARNING.format(days=days_left_in_trial), fail_silently=True)
     return False
 
