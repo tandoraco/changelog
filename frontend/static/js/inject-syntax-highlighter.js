@@ -9,7 +9,9 @@ function renderSyntaxHighlighter(value, index, array) {
             htmlMode = true;
         }
         CodeMirror.fromTextArea(element, {
-            lineNumbers: true, mode: {"name": mode, htmlMode: htmlMode}
+            lineNumbers: true,
+            mode: {"name": mode, htmlMode: htmlMode},
+            lineWrapping: true
         });
     }
 }
