@@ -6,7 +6,7 @@
     {% if extra %}
     <span>{{ extra|safe }}</span>
     {% endif %}
-    <form id="category_form" method="post" action="{{ action }}">
+    <form id="staff_form" method="post" action="{{ action }}">
         {% csrf_token %}
         {{ form|crispy }}
         <center>
@@ -37,8 +37,6 @@
             copyApiKeyButton.onclick = copyApiKey;
             extraActions.appendChild(copyApiKeyButton);
         }
-
-
     </script>
 </div>
 {% endblock %}
