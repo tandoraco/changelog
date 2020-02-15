@@ -1,3 +1,5 @@
+from collections import namedtuple
+
 from django import forms
 from django.apps import apps
 from django.contrib import messages
@@ -11,11 +13,24 @@ from frontend.custom.decorators import is_authenticated, is_admin
 from frontend.custom.forms import TandoraForm
 from v1.accounts.models import Subscription
 
+integration_meta = namedtuple('integration_meta', 'name logo description')
 
 INTEGRATION_FORM_FIELDS_DICT = {
     'zapier': {
         'read_only_fields': ['api_key', 'zapier_webhook_url'],
         'exclude': ['company', ]
+    }
+}
+
+INTEGRATION_FRONTEND_META_DICT = {
+    'zapier': {
+        'logo': 'https://tandora-production.s3.amazonaws.com/assets/logos/zapier-logo.png',
+        'description': 'Zapier provides workflows to automate the use of web applications together. '
+                       'You can connect your favorite apps like Twitter, Facebook etc with Tandora '
+                       'Changelog using Zapier Integration.'
+                       'This enables you to seamlessly post Tandora Changelog to all of the connected Zapier Apps.'
+                       'In a nutshell you can create a changelog once and post it to any of the connected Zapier Apps '
+                       'using this integration.'
     }
 }
 
@@ -33,7 +48,7 @@ class IntegrationList(custom_views.TandoraAdminListViewMixin):
     template_name = 'staff/integrations/index.html'
 
     def get_queryset(self):
-        return INTEGRATION_FORM_FIELDS_DICT.keys()
+        return INTEGRATION_FRONTEND_META_DICT.keys()
 
 
 @is_authenticated
