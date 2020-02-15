@@ -3,6 +3,8 @@ from html.parser import HTMLParser
 from django import template
 from django.template.defaultfilters import stringfilter
 
+from frontend.views.integrations import INTEGRATION_FRONTEND_META_DICT
+
 register = template.Library()
 
 
@@ -26,3 +28,20 @@ def extract_text_and_truncate(value):
     html_2_text.feed(value)
 
     return html_2_text.text.strip()[:280]
+
+
+@register.filter
+@stringfilter
+def get_integration_meta(value, arg):
+    return INTEGRATION_FRONTEND_META_DICT[arg][value]
+
+
+@register.filter
+@stringfilter
+def ul_list(value):
+    ul = '<ul>'
+    for val in value.split('.'):
+        if val:
+            ul += f'<li>{val}.</li>'
+    ul += '</ul>'
+    return ul
