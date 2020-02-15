@@ -18,14 +18,15 @@
                     <i><span style="color:grey;">Created: {{ changelog.created_at|naturaltime }}</span><br></i><br>
                     <span style="color:black;font-size:16px;">{{ changelog.content|safe|extract_text_and_truncate }} ...</span>
                 </div>
+                <br>
                 {% if request.user.company.use_case == 'c' %}
-                    <a class="card-link" href="/staff/edit-changelog/{{ changelog.id }}">Edit</a>
-                    <a class="card-link" href="/staff/changelog/{{ changelog.slug }}">View</a>
-                    <a class="card-link" style="color:red;" onclick="performDelete('/staff/delete-changelog/{{ changelog.id }}', 'changelog')">Delete</a>
+                    <a class="card-link" href="/staff/edit-changelog/{{ changelog.id }}"><i class="fas fa-edit"></i>&nbsp;Edit</a>
+                    <a class="card-link" href="/staff/changelog/{{ changelog.slug }}"><span style="color:green;"><i class="fas fa-eye"></i></span>&nbsp;View</a>
+                    <a class="card-link" style="color:red;" onclick="performDelete('/staff/delete-changelog/{{ changelog.id }}', 'changelog')"><span style="color:red;"><i class="fas fa-trash"></i></span>&nbsp;Delete</a>
                 {% else %}
-                    <a class="card-link" href="/staff/edit-page/{{ changelog.id }}">Edit</a>
-                    <a class="card-link" href="/staff/page/{{ changelog.slug }}">View</a>
-                    <a class="card-link" style="color:red;" onclick="performDelete('/staff/delete-page/{{ changelog.id }}', 'changelog')">Delete</a>
+                    <a class="card-link" href="/staff/edit-page/{{ changelog.id }}"><i class="fas fa-edit"></i>&nbsp;Edit</a>
+                    <a class="card-link" href="/staff/page/{{ changelog.slug }}"><span style="color:green;"><i class="fas fa-eye"></i></span>&nbsp;View</a>
+                    <a class="card-link" style="color:red;" onclick="performDelete('/staff/delete-page/{{ changelog.id }}', 'changelog')"><span style="color:red;"><i class="fas fa-trash"></i></span>&nbsp;Delete</a>
                 {% endif %}
             </div>
         </div>

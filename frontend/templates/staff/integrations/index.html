@@ -1,20 +1,20 @@
 {% extends "staff/base.html" %}
+{% load frontend_tags %}
 {% block content %}
 <center>
-  <h2>Manage integrations</h2>
+    <h2>Manage integrations</h2>
 </center>
 <div class="container page">
     {% for integration in object_list %}
-    <div class="row">
-        <div class="col-md-12">
-            <div class="article-preview">
-                <div class="preview-link">
-                    <h3>{{ integration|title }}</h3>
-                </div>
-                <a class="card-link" href="/staff/manage/integrations/{{ integration }}">Edit</a>
-            </div>
-        </div>
-    </div>
+    <div class="col-md-12" style="border:none; background:white; height:210px;">
+		<div class="col-xs-6">
+			<img src="{{ 'logo'|get_integration_meta:integration }}" style="height:50px;" />
+		</div>
+		<div class="col-xs-6">
+			<p style="font-size:15px; color:#03225C;">{{ 'description'|get_integration_meta:integration|ul_list|safe }}</p>
+		</div>
+        <a class="card-link" href="/staff/manage/integrations/{{ integration }}"><i class="fas fa-edit"></i>&nbsp;Edit</a>
+	</div>
     {% endfor %}
 </div>
 {% endblock %}
