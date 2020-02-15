@@ -4,9 +4,9 @@
 <div class="container col-md-4 col-md-offset-4">
     <center><h3>{{ title }}</h3></center>
     {% if extra %}
-        <span>{{ extra|safe }}</span>
+    <span>{{ extra|safe }}</span>
     {% endif %}
-    <form id="category_form"  method="post" action="{{ action }}">
+    <form id="category_form" method="post" action="{{ action }}">
         {% csrf_token %}
         {{ form|crispy }}
         <center>
@@ -14,5 +14,31 @@
             <button class="btn btn-default" type="reset">Reset</button>
         </center>
     </form>
+    <center>
+        <div id="extra_actions">
+        </div>
+    </center>
+    <div id="notification_toast">
+    </div>
+    <script>
+        let apiKey = document.getElementById('id_api_key');
+        let extraActions = document.getElementById('extra_actions');
+        if(apiKey && window.location.href.indexOf('/staff/manage/integrations') > 0) {
+            function copyApiKey() {
+                apiKey.select()
+                apiKey.setSelectionRange(0, 99999);
+                document.execCommand("copy");
+                showToast('success', 'Api key is copied to clipboard', '');
+            }
+            let copyApiKeyButton = document.createElement('button');
+            copyApiKeyButton.classList.add('btn');
+            copyApiKeyButton.classList.add('btn-dark');
+            copyApiKeyButton.innerHTML = '<i class="far fa-copy"></i>&nbsp;&nbsp;Copy Api key';
+            copyApiKeyButton.onclick = copyApiKey;
+            extraActions.appendChild(copyApiKeyButton);
+        }
+
+
+    </script>
 </div>
 {% endblock %}

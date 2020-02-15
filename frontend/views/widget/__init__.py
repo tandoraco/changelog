@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render
+from django.urls import reverse
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
 
@@ -17,6 +18,10 @@ from v1.core.models import Changelog
 from v1.widget.models import Embed
 
 
+INITIAL_JAVASCRIPT = f'<script>\n /* {WIDGET_CODE_EDIT_WARNING} */ \n // Insert your code below \n </script>'
+INITIAL_CSS = '{}'
+
+
 @is_authenticated
 def widget_form(request):
     company_id = request.session['company-id']
@@ -30,8 +35,8 @@ def widget_form(request):
     if Embed.objects.filter(company__id=company_id).count() == 0:
         action = 'create'
         initial = {
-            'javascript': f'<script>\n /* {WIDGET_CODE_EDIT_WARNING} */ \n // Insert your code below \n </script>',
-            'css': '{}'
+            'javascript': INITIAL_JAVASCRIPT,
+            'css': INITIAL_CSS
         }
         id = None
     else:
@@ -39,12 +44,26 @@ def widget_form(request):
         initial = None
         embed = Embed.objects.get(company__id=company_id)
         id = embed.id
+
+        embed_changed = False
+
+        if not embed.css:
+            embed.css = INITIAL_CSS
+            embed_changed = True
+
+        if not embed.javascript:
+            embed.javascript = INITIAL_JAVASCRIPT
+            embed_changed = True
+
+        if embed_changed:
+            embed.save()
+
         if embed.enabled:
             public_page_url = f"{request.session['public-page-url']}/widget/1"
             extra = f'<i><a target="_blank" href="{public_page_url}">Click here</a> to view widget.</i>'
 
     return TandoraForm(Embed, WidgetForm, action, 'staff/form.html',
-                       '/', initial=initial) \
+                       reverse('frontend-manage-widget'), initial=initial) \
         .get_form(request, success_message=WIDGET_CREATED_OR_EDITED_SUCCESSFULLY,
                   error_message=WIDGET_DOES_NOT_EXIST, id=id, extra=extra)
 
