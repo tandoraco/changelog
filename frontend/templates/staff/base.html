@@ -102,13 +102,13 @@
 <script src="{% static 'js/codemirror-js.js' %}"></script>
 <script src="{% static 'js/codemirror-html-mixed.js' %}"></script>
 <script>
-  var javascriptTextarea = document.getElementById("id_javascript");
+  let javascriptTextarea = document.getElementById("id_javascript");
   if(javascriptTextarea) {
     var editor = CodeMirror.fromTextArea(javascriptTextarea, {
       lineNumbers: true, mode: {"name": "javascript"}
     });
   }
-  var cssTextarea = document.getElementById("id_css");
+  let cssTextarea = document.getElementById("id_css");
   if(cssTextarea) {
     var editor = CodeMirror.fromTextArea(cssTextarea, {
       lineNumbers: true, mode: {"name": "css"}

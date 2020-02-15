@@ -8,8 +8,8 @@ from v1.widget.signals import remove_css_code_edit_warning
 
 class Embed(models.Model):
     company = models.OneToOneField(Company, null=False, on_delete=models.DO_NOTHING)
-    css = models.TextField(blank=True)
-    javascript = models.TextField(blank=True)
+    css = models.TextField(blank=True, null=True)
+    javascript = models.TextField(blank=True, null=True)
     color = models.CharField(max_length=7, blank=False)
     enabled = models.BooleanField(default=False)
 
@@ -20,7 +20,7 @@ class Embed(models.Model):
         return f"{self.css} {self.javascript}"
 
     def __str__(self):
-        return f'Enabled: {"Yes" if self.enabled else "No"}'
+        return f'enabled: {"Yes" if self.enabled else "No"}'
 
     class Meta:
         verbose_name = 'Embed Widget'
