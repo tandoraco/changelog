@@ -13,6 +13,24 @@ from v1.accounts.utils import hash_password
 from v1.static_site import models as v1_static_site_models
 
 
+class SyntaxHighlighterMixin:
+    class Media:
+        js = ('js/codemirror.js',
+              'js/codemirror-css.js',
+              'js/codemirror-js.js',
+              'js/codemirror-html-mixed.js',
+              'js/codemirror-xml.js',
+              'js/inject-syntax-highlighter.js'
+              )
+        css = {
+            'all': ('css/codemirror.css',)
+        }
+
+
+class ModelAdminWithSyntaxHighlighter(SyntaxHighlighterMixin, admin.ModelAdmin):
+    pass
+
+
 class TandoraLoginAdminSite(AdminSite):
     site_title = _('Tandora Admin')
     site_header = _('Tandora')
@@ -70,12 +88,12 @@ class AngelUserAdmin(ReadOnlyModelAdmin):
     readonly_fields = ('data', 'data_formatted')
 
 
-class SubscriptionAdmin(admin.ModelAdmin):
-    readonly_fields = ('razorpay_data', )
+class SubscriptionAdmin(SyntaxHighlighterMixin, admin.ModelAdmin):
+    readonly_fields = ('razorpay_data',)
 
 
 class ReferralAdmin(admin.ModelAdmin):
-    readonly_fields = ('conversion_count', 'company_ids', )
+    readonly_fields = ('conversion_count', 'company_ids',)
 
 
 class ChangelogAdmin(admin.ModelAdmin):
@@ -92,14 +110,14 @@ class ChangelogAdmin(admin.ModelAdmin):
         'view_count',
         'deleted'
     )
-    fields = ('created_at', )
+    fields = ('created_at',)
     search_fields = ('pk', 'id', 'title', 'content')
     list_per_page = 25
-    list_display = ('id', 'company', 'title', )
-    list_filter = ('company', 'deleted', 'created_at', 'view_count', )
+    list_display = ('id', 'company', 'title',)
+    list_filter = ('company', 'deleted', 'created_at', 'view_count',)
 
 
-class EmbedWidgetAdmin(admin.ModelAdmin):
+class EmbedWidgetAdmin(ModelAdminWithSyntaxHighlighter):
     list_display = ('company', 'enabled', 'widget_url')
 
     def widget_url(self, obj):
@@ -110,15 +128,15 @@ class EmbedWidgetAdmin(admin.ModelAdmin):
 
 
 admin_site = TandoraLoginAdminSite()
-admin_site.register(v1_account_models.Company)
+admin_site.register(v1_account_models.Company, ModelAdminWithSyntaxHighlighter)
 admin_site.register(v1_account_models.User, UserAdmin)
-admin_site.register(v1_account_models.PricePlan)
+admin_site.register(v1_account_models.PricePlan, ModelAdminWithSyntaxHighlighter)
 admin_site.register(v1_account_models.Subscription, SubscriptionAdmin)
 admin_site.register(v1_account_models.AngelUser, AngelUserAdmin)
 admin_site.register(v1_account_models.Affiliate, CreateReadModelAdmin)
 admin_site.register(v1_account_models.Referral, ReferralAdmin)
 admin_site.register(v1_account_models.CustomDomain)
-admin_site.register(v1_static_site_models.StaticSiteTheme)
+admin_site.register(v1_static_site_models.StaticSiteTheme, ModelAdminWithSyntaxHighlighter)
 admin_site.register(v1_static_site_models.StaticSiteField, CreateUpdateModelAdmin)
 admin_site.register(v1_static_site_models.StaticSiteThemeConfig, CreateUpdateModelAdmin)
 admin_site.register(apps.get_model('v1', 'Zapier'), ReadOnlyModelAdmin)
