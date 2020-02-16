@@ -27,7 +27,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='publicpage',
             name='color',
-            field=colorful.fields.RGBColorField(),
+            field=colorful.fields.RGBColorField(default='#428bca'),
         ),
         migrations.AlterField(
             model_name='publicpage',
