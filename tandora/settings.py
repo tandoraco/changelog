@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
+    'django.contrib.sites',
+    'django.contrib.sitemaps',
     'rest_framework',
     'rest_framework.authtoken',
     'drfpasswordless',
@@ -226,3 +228,5 @@ AWS_LOCATION = 'attachments'
 AWS_DEFAULT_ACL = 'public-read'
 
 HOST = "http://localhost:8000/" if DEBUG else os.environ.get('HOST')
+
+SITE_ID = 1

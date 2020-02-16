@@ -1,13 +1,17 @@
+from colorful.fields import RGBColorField
 from django.db import models
 
+from frontend.custom.utils import SettingsMixin
 
-class PublicPage(models.Model):
-    company = models.ForeignKey('Company', null=False, on_delete=models.CASCADE)
-    color = models.CharField(max_length=7)
-    hide_from_crawlers = models.BooleanField(default=False)
-    show_authors = models.BooleanField(default=False)
-    private_mode = models.BooleanField(default=False)
+
+DEFAULT_BLUE_COLOR = '#428bca'
+
+
+class PublicPage(SettingsMixin, models.Model):
+    company = models.OneToOneField('Company', null=False, on_delete=models.CASCADE)
+    color = RGBColorField(default=DEFAULT_BLUE_COLOR)
+    hide_from_crawlers = models.BooleanField(default=True)
+    _settings = models.TextField(blank=True, null=True, db_column='settings')
 
     def __str__(self):
-        return f"{self.color}, show_authors:{self.show_authors}," \
-            f" hide_from_crawlers:{self.hide_from_crawlers}, private:{self.private_mode}"
+        return f"{self.company}"

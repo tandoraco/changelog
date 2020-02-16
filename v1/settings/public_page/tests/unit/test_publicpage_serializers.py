@@ -30,9 +30,7 @@ class TestPublicPageSerializer(SerializerTestBase):
         public_page = PublicPage.objects.get(company=company)
         assert public_page.color == color
         # they fall back to defaults, if no values are provided
-        assert not public_page.hide_from_crawlers
-        assert not public_page.show_authors
-        assert not public_page.private_mode
+        assert public_page.hide_from_crawlers
 
     def test_publicpage_serializer_with_create_db_entry_defaults_non_default(self, company):
         data = []
@@ -43,7 +41,6 @@ class TestPublicPageSerializer(SerializerTestBase):
                 "company": company.id,
                 "color": color,
                 "hide_from_crawlers": True,
-                "private_mode": True
             }, is_valid=True))
         self.run_data_assertions(test_data=data, create_db_entry=True)
 
@@ -51,5 +48,3 @@ class TestPublicPageSerializer(SerializerTestBase):
         assert public_page.company.id == company.id
         assert public_page.color == color
         assert public_page.hide_from_crawlers
-        assert not public_page.show_authors
-        assert public_page.private_mode
