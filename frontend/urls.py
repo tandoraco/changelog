@@ -1,7 +1,9 @@
 from django.conf.urls import url
+from django.contrib.sitemaps.views import sitemap
 from django.urls import path
 from django.views.generic import RedirectView
 
+from frontend.sitemaps import SITEMAPS
 from frontend.views import auth, app, categories, widget, static_site, integrations, settings
 from frontend.views.core import changelog
 
@@ -44,6 +46,7 @@ urlpatterns = [
     path('staff/manage/theme', static_site.theme_form, name="frontend-manage-theme"),
     path('staff/manage/static-site', static_site.static_site_form, name="frontend-manage-static-site"),
     path('staff/manage/public-page', settings.manage_public_page, name="frontend-manage-public-page"),
+    path('sitemap.xml', sitemap, {'sitemaps': SITEMAPS}, name='django.contrib.sitemaps.views.sitemap'),
     path('<str:company>', app.company_public_index, name="frontend-company-public-index"),
     path('<str:company>/<str:changelog_terminology>/widget/1', widget.public_widget, name="frontend-public-widget"),
     path('<str:company>/<str:changelog_terminology>/<slug:slug>', app.view_changelog_as_public,
