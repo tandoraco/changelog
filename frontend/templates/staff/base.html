@@ -53,6 +53,7 @@
           {% endif %}
           {% if request.user.company.use_case == 'c' %}
             <a class="dropdown-item" href="/staff/manage/widget">Widget</a>
+            <a class="dropdown-item" href="/staff/manage/public-page">Public page</a>
           {% endif %}
           {% if request.user.company.use_case == 's' %}
             <a class="dropdown-item" href="/staff/manage/theme">Theme</a>
@@ -61,7 +62,12 @@
         </div>
       </li>
       <li class="nav-item">
-        <a class="nav-link" target="_blank" href="{% public_page_url %}">Public page</a>
+          {% if request.user.company.use_case == 'c' %}
+            <a class="nav-link" target="_blank" href="{% public_page_url %}">View Public page</a>
+          {% endif %}
+           {% if request.user.company.use_case == 's' %}
+            <a class="nav-link" target="_blank" href="{% public_page_url %}">View Website</a>
+          {% endif %}
       </li>
       <li class="nav-item">
         <a class="nav-link" href="/logout">Logout</a>

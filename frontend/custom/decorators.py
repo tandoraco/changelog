@@ -79,6 +79,21 @@ def requires_static_site(func):
     return wrapper
 
 
+def requires_changelog_use_case(func):
+
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        request = args[0]
+
+        if request.user.company.is_static_site:
+            messages.warning(request, NOT_ALLOWED)
+            return HttpResponseRedirect('/staff')
+
+        return func(*args, **kwargs)
+
+    return wrapper
+
+
 def is_limit_reached(feature_name, plan_features, company_id):
     # Feature name will be in plural and lower case.
     # So removing s from the end and title casing would give the model name
