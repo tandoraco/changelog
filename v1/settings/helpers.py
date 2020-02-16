@@ -28,8 +28,7 @@ def get_public_page(company):
     return {
         'color': public_page.color,
         'hide_from_crawlers': public_page.hide_from_crawlers,
-        'show_authors': public_page.show_authors,
-        'private_mode': public_page.private_mode
+        'settings': public_page.settings
     }
 
 

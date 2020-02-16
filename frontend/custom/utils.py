@@ -1,3 +1,5 @@
+import json
+
 from django.contrib import messages as msgs
 from django.contrib.messages import get_messages
 from django.http import HttpResponseRedirect
@@ -62,3 +64,14 @@ def messages(request):
             unique_messages.append(m)
 
     return {'messages': unique_messages}
+
+
+class SettingsMixin(object):
+
+    @property
+    def settings(self):
+        return json.loads(self._settings) if self._settings else {}
+
+    @settings.setter
+    def settings(self, value):
+        self._settings = json.dumps(value)
