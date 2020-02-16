@@ -18,6 +18,5 @@ class PublicPageSerializer(serializers.ModelSerializer):
             "company": instance.company.id,
             "color": instance.color,
             "hide_from_crawlers": instance.hide_from_crawlers,
-            "private_mode": instance.private_mode,
-            "show_authors": instance.show_authors
+            "settings": instance.settings
         }

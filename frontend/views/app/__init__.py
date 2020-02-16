@@ -6,6 +6,7 @@ from django.db import transaction
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
+from django.utils.text import slugify
 
 from frontend import constants as frontend_constants
 from frontend.constants import PASSWORD_RESET_INITIATED
@@ -50,9 +51,10 @@ def view_changelog(request, slug):
 
 
 def company_public_index(request, company):
+    company = unquote(company.replace('-', ' '))
     company_object = get_object_or_404(Company, company_name__iexact=company)
     company = company.lower()
-    return HttpResponseRedirect(f'/{company}/{company_object.changelog_terminology.lower().replace(" ", "-")}')
+    return HttpResponseRedirect(f'/{slugify(company)}/{company_object.changelog_terminology.lower().replace(" ", "-")}')
 
 
 @transaction.atomic

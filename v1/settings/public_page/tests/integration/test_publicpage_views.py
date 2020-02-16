@@ -19,8 +19,6 @@ class TestPublicPageViewSet(ModelViewSetTestBase):
         keys = [
             "color",
             "hide_from_crawlers",
-            "show_authors",
-            "private_mode"
         ]
         self.run_assertions_for_retrieve(user, keys=keys)
 

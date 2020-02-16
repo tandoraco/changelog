@@ -2,16 +2,15 @@
 {% load frontend_tags %}
 <div class="container page">
     {% for changelog in object_list %}
-    <div class="row">
+    <div class="row"
+        {% if forloop.last and page_obj.has_next %}
+        ic-trigger-on="scrolled-into-view"
+        ic-append-from="{% url 'frontend-staff-index' %}?page={{ page_obj.next_page_number }}"
+        ic-target="#changelogs"
+        ic-indicator="#spinner"
+        {% endif %} >
         <div class="col-md-12">
             <div class="article-preview">
-                <!--div class="article-meta">
-                        Mete
-                    <div class="info">
-                        Info
-                    </div>
-                    <span class="date">Date</span>
-                </div-->
                 <div class="preview-link">
                     <h2><a href="/staff/changelog/{{ changelog.slug }}">{{ changelog.title }}</a></h2>
                     <span style="font-size:16px; color: white; background-color: {{ changelog.category.color }};">&nbsp{{ changelog.category.name }}&nbsp</span><br>
