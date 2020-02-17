@@ -27,8 +27,9 @@ def delete_model(request, model, id, success_redirect_path, error_redirect_path,
 def get_company_from_slug_and_changelog_terminology(company, changelog_terminology):
     company = company.replace("-", " ")
     changelog_terminology = changelog_terminology.replace("-", " ")
-    company = Company.objects.get(company_name__iexact=company, changelog_terminology__iexact=changelog_terminology)
-    return company
+    company = Company.objects.filter(company_name__iexact=company,
+                                     changelog_terminology__iexact=changelog_terminology).select_related()
+    return company[0]
 
 
 def get_company_from_request(request):

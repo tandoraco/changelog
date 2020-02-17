@@ -6,4 +6,4 @@ class PublicPageForm(forms.ModelForm):
 
     class Meta:
         model = apps.get_model('v1', 'PublicPage')
-        fields = ('color', 'hide_from_crawlers', )
+        exclude = ('company', 'company_logo', )

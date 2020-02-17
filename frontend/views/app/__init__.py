@@ -74,14 +74,15 @@ def view_changelog_as_public(request, company, changelog_terminology, slug):
             context.update({'changelog': changelog})
             return render(request, template, context=context)
 
-    except (Company.DoesNotExist, Changelog.DoesNotExist):
+    except (Company.DoesNotExist, Changelog.DoesNotExist, IndexError):
         raise Http404
 
 
 def public_index(request, company, changelog_terminology):
     try:
         company = get_company_from_slug_and_changelog_terminology(company, changelog_terminology)
-        changelogs = Changelog.objects.filter(company=company, deleted=False, published=True).order_by('-created_at')
+        changelogs = Changelog.objects.filter(company=company, deleted=False, published=True)\
+            .order_by('-created_at').select_related()
 
         context, template = get_context_and_template_name(company)
         if context.get('config'):
@@ -91,7 +92,7 @@ def public_index(request, company, changelog_terminology):
             context['changelogs'] = changelogs
             return render(request, template, context=context)
 
-    except (Company.DoesNotExist, Changelog.DoesNotExist):
+    except (Company.DoesNotExist, Changelog.DoesNotExist, IndexError):
         raise Http404
 
 

@@ -34,7 +34,12 @@ def get_context_and_template_name(company, changelog=False):
         context = {
             'company_name': company.company_name,
             'terminology': company.changelog_terminology,
-            'hide_tandora_logo': True
+            'title': company.publicpage.title,
+            'tag_line': company.publicpage.tag_line,
+            'font_link': company.publicpage.font,
+            'font': company.publicpage.get_font_display(),
+            'color': company.publicpage.color,
+            'hide_tandora_logo': True,
         }
 
     context.update({'plan_features': get_plan_features(company.id)})

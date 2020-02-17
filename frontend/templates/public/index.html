@@ -5,9 +5,13 @@
 <div id="c-banner" class="banner">
     <div class="container">
         <h1 class="logo-font">
+            {% if title %}
+            {{ title }}
+            {% else %}
             {{ company_name }}
+            {% endif %}
         </h1>
-        <p style="text-align:center;">{{ terminology }} </p>
+        <p style="text-align:center;">{% if tag_line %}{{ tag_line }}{% else %}{{ terminology }}{% endif %}</p>
     </div>
 </div>
 <div class="container page">
@@ -36,9 +40,15 @@
     {% endfor %}
 </div>
 <script>
+    {% if color %}
     let banner = document.getElementById('c-banner');
-    banner.style.backgroundColor = "{{ color }}";
-    let body = document.getElementsByTagName('body')[0];
-    body.style.fontFamily = "Lato";
+    if(banner) {
+        banner.style.backgroundColor = "{{ color }}";
+    }
+    {% endif %}
+    {% if font %}
+        let body = document.getElementsByTagName('body')[0];
+        body.style.fontFamily = "{{ font }}";
+    {% endif %}
 </script>
 {% endblock %}

@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib import messages
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render
@@ -81,6 +82,9 @@ class TandoraForm:
 
                 messages.success(request, message=success_message.format(self.action, str(obj)))
                 return HttpResponseRedirect(self.response_redirect_path)
+            else:
+                if settings.DEBUG:
+                    print(form.errors)
 
         return render(request, self.form_html,
                       {'form': form, 'title': title, 'extra': extra})

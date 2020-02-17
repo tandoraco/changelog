@@ -84,5 +84,5 @@ def public_widget(request, company, changelog_terminology):
                           'hide_tandora_logo': True,
                           'plan_features': get_plan_features(company.id)
                       })
-    except (Company.DoesNotExist, Embed.DoesNotExist):
+    except (Company.DoesNotExist, Embed.DoesNotExist, IndexError):
         raise Http404
