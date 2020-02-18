@@ -2,7 +2,13 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% if changelog %}
+    <title>{{ changelog.title }}</title>
+    {% elif company_name %}
+    <title>{{ company_name }} - {{ terminology }}</title>
+    {% else %}
     <title>Tandora</title>
+    {% endif %}
     <!--link href="https://fonts.googleapis.com/css?family=M+PLUS+1p&display=swap" rel="stylesheet"-->
     <link href="https://fonts.googleapis.com/css?family=Red+Hat+Display|Lato&display=swap" rel="stylesheet">
     <!--link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"-->
