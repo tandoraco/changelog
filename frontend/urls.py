@@ -48,7 +48,14 @@ urlpatterns = [
     path('staff/manage/public-page', settings.manage_public_page, name="frontend-manage-public-page"),
     path('sitemap.xml', sitemap, {'sitemaps': SITEMAPS}, name='django.contrib.sitemaps.views.sitemap'),
     path('<str:company>', app.company_public_index, name="frontend-company-public-index"),
-    path('<str:company>/<str:changelog_terminology>/widget/1', widget.public_widget, name="frontend-public-widget"),
+    # Removing previous widget url because, widget url was dependant on company name and terminology
+    # if terminology changes the widget url will also change, this wont be feasible in the long run
+    # because we cannot ask our customers to change the widget url often, since they
+    # would have embedded their widget. so defining a new widget url
+    # and hard-coding the production users widget url for backwards compatibility
+    path('doctorparoma/announcements/widget/1', widget.legacy_widget, name="doctor-paroma-widget"),
+    path('vriksham-pre-pregnancy-classes/changelog/widget/1', widget.legacy_widget, name='vriksham-widget'),
+    path('widget/<str:company>', widget.public_widget, name="frontend-public-widget"),
     path('<str:company>/<str:changelog_terminology>/<slug:slug>', app.view_changelog_as_public,
          name="frontend-view-changelog-as-public"),
     path('<str:company>/<str:changelog_terminology>', app.public_index, name="frontend-public-index"),

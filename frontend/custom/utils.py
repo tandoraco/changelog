@@ -24,10 +24,15 @@ def delete_model(request, model, id, success_redirect_path, error_redirect_path,
     return HttpResponseRedirect(success_redirect_path)
 
 
-def get_company_from_slug_and_changelog_terminology(company, changelog_terminology):
+def get_company_from_slug_and_changelog_terminology(company, changelog_terminology=None):
     company = company.replace("-", " ")
-    changelog_terminology = changelog_terminology.replace("-", " ")
-    company = Company.objects.get(company_name__iexact=company, changelog_terminology__iexact=changelog_terminology)
+
+    if changelog_terminology:
+        changelog_terminology = changelog_terminology.replace("-", " ")
+        company = Company.objects.get(company_name__iexact=company, changelog_terminology__iexact=changelog_terminology)
+    else:
+        company = Company.objects.get(company_name__iexact=company)
+
     return company
 
 
