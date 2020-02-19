@@ -7,6 +7,7 @@ from django.conf import settings
 from django.contrib.messages import get_messages
 from django.http import HttpRequest
 from django.test import Client
+from django.urls import reverse
 from faker import Faker
 from rest_framework import status
 
@@ -21,7 +22,7 @@ class TandoraTestClient(Client):
         return f'/{company.company_name}/{company.changelog_terminology}'
 
     def get_public_widget_url(self, company):
-        return f'{self.get_public_page_url(company)}/widget/1'
+        return reverse('frontend-public-widget', kwargs={'company': company})
 
     def _get_messages(self, response):
         return list(get_messages(response.wsgi_request))

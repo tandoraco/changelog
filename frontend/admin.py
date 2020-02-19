@@ -1,8 +1,8 @@
 # Register your models here.
 from django.apps import apps
-from django.conf import settings
 from django.contrib import admin
 from django.contrib.admin import AdminSite
+from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.text import slugify
 from django.utils.translation import ugettext as _
@@ -10,6 +10,7 @@ from django.utils.translation import ugettext as _
 from frontend.forms.auth import TandoraAdminLoginForm
 from v1.accounts import models as v1_account_models
 from v1.accounts.utils import hash_password
+from v1.settings.public_page.models import PublicPage
 from v1.static_site import models as v1_static_site_models
 
 
@@ -121,9 +122,8 @@ class EmbedWidgetAdmin(ModelAdminWithSyntaxHighlighter):
     list_display = ('company', 'enabled', 'widget_url')
 
     def widget_url(self, obj):
-        company_name = slugify(obj.company.company_name)
-        changelog_terminology = slugify(obj.company.changelog_terminology)
-        _widget_url = f'{settings.HOST}{company_name}/{changelog_terminology}/widget/1'
+        company = slugify(obj.company.company_name)
+        _widget_url = reverse('frontend-public-widget', kwargs={'company': company})
         return format_html(f'<a target="_blank" href="{_widget_url}">{_widget_url}</a>')
 
 
@@ -142,3 +142,4 @@ admin_site.register(v1_static_site_models.StaticSiteThemeConfig, CreateUpdateMod
 admin_site.register(apps.get_model('v1', 'Zapier'), ReadOnlyModelAdmin)
 admin_site.register(apps.get_model('v1', 'ZapierWebhookTrigger'), ReadOnlyModelAdmin)
 admin_site.register(apps.get_model('v1', 'Embed'), EmbedWidgetAdmin)
+admin_site.register(PublicPage)
