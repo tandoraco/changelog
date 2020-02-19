@@ -5,6 +5,7 @@ from faker import Faker
 
 from v1.accounts.serializers import LoginSerializer, CompanySerializer, UserSerializer, ForgotPasswordSerializer, \
     ResetPasswordSerializer
+from v1.accounts.validators import BLACKLISTED_COMPANY_NAMES
 from v1.utils.test_base import SerializerTestData
 from v1.utils.test_base.serializer_test_base import SerializerTestBase
 
@@ -74,6 +75,14 @@ class TestCompanySerializer(SerializerTestBase):
         data = list()
         data.extend([SerializerTestData(data=d, is_valid=True) for d in valid_company_data])
         data.extend([SerializerTestData(data=d, is_valid=False) for d in invalid_company_data])
+        self.run_data_assertions(test_data=data)
+
+        data = list()
+        for company_name in BLACKLISTED_COMPANY_NAMES:
+            # when black listed company name is used, valid data becomes invalid
+            _data = valid_company_data[0]
+            _data['company_name'] = company_name
+            data.append(SerializerTestData(data=_data, is_valid=False))
         self.run_data_assertions(test_data=data)
 
 

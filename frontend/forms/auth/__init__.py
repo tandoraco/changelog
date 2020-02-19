@@ -11,7 +11,8 @@ from v1.accounts.constants import MAX_EMAIL_LENGTH, PASSWORD_INCORRECT_ERROR, EM
     MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH, USE_CASE_CHOICES, INACTIVE_USER_ERROR
 from v1.accounts.models import User, Company, ForgotPassword, Affiliate, Referral
 from v1.accounts.utils import verify_password, hash_password
-from v1.accounts.validators import form_password_validator, form_no_symbols_validator
+from v1.accounts.validators import form_password_validator, form_no_symbols_validator, \
+    form_black_listed_company_name_validator
 
 REFERRAL_CODE = 'If you have a referral code provided by Tandora man (affiliate), provide here.'
 
@@ -91,7 +92,9 @@ class CompanySignupForm(BasicUserForm):
 
     def clean_company_name(self):
         company_name = self.data.get('company_name')
-        return form_no_symbols_validator(company_name)
+        form_no_symbols_validator(company_name)
+        form_black_listed_company_name_validator(company_name)
+        return company_name
 
     def clean_referral_code(self):
         referral_code = self.cleaned_data.get('referral_code')
