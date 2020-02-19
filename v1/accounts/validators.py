@@ -6,12 +6,19 @@ from rest_framework import serializers
 from v1.accounts.constants import (PASSWORD_CONSTRAINS_NOT_MET,
                                    PASSWORD_LENGTH_VALIDATION_FAILED,
                                    MIN_PASSWORD_LENGTH,
-                                   MAX_PASSWORD_LENGTH, SPECIAL_CHARACTERS_NOT_ALLOWED)
+                                   MAX_PASSWORD_LENGTH, SPECIAL_CHARACTERS_NOT_ALLOWED, NOT_ALLOWED_COMPANY_NAME)
 
 LOWERCASE_LETTERS = set(string.ascii_lowercase)
 UPPERCASE_LETTERS = set(string.ascii_uppercase)
 NUMBERS = set(string.digits)
 SYMBOLS = set(string.punctuation)
+BLACKLISTED_COMPANY_NAMES = {
+    'tandora',
+    'api',
+    'staff',
+    'widget',
+    'webhook'
+}
 
 
 def password_validator(password, form=False):
@@ -48,3 +55,16 @@ def no_symbols_validator(value, form=False):
 
 def form_no_symbols_validator(value):
     return no_symbols_validator(value, form=True)
+
+
+def black_listed_company_name_validator(value, form=False):
+    validation_error = forms.ValidationError if form else serializers.ValidationError
+
+    if value.lower() in BLACKLISTED_COMPANY_NAMES:
+        raise validation_error(NOT_ALLOWED_COMPANY_NAME)
+
+    return value
+
+
+def form_black_listed_company_name_validator(value):
+    return black_listed_company_name_validator(value, form=True)

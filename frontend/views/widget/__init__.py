@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django.utils.text import slugify
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
 
@@ -59,7 +60,7 @@ def widget_form(request):
             embed.save()
 
         if embed.enabled:
-            public_page_url = f"{request.session['public-page-url']}/widget/1"
+            public_page_url = reverse('frontend-public-widget', kwargs={'company': slugify(company.company_name)})
             extra = f'<i><a target="_blank" href="{public_page_url}">Click here</a> to view widget.</i>'
 
     return TandoraForm(Embed, WidgetForm, action, 'staff/form.html',
@@ -68,9 +69,7 @@ def widget_form(request):
                   error_message=WIDGET_DOES_NOT_EXIST, id=id, extra=extra)
 
 
-@csrf_exempt
-@xframe_options_exempt
-def public_widget(request, company, changelog_terminology):
+def render_widget(request, company, changelog_terminology):
     try:
         company = get_company_from_slug_and_changelog_terminology(company, changelog_terminology)
         widget = Embed.objects.get(company=company, enabled=True)
@@ -86,3 +85,15 @@ def public_widget(request, company, changelog_terminology):
                       })
     except (Company.DoesNotExist, Embed.DoesNotExist):
         raise Http404
+
+
+@csrf_exempt
+@xframe_options_exempt
+def public_widget(request, company):
+    return render_widget(request, company, None)
+
+
+@csrf_exempt
+@xframe_options_exempt
+def legacy_widget(request, company, changelog_terminology):
+    return render_widget(request, company, None)
