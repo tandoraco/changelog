@@ -53,8 +53,7 @@ urlpatterns = [
     # because we cannot ask our customers to change the widget url often, since they
     # would have embedded their widget. so defining a new widget url
     # and hard-coding the production users widget url for backwards compatibility
-    path('doctorparoma/announcements/widget/1', widget.legacy_widget, name="doctor-paroma-widget"),
-    path('vriksham-pre-pregnancy-classes/changelog/widget/1', widget.legacy_widget, name='vriksham-widget'),
+    path('<str:company>/<str:changelog_terminology>/widget/1', widget.legacy_widget, name="frontend-legacy-widget"),
     path('widget/<str:company>', widget.public_widget, name="frontend-public-widget"),
     path('<str:company>/<str:changelog_terminology>/<slug:slug>', app.view_changelog_as_public,
          name="frontend-view-changelog-as-public"),
