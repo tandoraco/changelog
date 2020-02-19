@@ -96,4 +96,7 @@ def public_widget(request, company):
 @csrf_exempt
 @xframe_options_exempt
 def legacy_widget(request, company, changelog_terminology):
-    return render_widget(request, company, None)
+    if company.lower() == 'vriksham-pre-pregnancy-classes' or company.lower() == 'doctorparoma':
+        return render_widget(request, company, None)
+    else:
+        raise Http404
