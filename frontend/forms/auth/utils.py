@@ -69,9 +69,12 @@ def is_trial_expired(request):
     return False
 
 
-def get_plan_features(company_id):
+def get_plan_features(company_id, company=None):
     try:
-        subscription = Subscription.objects.get(company_id=company_id)
+        if not company:
+            subscription = Subscription.objects.get(company_id=company_id)
+        else:
+            subscription = company.subscription
         plan_features = json.loads(subscription.plan.plan_features)
     except Subscription.DoesNotExist:
         subscription = None

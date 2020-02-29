@@ -15,9 +15,7 @@ from frontend.custom.utils import get_company_from_slug_and_changelog_terminolog
 from frontend.forms.auth.utils import get_plan_features
 from frontend.forms.widget import WidgetForm
 from v1.accounts.models import Company
-from v1.core.models import Changelog
 from v1.widget.models import Embed
-
 
 INITIAL_JAVASCRIPT = f'<script>\n /* {WIDGET_CODE_EDIT_WARNING} */ \n // Insert your code below \n </script>'
 INITIAL_CSS = '{}'
@@ -72,18 +70,21 @@ def widget_form(request):
 def render_widget(request, company, changelog_terminology):
     try:
         company = get_company_from_slug_and_changelog_terminology(company, changelog_terminology)
-        widget = Embed.objects.get(company=company, enabled=True)
-        changelogs = Changelog.objects.filter(company=company, published=True,
-                                              deleted=False).order_by('-created_at')[:10]
+        widget = company.embed
+        if not widget.enabled:
+            raise Embed.DoesNotExist
+        changelogs = company.changelog_set.filter(company=company,
+                                                  published=True,
+                                                  deleted=False).order_by('-created_at').select_related()[:10]
         return render(request, 'public/widget.html',
                       context={
                           'company': company,
                           'widget': widget,
                           'changelogs': changelogs,
                           'hide_tandora_logo': True,
-                          'plan_features': get_plan_features(company.id)
+                          'plan_features': get_plan_features(company.id, company=company)
                       })
-    except (Company.DoesNotExist, Embed.DoesNotExist):
+    except (Company.DoesNotExist, Embed.DoesNotExist, IndexError):
         raise Http404
 
 
