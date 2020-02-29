@@ -29,9 +29,14 @@ def get_company_from_slug_and_changelog_terminology(company, changelog_terminolo
 
     if changelog_terminology:
         changelog_terminology = changelog_terminology.replace("-", " ")
-        company = Company.objects.get(company_name__iexact=company, changelog_terminology__iexact=changelog_terminology)
+        company = Company.objects.select_related(
+            'embed',
+            'subscription',
+            'subscription__plan').filter(company_name__iexact=company,
+                                         changelog_terminology__iexact=changelog_terminology)[0]
     else:
-        company = Company.objects.get(company_name__iexact=company)
+        company = Company.objects.select_related('embed', 'subscription',
+                                                 'subscription__plan').filter(company_name__iexact=company)[0]
 
     return company
 
