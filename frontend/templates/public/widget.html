@@ -39,6 +39,7 @@
     banner.style.backgroundColor = "{{ widget.color }}";
     let body = document.getElementsByTagName('body')[0];
     body.style.fontFamily = "Lato";
+    mixpanel.track("Widget", {"path": window.location.href});
 </script>
 {{ widget.javascript|safe }}
 <style>
