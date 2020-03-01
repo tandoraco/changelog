@@ -15,7 +15,8 @@ class Command(BaseCommand):
             "name": "Adhithyan",
             "company_name": "Tandora Dev",
             "website": "https://tandora.co",
-            "changelog_terminology": "test"
+            "changelog_terminology": "test",
+            "use_case": "c",
         }
 
         call_command('create_company',
@@ -24,5 +25,6 @@ class Command(BaseCommand):
                      f'--password={data["password"]}',
                      f'--company_name={data["company_name"]}',
                      f'--website={data["website"]}',
-                     f'--changelog_terminology={data["changelog_terminology"]}'
+                     f'--changelog_terminology={data["changelog_terminology"]}',
+                     f'--use_case={data["use_case"]}',
                      )
