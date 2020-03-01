@@ -27,5 +27,6 @@
     banner.style.backgroundColor = "{{ color }}";
     let body = document.getElementsByTagName('body')[0];
     body.style.fontFamily = "Lato";
+    mixpanel.track("Public Changelog", {"path": window.location.href});
 </script>
 {% endblock %}

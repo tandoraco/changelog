@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'knox',
     'django_ace',
     'storages',
+    'corsheaders',
     'v1',
     'frontend',
     'tandoramaster',
@@ -63,6 +64,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -230,3 +232,6 @@ AWS_DEFAULT_ACL = 'public-read'
 HOST = "http://localhost:8000/" if DEBUG else os.environ.get('HOST')
 
 SITE_ID = 1
+
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_URLS_REGEX = r'.?widget.?'

@@ -5,10 +5,11 @@ RUN apk add py-cryptography
 
 COPY . /code/
 WORKDIR /code
-RUN pip install -r requirements_dev.txt
-RUN pip install django-storages==1.8
-ENV PYTHONUNBUFFERED=1
 
 RUN apk add build-base py-pip jpeg-dev zlib-dev
 ENV LIBRARY_PATH=/lib:/usr/lib
-RUN pip install pillow==6.0.0
+
+RUN pip install --upgrade pip
+RUN pip install -r requirements_dev.txt
+RUN pip install django-storages==1.8
+ENV PYTHONUNBUFFERED=1
