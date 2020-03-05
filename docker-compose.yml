@@ -10,14 +10,14 @@ services:
     entrypoint: /bin/sh /code/commons/scripts/entrypoint.sh
     volumes:
       - .:/code
-    expose:
-      - 8000
+    ports:
+      - 8000:8000
     depends_on:
       - db
   letsencrypt:
     image: linuxserver/letsencrypt
     ports:
-      - 80:80
+      - 80:8000
       - 443:443
     volumes:
       - ./config/letsencrypt:/config
