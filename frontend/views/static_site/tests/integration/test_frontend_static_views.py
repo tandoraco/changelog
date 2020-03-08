@@ -78,3 +78,64 @@ class TestFrontendStaticViews:
         assert reverse('frontend-manage-widget') in response_content
         assert reverse('frontend-manage-theme') not in response_content
         assert reverse('frontend-manage-static-site') not in response_content
+
+    def test_web_builder_setup_at_first_login(self, company, active_user, user_data):
+        assert company.is_first_login
+        company.use_case = 's'
+        company.save()
+
+        data = {
+            'email': active_user.email,
+            'password': user_data['password']
+        }
+
+        url = reverse('frontend-login')
+        response = self.client.post(url, data=data)
+        # on successful first login for web builder page , we will show web builder setup
+        assert response.status_code == status.HTTP_302_FOUND
+        assert 'setup/stage/1' in response.url
+
+        settings = company.settings
+        settings['is_first_login'] = False
+        company.settings = settings
+        company.save()
+
+        url = reverse('frontend-login')
+        response = self.client.post(url, data=data)
+        # once we disable is_first_login, successful login will redirect to staff index page
+        assert response.status_code == status.HTTP_302_FOUND
+        assert 'setup/stage/1' not in response.url
+
+    def test_web_builder_setup_stage_1(self, static_site_company, active_user, user_data):
+        assert static_site_company.is_first_login
+        stage_1 = 1
+        url = reverse('frontend-setup-web-builder', args=(stage_1, ))
+        self.client.force_login(active_user)
+
+        response = self.client.get(url)
+        assert response.url == reverse('frontend-manage-theme')
+
+    def test_web_builder_setup_stage_2(self, static_site_company, active_user, user_data):
+        assert static_site_company.is_first_login
+        stage_2 = 2
+        url = reverse('frontend-setup-web-builder', args=(stage_2,))
+        self.client.force_login(active_user)
+
+        response = self.client.get(url)
+        assert response.url == reverse('frontend-manage-static-site')
+
+    def test_web_builder_setup_stage_3(self, static_site_company, active_user, user_data):
+        assert static_site_company.is_first_login
+
+        stage_3 = 3
+        url = reverse('frontend-setup-web-builder', args=(stage_3,))
+        self.client.force_login(active_user)
+
+        response = self.client.get(url)
+        assert response.url == reverse('frontend-staff-index')
+
+        static_site_company.refresh_from_db()
+        # We currently have 3 stages in web builder setup
+        # The last stage is stage 3, which just shows success message
+        # On this stage, we mark the is_first_login as false, so setup won't be shown
+        assert not static_site_company.is_first_login
