@@ -33,6 +33,14 @@ def company(company_data):
 
 
 @pytest.fixture
+def static_site_company(company):
+    company.use_case = 's'
+    company.save()
+
+    return company
+
+
+@pytest.fixture
 def admin(company, company_data):
     return User.objects.get(email=company_data.get('email'))
 
