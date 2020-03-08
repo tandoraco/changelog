@@ -20,6 +20,7 @@ Developed using Python, Django and Django Rest Framework
     - `docker exec -it tandora-backend_web_1 /bin/sh`
     - `python manage.py migrate`
     - `python manage.py dev_setup`
+    - `python manage.py dev_setup_static_site`
         - Closely watch the output of terminal logs. There will be a line containing Click this (some url) to verify your url.
         - Copy that verification url and paste in browser to activate your user account.
 - Now visit [http://localhost:8000](http://localhost:8000) in browser.
