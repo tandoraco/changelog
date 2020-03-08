@@ -61,3 +61,7 @@ INTEGRATION_NOT_AVAILABLE_FOR_PLAN_ERROR = "Your current subscription plan does 
                                            "Please contact support@tandora.co for more details. "
 INTEGRATION_EDITED_SUCCESSFULLY = _("Integration updated successfully.")
 INTEGRATION_EDIT_FAILED_ERROR = _("Integration editing failed. Please try again after some time.")
+
+WEB_BUILDER_SETUP_COMPLETED_PREVIEW_WEBSITE_MESSAGE = _(
+    'You have successfully completed website setup. Click <a target="_blank" '
+    'href="url">here</a> to view preview of website.')
