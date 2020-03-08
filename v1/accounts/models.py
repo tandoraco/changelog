@@ -92,6 +92,10 @@ class Company(models.Model):
     def theme(self):
         return self.settings.get('theme')
 
+    @property
+    def is_first_login(self):
+        return self.settings.get('is_first_login', True)
+
     def theme_meta(self, return_fields=True):
         from v1.static_site import models as static_site_models
         theme_name = self.settings.get('theme', 'default')
