@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.db import transaction
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from django.urls import reverse
 from rest_framework.decorators import api_view, authentication_classes
 from rest_framework.response import Response
 
@@ -33,6 +34,8 @@ def login(request):
         if form.is_valid():
             create_session(form.data['email'], request)
 
+            if request.user.company.use_case == 's' and request.user.company.is_first_login:
+                return HttpResponseRedirect(reverse('frontend-setup-web-builder', args=(1, )))
             if redirect_to:
                 return HttpResponseRedirect(redirect_to)
 

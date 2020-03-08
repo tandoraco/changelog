@@ -101,3 +101,4 @@ def create_session(email, request):
     company_slug = slugify(user.company.company_name)
     changelog_terminology = slugify(user.company.changelog_terminology)
     request.session["public-page-url"] = f'/{company_slug}/{changelog_terminology}'
+    request.user = user
