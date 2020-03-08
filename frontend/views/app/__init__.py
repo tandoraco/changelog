@@ -10,10 +10,10 @@ from django.utils.text import slugify
 
 from frontend import constants as frontend_constants
 from frontend.constants import PASSWORD_RESET_INITIATED
+from frontend.custom import views as custom_views
 from frontend.custom.decorators import is_authenticated, is_admin, is_allowed
 from frontend.custom.forms import TandoraForm
 from frontend.custom.utils import get_company_from_slug_and_changelog_terminology
-from frontend.custom import views as custom_views
 from frontend.forms.auth import UserForm, StaffNewUserForm
 from frontend.views.app.public_helpers import get_context_and_template_name, render_custom_theme
 from v1.accounts.constants import INACTIVE_USER_ADMIN_ERROR
@@ -122,7 +122,7 @@ def create_user(request):
 @is_admin
 def edit_user(request, id):
     return TandoraForm(User, UserForm, 'edit', 'staff/form.html',
-                       reverse('frontend-view-users'))\
+                       reverse('frontend-view-users')) \
         .get_form(request,
                   success_message=frontend_constants.USER_CREATED_OR_EDITED_SUCCESSFULLY,
                   error_message=frontend_constants.USER_DOES_NOT_EXIST, id=id)
