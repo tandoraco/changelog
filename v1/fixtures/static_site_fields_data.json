@@ -1,0 +1,185 @@
+[
+{
+    "model": "v1.staticsitetheme",
+    "pk": 1,
+    "fields": {
+        "name": "Default",
+        "template_file": "public/static-site.html",
+        "template_content": ""
+    }
+},
+{
+    "model": "v1.staticsitefield",
+    "pk": 1,
+    "fields": {
+        "name": "company_name",
+        "type": "c",
+        "required": true,
+        "max_length": 50
+    }
+},
+{
+    "model": "v1.staticsitefield",
+    "pk": 2,
+    "fields": {
+        "name": "tag_line",
+        "type": "c",
+        "required": true,
+        "max_length": 100
+    }
+},
+{
+    "model": "v1.staticsitefield",
+    "pk": 3,
+    "fields": {
+        "name": "menu_1_title",
+        "type": "c",
+        "required": false,
+        "max_length": 50
+    }
+},
+{
+    "model": "v1.staticsitefield",
+    "pk": 4,
+    "fields": {
+        "name": "menu_1_link",
+        "type": "u",
+        "required": false,
+        "max_length": 200
+    }
+},
+{
+    "model": "v1.staticsitefield",
+    "pk": 5,
+    "fields": {
+        "name": "menu_2_title",
+        "type": "c",
+        "required": false,
+        "max_length": 50
+    }
+},
+{
+    "model": "v1.staticsitefield",
+    "pk": 6,
+    "fields": {
+        "name": "menu_2_link",
+        "type": "u",
+        "required": false,
+        "max_length": null
+    }
+},
+{
+    "model": "v1.staticsitefield",
+    "pk": 7,
+    "fields": {
+        "name": "menu_3_title",
+        "type": "c",
+        "required": false,
+        "max_length": null
+    }
+},
+{
+    "model": "v1.staticsitefield",
+    "pk": 8,
+    "fields": {
+        "name": "menu_3_link",
+        "type": "u",
+        "required": false,
+        "max_length": null
+    }
+},
+{
+    "model": "v1.staticsitefield",
+    "pk": 9,
+    "fields": {
+        "name": "home_page_content",
+        "type": "t",
+        "required": true,
+        "max_length": null
+    }
+},
+{
+    "model": "v1.staticsitefield",
+    "pk": 10,
+    "fields": {
+        "name": "image_slide_show_link_1",
+        "type": "u",
+        "required": true,
+        "max_length": null
+    }
+},
+{
+    "model": "v1.staticsitefield",
+    "pk": 11,
+    "fields": {
+        "name": "image_slide_show_link_2",
+        "type": "u",
+        "required": true,
+        "max_length": null
+    }
+},
+{
+    "model": "v1.staticsitefield",
+    "pk": 12,
+    "fields": {
+        "name": "facebook_profile",
+        "type": "u",
+        "required": false,
+        "max_length": null
+    }
+},
+{
+    "model": "v1.staticsitefield",
+    "pk": 13,
+    "fields": {
+        "name": "twitter_profile",
+        "type": "u",
+        "required": false,
+        "max_length": null
+    }
+},
+{
+    "model": "v1.staticsitefield",
+    "pk": 14,
+    "fields": {
+        "name": "privacy_policy_link",
+        "type": "u",
+        "required": false,
+        "max_length": null
+    }
+},
+{
+    "model": "v1.staticsitefield",
+    "pk": 15,
+    "fields": {
+        "name": "terms_of_service_link",
+        "type": "u",
+        "required": false,
+        "max_length": null
+    }
+},
+{
+    "model": "v1.staticsitethemeconfig",
+    "pk": 1,
+    "fields": {
+        "theme": 1,
+        "fields": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15
+        ]
+    }
+}
+]

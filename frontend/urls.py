@@ -26,6 +26,7 @@ urlpatterns = [
     path('staff/edit-page/<int:id>', changelog.edit_changelog, name="frontend-edit-page"),
     path('staff/delete-page/<int:id>', changelog.delete_changelog, name="frontend-delete-page"),
     path('staff/page/<slug:slug>', app.view_changelog, name="frontend-view-page"),
+    path('staff/web-builder/setup/stage/<int:stage_id>', app.setup_web_builder, name='frontend-setup-web-builder'),
     path('staff/manage/users', app.UserList.as_view(), name="frontend-view-users"),
     path('staff/manage/users/create-user', app.create_user, name="frontend-create-user"),
     path('staff/manage/users/edit-user/<int:id>', app.edit_user, name="frontend-edit-user"),

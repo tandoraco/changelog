@@ -31,7 +31,10 @@ def static_site_form(request):
             company.settings = settings
             company.save()
             messages.success(request, STATIC_SITE_CONFIGURE_SUCCESS)
-            return HttpResponseRedirect('/')
+            if request.session.get('setup-stage-redirection'):
+                return HttpResponseRedirect(request.session['setup-stage-redirection'])
+            else:
+                return HttpResponseRedirect('/')
     else:
         if company.settings.get('static_site_config'):
             for setting_name, setting_value in company.settings['static_site_config'].items():
@@ -59,7 +62,10 @@ def theme_form(request):
         if form.is_valid():
             form.save()
             messages.success(request, THEME_SET_SUCCESS)
-            return HttpResponseRedirect('/')
+            if request.session.get('setup-stage-redirection'):
+                return HttpResponseRedirect(request.session['setup-stage-redirection'])
+            else:
+                return HttpResponseRedirect('/')
 
     return render(request, 'staff/form.html', {
         'form': form,
