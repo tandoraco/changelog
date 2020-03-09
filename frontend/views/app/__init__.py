@@ -36,7 +36,7 @@ class ChangeLogList(custom_views.TandoraListViewMixin):
 
     def get_queryset(self):
         company_id = self.request.session['company-id']
-        return Changelog.objects.filter(deleted=False, company__id=company_id).order_by('-created_at')
+        return Changelog.objects.filter(deleted=False, company__id=company_id).select_related().order_by('-created_at')
 
 
 @is_authenticated
