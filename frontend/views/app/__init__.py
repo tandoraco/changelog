@@ -78,6 +78,21 @@ def view_changelog_as_public(request, company, changelog_terminology, slug):
         raise Http404
 
 
+def view_changelog_custom_url(request, custom_path):
+    try:
+        changelog = Changelog.objects.filter(custom_url_path=custom_path).select_related()[0]
+        context, template = get_context_and_template_name(changelog.company, changelog=True)
+        if context.get('config'):
+            context['config']['home_page_title'] = changelog.title
+            context['config']['home_page_content'] = changelog.content
+            return render_custom_theme(changelog.company, context, request)
+        else:
+            context.update({'changelog': changelog})
+            return render(request, template, context=context)
+    except IndexError:
+        raise Http404
+
+
 def public_index(request, company, changelog_terminology):
     try:
         company = get_company_from_slug_and_changelog_terminology(company, changelog_terminology)
