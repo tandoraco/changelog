@@ -17,7 +17,8 @@ BLACKLISTED_COMPANY_NAMES = {
     'api',
     'staff',
     'widget',
-    'webhook'
+    'webhook',
+    'website',
 }
 
 

@@ -23,9 +23,13 @@ class Changelog(models.Model):
         auto_now=True)  # auto_now automatically updates time, whenever a model is saved
     last_edited_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name="last_edited_by")
     view_count = models.PositiveIntegerField(default=0)
+    custom_url_path = models.CharField(max_length=100, null=True)
 
     def __str__(self):
         return f"{self.title}\n{self.id}"
+
+    class Meta:
+        unique_together = ('company', 'custom_url_path')
 
 
 class InlineImageAttachment(models.Model):

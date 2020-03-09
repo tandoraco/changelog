@@ -18,3 +18,8 @@ class ChangelogForm(forms.ModelForm):
         company_id = request.session['company-id']
         self.fields['category'] = forms.ModelChoiceField(queryset=Category.objects.filter(company__id=company_id,
                                                                                           deleted=False))
+
+        if request.user.company.use_case == 's':
+            self.fields['custom_url_path'] = forms.CharField(required=False, max_length=100)
+            self.fields['custom_url_path'].label = 'Enter custom url path, ' \
+                                                   'if you wish to access this page apart from usual url'
