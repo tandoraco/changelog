@@ -1,3 +1,4 @@
+from django.conf import settings as django_settings
 from django.conf.urls import url
 from django.contrib.sitemaps.views import sitemap
 from django.urls import path
@@ -60,5 +61,10 @@ urlpatterns = [
     path('<str:company>/<str:changelog_terminology>/<slug:slug>', app.view_changelog_as_public,
          name="frontend-view-changelog-as-public"),
     path('<str:company>/<str:changelog_terminology>', app.public_index, name="frontend-public-index"),
-    url(r'^.*/$', app.view_changelog_custom_url, name='frontend-view-changelog-custom-url'),
 ]
+
+if not django_settings.DEBUG:
+    # This is to prevent debug tool bar not getting rendered during development.
+    urlpatterns += [
+        url(r'^.*/$', app.view_changelog_custom_url, name='frontend-view-changelog-custom-url'),
+    ]
