@@ -78,9 +78,17 @@ def view_changelog_as_public(request, company, changelog_terminology, slug):
         raise Http404
 
 
-def view_changelog_custom_url(request, custom_path):
+def view_changelog_custom_url(request):
     try:
-        changelog = Changelog.objects.filter(custom_url_path=custom_path).select_related()[0]
+        request_path = request.path.strip('/')
+        request_path_parts = request_path.split('/')
+        company = unquote(request_path_parts[0]).replace('-', ' ')
+        custom_path = '/'.join(request_path_parts[1:])
+        if not custom_path:
+            raise Http404
+        changelog = Changelog.objects.filter(company__company_name__iexact=company,
+                                             custom_url_path__iexact=custom_path,
+                                             deleted=False).select_related()[0]
         context, template = get_context_and_template_name(changelog.company, changelog=True)
         if context.get('config'):
             context['config']['home_page_title'] = changelog.title

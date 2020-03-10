@@ -23,3 +23,6 @@ class ChangelogForm(forms.ModelForm):
             self.fields['custom_url_path'] = forms.CharField(required=False, max_length=100)
             self.fields['custom_url_path'].label = 'Enter custom url path, ' \
                                                    'if you wish to access this page apart from usual url'
+            instance = kwargs.get('instance')
+            if instance and instance.custom_url_path:
+                self.fields['custom_url_path'].initial = instance.custom_url_path

@@ -57,8 +57,8 @@ urlpatterns = [
     # and hard-coding the production users widget url for backwards compatibility
     path('<str:company>/<str:changelog_terminology>/widget/1', widget.legacy_widget, name="frontend-legacy-widget"),
     path('widget/<str:company>', widget.public_widget, name="frontend-public-widget"),
-    path('website/<str:custom_path>', app.view_changelog_custom_url, name='frontend-view-changelog-custom-url'),
     path('<str:company>/<str:changelog_terminology>/<slug:slug>', app.view_changelog_as_public,
          name="frontend-view-changelog-as-public"),
     path('<str:company>/<str:changelog_terminology>', app.public_index, name="frontend-public-index"),
+    url(r'^.*/$', app.view_changelog_custom_url, name='frontend-view-changelog-custom-url'),
 ]
