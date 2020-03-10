@@ -7,10 +7,9 @@ from django.contrib import messages
 from django.utils import timezone
 from django.utils.text import slugify
 
-from frontend.constants import NOT_LOGGED_IN_ERROR, FREE_TRIAL_PERIOD_IN_DAYS, LOGIN_AGAIN_INFO, \
-    TRIAL_UPGRADE_WARNING, TRIAL_ENDS_TODAY
+from frontend.constants import NOT_LOGGED_IN_ERROR, FREE_TRIAL_PERIOD_IN_DAYS, TRIAL_UPGRADE_WARNING, TRIAL_ENDS_TODAY
 from v1.accounts.constants import INACTIVE_USER_ERROR
-from v1.accounts.models import ClientToken, Company, User, Subscription
+from v1.accounts.models import ClientToken, User, Subscription
 
 CHANGELOG_TESTING_LIMIT = 5
 DEFAULT_PLAN_FEATURES = {
@@ -21,7 +20,7 @@ DEFAULT_PLAN_FEATURES = {
 }
 
 
-def is_valid_auth_token_and_email(request):
+def is_valid_auth_token_and_email(request, company, ct=None):
     token = request.session.get("auth-token", None)
     email = request.session.get("email", None)
 
@@ -29,7 +28,8 @@ def is_valid_auth_token_and_email(request):
         return False
 
     try:
-        ct = ClientToken.objects.get(token=token)
+        if not ct:
+            ct = ClientToken.objects.filter(token=token).select_related()[0]
         assert ct.user.email == email
         assert request.session["user-id"]
         request.user = ct.user
@@ -37,7 +37,7 @@ def is_valid_auth_token_and_email(request):
         if not request.user.is_active:
             messages.error(request, message=INACTIVE_USER_ERROR)
             return False
-    except (ClientToken.DoesNotExist, AssertionError):
+    except (ClientToken.DoesNotExist, AssertionError, IndexError):
         messages.error(request, message=NOT_LOGGED_IN_ERROR)
         return False
 
@@ -49,13 +49,7 @@ def clear_request_session(request):
     request.session.flush()
 
 
-def is_trial_expired(request):
-    try:
-        company = Company.objects.get(id=request.session['company-id'])
-    except KeyError:
-        messages.info(request, message=LOGIN_AGAIN_INFO, fail_silently=True)
-        return False
-
+def is_trial_expired(request, company):
     now = timezone.now()
     if company.is_trial_account and (now > company.created_time + timedelta(days=FREE_TRIAL_PERIOD_IN_DAYS)):
         return True

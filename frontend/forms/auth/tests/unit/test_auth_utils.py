@@ -19,7 +19,7 @@ def test_is_trial_expired(company):
     }
     mock_request = namedtuple('mock_request', 'session META')
     request = mock_request(session=session, META={})
-    assert not is_trial_expired(request)
+    assert not is_trial_expired(request, company)
 
     company.is_trial_account = True
     company.save()
@@ -30,9 +30,9 @@ def test_is_trial_expired(company):
     for i in range(FREE_TRIAL_PERIOD_IN_DAYS-1):
         with mock.patch('django.utils.timezone.now') as timezone_now:
             timezone_now.return_value = company.created_time + timedelta(days=i)
-            assert not is_trial_expired(request)
+            assert not is_trial_expired(request, company)
 
     # after trial period, is_trial_expired will be true
     with mock.patch('django.utils.timezone.now') as timezone_now:
         timezone_now.return_value = company.created_time + timedelta(FREE_TRIAL_PERIOD_IN_DAYS + 1)
-        assert is_trial_expired(request)
+        assert is_trial_expired(request, company)

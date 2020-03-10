@@ -104,7 +104,8 @@ class Company(models.Model):
         fields = []
 
         try:
-            static_site_theme = static_site_models.StaticSiteTheme.objects.filter(name__iexact=theme_name)[0]
+            static_site_theme = static_site_models.StaticSiteTheme.objects.filter(name__iexact=theme_name).\
+                select_related('staticsitethemeconfig')[0]
             if static_site_theme.template_file:
                 theme_type = 'file'
                 theme = static_site_theme.template_file
