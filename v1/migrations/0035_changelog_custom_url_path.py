@@ -13,6 +13,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='changelog',
             name='custom_url_path',
-            field=models.CharField(max_length=100, null=True),
+            field=models.CharField(max_length=100, null=True, blank=True),
         ),
     ]
