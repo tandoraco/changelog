@@ -11,13 +11,15 @@ from v1.accounts.constants import MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH
 from v1.accounts.models import User, ForgotPassword, CustomDomain, PricePlan, Subscription
 from v1.accounts.serializers import CompanySerializer, UserSerializer
 
+fake = Faker()
+
 
 @pytest.fixture
 def company_data():
     return {
         'email': 'test@test.com',
         'password': 'Test123.',
-        'company_name': 'Test',
+        'company_name': fake.name(),
         'website': 'http://www.test.com',
         'name': 'Test Admin'
     }
@@ -113,7 +115,7 @@ def valid_company_data(valid_password):
             'email': fake.email(),
             'name': fake.name(),
             'password': valid_password,
-            'company_name': 'Test company',
+            'company_name': fake.name(),
             'website': fake.url()
         })
     return data
@@ -128,7 +130,7 @@ def invalid_company_data(invalid_password):
             'email': fake.name(),
             'name': fake.name(),
             'password': invalid_password,
-            'company_name': fake.company(),
+            'company_name': fake.name(),
             'website': fake.url()
         })
     return data
