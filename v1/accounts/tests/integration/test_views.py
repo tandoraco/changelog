@@ -49,6 +49,7 @@ def test_create_company(company_data):
     company_data['email'] = original_email + "com"
     company_data['website'] = "https://www.adhithyan.cm"
     company_data["changelog_terminology"] = changelog_terminology
+    company_data["company_name"] = 'Pytest'
     request = factory.post(url, company_data)
     response = account_views.create_company(request)
     assert response.status_code == 201

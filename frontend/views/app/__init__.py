@@ -104,7 +104,8 @@ def view_changelog_custom_url(request):
 
 def public_index(request, company, changelog_terminology):
     try:
-        changelogs = get_changelogs_from_company_name_and_changelog_terminology(company, changelog_terminology)
+        company_name = company
+        changelogs = get_changelogs_from_company_name_and_changelog_terminology(company_name, changelog_terminology)
         company = None
         for changelog in changelogs:
             # Why I am iterating here instead of taking the company from index[0]
@@ -116,6 +117,14 @@ def public_index(request, company, changelog_terminology):
             # So hacking this behaviour to evaulate the queryset only once and
             # keep the db call to 1
             company = changelog.company
+        if not company:
+            # changes for back-portability
+            # when there are no published pages/changelogs but static site config is present
+            # this is required to render the website
+            company = get_company_from_slug_and_changelog_terminology(company_name, changelog_terminology)
+            changelogs = Changelog.objects.filter(company=company, deleted=False, published=True).order_by(
+                '-created_at').select_related('category')
+
         context, template = get_context_and_template_name(company)
 
         if context.get('config'):
