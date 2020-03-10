@@ -162,6 +162,8 @@ class ModelViewSetTestBase(object):
         response_data = response.data
         for key in valid_data.keys():
             assert key in response_data
+            if key == 'custom_url_path':
+                continue
             assert response_data[key] == valid_data[key]
 
         request = self.factory.post(self.url, invalid_data)
