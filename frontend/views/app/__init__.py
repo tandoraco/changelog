@@ -13,7 +13,8 @@ from frontend.constants import PASSWORD_RESET_INITIATED
 from frontend.custom import views as custom_views
 from frontend.custom.decorators import is_authenticated, is_admin, is_allowed
 from frontend.custom.forms import TandoraForm
-from frontend.custom.utils import get_company_from_slug_and_changelog_terminology
+from frontend.custom.utils import get_company_from_slug_and_changelog_terminology, \
+    get_changelogs_from_company_name_and_changelog_terminology
 from frontend.forms.auth import UserForm, StaffNewUserForm
 from frontend.views.app.public_helpers import get_context_and_template_name, render_custom_theme
 from v1.accounts.constants import INACTIVE_USER_ADMIN_ERROR
@@ -103,10 +104,20 @@ def view_changelog_custom_url(request):
 
 def public_index(request, company, changelog_terminology):
     try:
-        company = get_company_from_slug_and_changelog_terminology(company, changelog_terminology)
-        changelogs = Changelog.objects.filter(company=company, deleted=False, published=True).order_by('-created_at')
-
+        changelogs = get_changelogs_from_company_name_and_changelog_terminology(company, changelog_terminology)
+        company = None
+        for changelog in changelogs:
+            # Why I am iterating here instead of taking the company from index[0]
+            # when all changelogs belong to one company ?
+            # Reason: Django evaluates queryset lazily
+            # So when I take company from index 0, only one object from queryset is evaluated
+            # and when rendering in template queryset is again evaluated
+            # which makes the number of db calls to 2.
+            # So hacking this behaviour to evaulate the queryset only once and
+            # keep the db call to 1
+            company = changelog.company
         context, template = get_context_and_template_name(company)
+
         if context.get('config'):
             context['config']['home_page_title'] = ''
             return render_custom_theme(company, context, request)
