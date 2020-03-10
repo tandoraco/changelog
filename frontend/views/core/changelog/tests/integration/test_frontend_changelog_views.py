@@ -55,6 +55,8 @@ class TestFrontEndChangelogViews:
         assert response.status_code == status.HTTP_404_NOT_FOUND
 
     def test_frontend_create__update_changelog(self, active_user, published_changelog_data, unpublished_changelog_data):
+        published_changelog_data.pop('custom_url_path', None)
+        unpublished_changelog_data.pop('custom_url_path', None)
         url = reverse('frontend-create-changelog')
 
         from frontend.custom.test_utils import TandoraTestClient
