@@ -38,6 +38,8 @@ def _changelog_form(request, form, action, changelog_id=None, instance=None):
                                                                                                initial=initial)
         data = request.POST.copy()
         data["company"] = request.session["company-id"]
+        if not data.get('custom_url_path'):
+            data['custom_url_path'] = None
         if not instance:
             data["created_by"] = request.session["user-id"]
         else:
@@ -50,7 +52,6 @@ def _changelog_form(request, form, action, changelog_id=None, instance=None):
             serializer.save()
             messages.success(request, message=CHANGELOG_CREATED_OR_EDITED_SUCCESSFULLY.format(f"{action}"))
             return HttpResponseRedirect("/staff")
-
     changelog_id = f"/{str(changelog_id)}" if changelog_id else ""
 
     return render(request, 'staff/changelogs/form.html',
