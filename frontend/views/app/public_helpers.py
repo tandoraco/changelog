@@ -37,7 +37,7 @@ def get_context_and_template_name(company, changelog=False):
             'hide_tandora_logo': True
         }
 
-    context.update({'plan_features': get_plan_features(company.id)})
+    context.update({'plan_features': get_plan_features(company.id, company=company)})
 
     return context, template
 

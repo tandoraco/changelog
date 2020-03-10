@@ -36,7 +36,7 @@ class ChangeLogList(custom_views.TandoraListViewMixin):
 
     def get_queryset(self):
         company_id = self.request.session['company-id']
-        return Changelog.objects.filter(deleted=False, company__id=company_id).order_by('-created_at')
+        return Changelog.objects.filter(deleted=False, company__id=company_id).select_related().order_by('-created_at')
 
 
 @is_authenticated
@@ -75,6 +75,29 @@ def view_changelog_as_public(request, company, changelog_terminology, slug):
             return render(request, template, context=context)
 
     except (Company.DoesNotExist, Changelog.DoesNotExist, IndexError):
+        raise Http404
+
+
+def view_changelog_custom_url(request):
+    try:
+        request_path = request.path.strip('/')
+        request_path_parts = request_path.split('/')
+        company = unquote(request_path_parts[0]).replace('-', ' ')
+        custom_path = '/'.join(request_path_parts[1:])
+        if not custom_path:
+            raise Http404
+        changelog = Changelog.objects.filter(company__company_name__iexact=company,
+                                             custom_url_path__iexact=custom_path,
+                                             deleted=False).select_related()[0]
+        context, template = get_context_and_template_name(changelog.company, changelog=True)
+        if context.get('config'):
+            context['config']['home_page_title'] = changelog.title
+            context['config']['home_page_content'] = changelog.content
+            return render_custom_theme(changelog.company, context, request)
+        else:
+            context.update({'changelog': changelog})
+            return render(request, template, context=context)
+    except IndexError:
         raise Http404
 
 

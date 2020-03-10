@@ -42,8 +42,7 @@ def get_company_from_slug_and_changelog_terminology(company, changelog_terminolo
 
 
 def get_company_from_request(request):
-    company_id = request.session['company-id']
-    return Company.objects.get(id=company_id)
+    return request.user.company
 
 
 def save_and_get_redirect_url(request):
