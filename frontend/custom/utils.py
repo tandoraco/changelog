@@ -5,6 +5,7 @@ from django.contrib.messages import get_messages
 from django.http import HttpResponseRedirect
 
 from v1.accounts.models import Company
+from v1.core.models import Changelog
 
 
 def delete_model(request, model, id, success_redirect_path, error_redirect_path, success_message, error_message):
@@ -39,6 +40,15 @@ def get_company_from_slug_and_changelog_terminology(company, changelog_terminolo
                                                  'subscription__plan').filter(company_name__iexact=company)[0]
 
     return company
+
+
+def get_changelogs_from_company_name_and_changelog_terminology(company, changelog_terminology):
+    company = company.replace("-", " ")
+    changelogs = Changelog.objects.filter(company__company_name__iexact=company,
+                                          company__changelog_terminology__iexact=changelog_terminology,
+                                          deleted=False, published=True).\
+        select_related('company', 'company__subscription', 'category').order_by('-created_at')
+    return changelogs
 
 
 def get_company_from_request(request):
