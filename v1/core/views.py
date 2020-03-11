@@ -1,3 +1,5 @@
+from django.db import transaction
+from django.shortcuts import get_object_or_404
 from knox.auth import TokenAuthentication
 from rest_framework import status
 from rest_framework.decorators import permission_classes, api_view, authentication_classes
@@ -35,3 +37,19 @@ def inline_image_attachment(request):
         })
 
     return serializer_error_response(serializer)
+
+
+@api_view(['POST', ])
+@authentication_classes([])
+@permission_classes([])
+@transaction.atomic
+def increase_view_count(request, pk):
+    changelog = get_object_or_404(Changelog, pk=pk)
+    changelog.view_count += 1
+    changelog.save()
+
+    changelog.refresh_from_db()
+
+    return Response(status=status.HTTP_200_OK, data={
+        'view_count': changelog.view_count
+    })
