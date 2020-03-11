@@ -19,7 +19,7 @@
         <span>{{ changelog.content|safe }}</span>
     </div>
     <span style="color:grey;">
-        <u>Views: {{ changelog.view_count }}</u>
+        <u>Views: <span id="changelog-view-count">{{ changelog.view_count }}</span></u>
     </span>
 </div>
 <script>
@@ -27,5 +27,17 @@
     banner.style.backgroundColor = "{{ color }}";
     let body = document.getElementsByTagName('body')[0];
     body.style.fontFamily = "Lato";
+</script>
+<script defer>
+    window.addEventListener("load", function() {
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', '/api/v1/view-count/' + {{ changelog.id }} + '/', true)
+        xhr.onload = function() {
+            let changeViewCountElement = document.getElementById('changelog-view-count');
+            let response = JSON.parse(this.responseText);
+            changeViewCountElement.innerHTML = response.view_count;
+        }
+        xhr.send({});
+    });
 </script>
 {% endblock %}
