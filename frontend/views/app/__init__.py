@@ -61,10 +61,10 @@ def company_public_index(request, company):
 @transaction.atomic
 def view_changelog_as_public(request, company, changelog_terminology, slug):
     try:
-        company = get_company_from_slug_and_changelog_terminology(company, changelog_terminology)
-        changelog = Changelog.objects.get(company=company, slug=unquote(slug), published=True, deleted=False)
-        changelog.view_count += 1
-        changelog.save()
+        company_name = company
+        changelogs = get_changelogs_from_company_name_and_changelog_terminology(company_name, changelog_terminology)
+        changelog = changelogs.filter(slug=unquote(slug)).select_related('company', 'company__subscription')[0]
+        company = changelog.company
 
         context, template = get_context_and_template_name(company, changelog=True)
         if context.get('config'):
