@@ -241,7 +241,7 @@ class Referral(models.Model):
 
 
 class CustomDomain(models.Model):
-    company = models.OneToOneField(Company, on_delete=models.DO_NOTHING)
+    company = models.OneToOneField(Company, on_delete=models.CASCADE)
     domain_name = models.CharField(max_length=200, blank=False, null=False, unique=True, db_index=True)
     tandora_url = models.URLField(blank=False, null=False)
     is_enabled = models.BooleanField(default=True)

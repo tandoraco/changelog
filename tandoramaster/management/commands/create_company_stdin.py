@@ -18,6 +18,7 @@ class Command(BaseCommand):
         company_name = input('Company name: ').strip()
         website = input('Website: ').strip()
         changelog_terminology = input('Changelog Terminology: ').strip()
+        use_case = input('Use case: either s or c:').strip().lower()
 
         call_command('create_company',
                      f'--email={email}',
@@ -26,4 +27,5 @@ class Command(BaseCommand):
                      f'--company_name={company_name}',
                      f'--website={website}',
                      f'--changelog_terminology={changelog_terminology}'
+                     f'--use_case={use_case}'
                      )

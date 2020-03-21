@@ -5,7 +5,7 @@ from django.urls import path
 from django.views.generic import RedirectView
 
 from frontend.sitemaps import SITEMAPS
-from frontend.views import auth, app, categories, widget, static_site, integrations, settings
+from frontend.views import auth, app, categories, widget, static_site, integrations, settings, admin_actions
 from frontend.views.core import changelog
 
 urlpatterns = [
@@ -49,6 +49,8 @@ urlpatterns = [
     path('staff/manage/theme', static_site.theme_form, name="frontend-manage-theme"),
     path('staff/manage/static-site', static_site.static_site_form, name="frontend-manage-static-site"),
     path('staff/manage/public-page', settings.manage_public_page, name="frontend-manage-public-page"),
+    path('staff/admin/actions/delete-company/<str:company_name>', admin_actions.delete_company,
+         name='admin-delete-company'),
     path('sitemap.xml', sitemap, {'sitemaps': SITEMAPS}, name='django.contrib.sitemaps.views.sitemap'),
     path('<str:company>', app.company_public_index, name="frontend-company-public-index"),
     # Removing previous widget url because, widget url was dependant on company name and terminology
