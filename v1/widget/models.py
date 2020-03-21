@@ -7,7 +7,7 @@ from v1.widget.signals import remove_css_code_edit_warning
 
 
 class Embed(models.Model):
-    company = models.OneToOneField(Company, null=False, on_delete=models.DO_NOTHING)
+    company = models.OneToOneField(Company, null=False, on_delete=models.CASCADE)
     css = models.TextField(blank=True, null=True)
     javascript = models.TextField(blank=True, null=True)
     color = models.CharField(max_length=7, blank=False)

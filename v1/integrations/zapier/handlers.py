@@ -31,7 +31,8 @@ class ZapierHandler(IntegrationHandlerBase):
         if request.method != 'GET':
             raise MethodNotAllowed(request.method)
 
-        return Response(status=status.HTTP_200_OK, data={'success': True})
+        return Response(status=status.HTTP_200_OK, data={'success': True, 'email': self.company.admin.email,
+                                                         'company': self.company.company_name})
 
     def subscribe_webhook(self, request):
         if request.method != 'POST':
