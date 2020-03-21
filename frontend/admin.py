@@ -32,6 +32,18 @@ class ModelAdminWithSyntaxHighlighter(SyntaxHighlighterMixin, admin.ModelAdmin):
     pass
 
 
+class CompanyAdmin(ModelAdminWithSyntaxHighlighter):
+    list_display = ('company_name', 'company_actions', )
+
+    def company_actions(self, obj):
+        delete_action_url = reverse('admin-delete-company', args=(obj.company_name, ))
+        return format_html(
+            f'<a class="button" href="{delete_action_url}">Delete Company</a>'
+        )
+
+    company_actions.short_description = 'ACTIONS'
+
+
 class TandoraLoginAdminSite(AdminSite):
     site_title = _('Tandora Admin')
     site_header = _('Tandora')
@@ -128,7 +140,7 @@ class EmbedWidgetAdmin(ModelAdminWithSyntaxHighlighter):
 
 
 admin_site = TandoraLoginAdminSite()
-admin_site.register(v1_account_models.Company, ModelAdminWithSyntaxHighlighter)
+admin_site.register(v1_account_models.Company, CompanyAdmin)
 admin_site.register(v1_account_models.User, UserAdmin)
 admin_site.register(v1_account_models.PricePlan, ModelAdminWithSyntaxHighlighter)
 admin_site.register(v1_account_models.Subscription, SubscriptionAdmin)
