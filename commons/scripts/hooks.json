@@ -1,0 +1,16 @@
+[{
+    "id": "tandora-production-deployment",
+    "execute-command": "/home/ubuntu/webhooks/tandora-production/deploy.sh",
+    "command-working-directory": "/home/ubuntu/tandora-backend/",
+    "response-message": "Executing deploy script...",
+    "trigger-rule": {
+        "match": {
+            "type": "payload-hash-sha1",
+            "secret": "The Returners",
+            "parameter": {
+                "source": "header",
+                "name": "X-Hub-Signature"
+            } 
+        }
+    }
+}]
