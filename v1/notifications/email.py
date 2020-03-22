@@ -12,7 +12,7 @@ FROM_ADDRESS = "no-reply@tandora.co"
 class Email(object):
 
     @classmethod
-    def send_mail(cls, template, model, sender_email=None):
+    def send_mail(cls, template, model):
         recipient_email = ""
         if hasattr(model, "email"):
             recipient_email = getattr(model, "email")
@@ -25,7 +25,7 @@ class Email(object):
             send_mail(
                 template['subject'],
                 template['body'],
-                FROM_ADDRESS if not sender_email else sender_email,
+                FROM_ADDRESS,
                 [recipient_email]
             )
         else:
