@@ -66,55 +66,64 @@
                     <div class="panel-heading" id="accordion">
                         <span class="glyphicon glyphicon-comment"></span> Chat
                         <div class="btn-group pull-right">
-                            <a type="button" class="btn btn-default btn-xs" data-toggle="collapse"
+                            <a id="chatWindowToggle" type="button" class="btn btn-default btn-xs" data-toggle="collapse"
                                 data-parent="#accordion" href="#collapseOne">
                                 <span class="glyphicon glyphicon-chevron-down"></span>
                             </a>
                         </div>
                     </div>
                     <div class="panel-collapse collapse" id="collapseOne">
-                        <div class="panel-body">
+                        <div class="panel-body" id='chatPanel'>
                             <ul class="chat" id="chatWindow">
                             </ul>
                         </div>
-                        <div class="panel-footer">
+                        <!--div class="panel-footer">
                             <div class="input-group">
                                 <input id='userInput' type="text" class="form-control input-sm"
-                                    placeholder="Type your message here..." />
+                                    placeholder="Type your message here..." />  
                                 <span class="input-group-btn">
                                     <button class="btn btn-warning btn-sm" id="btn-chat" onclick="send_chat_input();">
                                         Send</button>
                                 </span>
                             </div>
-                        </div>
+                        </div-->
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <span id="score" style="display:none;">0</div>
     <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
     <script src="https://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     <script>
+        function scroll_to_bottom_of_chat_window() {
+            scrollHeight = $('#chatWindow').height();
+            $('#chatPanel').animate({scrollTop: scrollHeight});
+        }
         function send_chat_input() {
             user_html($('#userInput').val());
             $('#userInput').val('');
+            scroll_to_bottom_of_chat_window();
         }
-        function chatbot_html(message) {
+        function chatbot_html(message, responseButtons='') {
             html = `
                 <li class="left clearfix">
                 <span class="chat-img pull-left">
-                    <img src="http://placehold.it/50/55C1E7/fff&text=U" alt="User Avatar" class="img-circle" />
+                    <img src="http://placehold.it/50/55C1E7/fff&text=C" alt="User Avatar" class="img-circle" />
                 </span>
                 <div class="chat-body clearfix">
                     <div class="header">
-                        <strong class="primary-font">Tandora Chatbot</strong>
+                        <strong class="primary-font">Chatbot</strong>
                             <small class="pull-right text-muted">
-                                <span class="glyphicon glyphicon-time"></span>12 mins ago
+                                <span class="glyphicon glyphicon-time">${Date().split(' ')[4]}</span>
                             </small>
                     </div>
                     <p>
                     ${message}
                     </p>
+                    <div class="responseButtons">
+                        ${responseButtons}
+                    </div>
                 </div>
                 </li>`
             $('#chatWindow').append(html);
@@ -127,7 +136,7 @@
                     </span>
                 <div class="chat-body clearfix">
                     <div class="header">
-                        <small class=" text-muted"><span class="glyphicon glyphicon-time"></span>15 mins ago</small>
+                        <small class=" text-muted"><span class="glyphicon glyphicon-time"></span>${Date().split(' ')[4]}</small>
                         <strong class="pull-right primary-font">You</strong>
                     </div>
                 <p>
@@ -137,13 +146,74 @@
                 </li>`;
             $('#chatWindow').append(html);
         }
-        chatbot_html('Hello world.');
-        // Listener to send chat when enter key is pressed.
-        $(document).on("keypress", "input", function (e) {
+        function nextQuestion(index) {
+            if(index < chatBotQuestions.length-1) {
+                index = index + 1;
+                chatbot_html(chatBotQuestions[index]['question'], chatBotQuestions[index]['responses'])
+            } else {
+                chatbot_html(`Your score is ${$('#score').text()}`);
+            }
+            scroll_to_bottom_of_chat_window();
+        }
+        function addScoreAndNextQuestion(score, index) {
+            let currentScore = parseInt($('#score').text()) + score;
+            $('#score').text(currentScore);
+            nextQuestion(index);
+        }
+        
+        let chatBotQuestions = [
+        ]
+        function pushQuestion(question, score, index) {
+            chatBotQuestions.push({
+                'question': question,
+                'score': score,
+                'responses': `<br><button type="button" class="btn btn-success" onclick="addScoreAndNextQuestion(${score}, ${index});">Yes</button>&nbsp&nbsp<button type="button" class="btn btn-danger" onclick="nextQuestion(${index});">No</button>`
+            })
+        }
+        function constructQuestions1(question, index, array) {
+            pushQuestion(question, 1, index)
+        }
+        function constructQuestions2(question, index, array) {
+            pushQuestion(question, 2, questionsWithScore1.length + index);
+        }
+        function constructQuestions3(question, index, array) {
+            pushQuestion(question, 3, questionsWithScore1.length + questionsWithScore2.length + index);
+        }
+        function listenEnter() {
+            $(document).on("keypress", "input", function (e) {
             if (e.which == 13) {
                 send_chat_input();
-            }
-        });
+                }
+            });
+        }
+        let questionsWithScore1 = [
+            'Do you have cough ?',
+            'Do you have colds ?',
+            'Are you having Diarrhea?',
+            'Do you have sore threat ?',
+            'Are you experiencing body aches',
+            'Do you have a headache ?',
+            'Do you have a fever ?'
+        ]
+        let questionsWithScore2 = [
+            'Are you having difficulty breathing ?',
+            'Are you experiencing fatigue ?'
+        ]
+        let questionsWithScore3 = [
+            'Have you travelled recently during the past 14 days?',
+            'Do you have a travel history to COVID-19 INFECTED AREA?',
+            'Do you have a direct contact or is taking care of positive COVID-19 PATIENT?'
+        ]
+
+        questionsWithScore1.map(constructQuestions1);
+        questionsWithScore2.map(constructQuestions2);
+        questionsWithScore3.map(constructQuestions3);
+        console.log(chatBotQuestions);
+        chatbot_html('Answer few questions to find out whether you have corona or not.');
+        chatbot_html(chatBotQuestions[0]['question'], chatBotQuestions[0]['responses'])
+        // Listener to send chat when enter key is pressed.
+        listenEnter();
+        $('#chatWindowToggle').click();
     </script>
 </body>
 </html>
