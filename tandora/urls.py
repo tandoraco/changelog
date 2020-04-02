@@ -20,11 +20,16 @@ from django.urls import include, path
 
 from frontend.admin import admin_site
 
+
+handler404 = 'frontend.views.handler404'
+handler500 = 'frontend.views.handler500'
+
 urlpatterns = [
     url(r'^tinymce/', include('tinymce.urls')),
     url(r"api/v1/", include("v1.urls"), name="v1-api"),
     path('admin/', admin_site.urls),
     url(r"", include("frontend.urls"), name="v1-frontend"),
+    url("chat-bot-demo/", include('chatbotdemo.urls')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if settings.DEBUG:
