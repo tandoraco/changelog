@@ -1,5 +1,5 @@
 {
-    "python.pythonPath": "/Users/adhi/.pyenv/versions/tdb/bin/python",
+    "python.pythonPath": "/Users/adhi/.pyenv/versions/tandora-backend/bin/python",
     "python.linting.enabled": true,
     "python.linting.pylintEnabled": false,
     "python.linting.flake8Enabled": true,
