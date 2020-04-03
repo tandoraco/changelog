@@ -1,3 +1,5 @@
+import re
+
 import requests
 from django.conf import settings
 from django.http import Http404, HttpResponse
@@ -26,7 +28,7 @@ class CustomDomainMiddleware(MiddlewareMixin):
             except KeyError:
                 host_domain = request.META.get('HOST')
 
-            if host_domain and 'app.tandora.co' not in host_domain:
+            if host_domain and re.search(r'app.*\.tandora\.co', host_domain) is None:
                 host_domain = host_domain.replace('http://', '').replace('https://', '').split('/')[0]
                 custom_domain = get_object_or_404(CustomDomain, domain_name__contains=host_domain)
 
