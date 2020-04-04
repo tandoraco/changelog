@@ -59,16 +59,22 @@ def render_html_from_string(request, template_string, context):
     {% if plan_features.show_tandora_branding_at_footer %}
     <script>
         var footer = document.getElementsByTagName("footer");
+        footerText = '';
+        {% if plan_features.custom_footer_text %}
+            footerText += '{{ plan_features.custom_footer_text }}'
+        {% endif %}
         if(footer && footer.length == 1) {
             footer = footer[0];
             var tandoraBranding = document.createElement('div');
             tandoraBranding.classList.add('footer-tandora-branding')
-            tandoraBranding.innerHTML='Powered by <a href="https://www.tandora.co/?from=cweb-builder">Tandora</a>';
+            tandoraBranding.innerHTML = footerText +
+            'Powered by <a href="https://www.tandora.co/?from=cweb-builder">Tandora</a>';
             footer.append(tandoraBranding);
         } else {
             footer = document.createElement('footer');
             footer.classList.add('footer-tandora-branding');
-            footer.innerHTML = 'Powered by <a href="https://www.tandora.co/?from=cweb-builder">Tandora</a>';
+            footer.innerHTML = footerText +
+            'Powered by <a href="https://www.tandora.co/?from=cweb-builder">Tandora</a>';
             document.body.append(footer);
         }
         </script>
