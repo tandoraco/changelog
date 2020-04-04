@@ -5,7 +5,8 @@ from django.db import models
 from django.db.models.signals import pre_save
 from tinymce.widgets import TinyMCE
 
-from v1.static_site.signals import snake_case_field_name, either_template_name_or_template_content_is_required
+from v1.static_site.signals import snake_case_field_name, either_template_name_or_template_content_is_required, \
+    private_theme_requires_company
 
 STATIC_SITE_FIELD_CHOICES = (
     ('c', 'char'),
@@ -21,6 +22,8 @@ class StaticSiteTheme(models.Model):
     name = models.CharField(max_length=50)
     template_file = models.CharField(max_length=100, blank=True, null=True)
     template_content = models.TextField(blank=True, null=True)
+    is_private = models.BooleanField(default=False)
+    company = models.OneToOneField('Company', on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return self.name
@@ -60,3 +63,4 @@ class StaticSiteThemeConfig(models.Model):
 
 pre_save.connect(snake_case_field_name, sender=StaticSiteField)
 pre_save.connect(either_template_name_or_template_content_is_required, sender=StaticSiteTheme)
+pre_save.connect(private_theme_requires_company, sender=StaticSiteTheme)
