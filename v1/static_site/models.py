@@ -23,7 +23,7 @@ class StaticSiteTheme(models.Model):
     template_file = models.CharField(max_length=100, blank=True, null=True)
     template_content = models.TextField(blank=True, null=True)
     is_private = models.BooleanField(default=False)
-    company = models.OneToOneField('Company', on_delete=models.SET_NULL, null=True)
+    company = models.OneToOneField('Company', on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return self.name
