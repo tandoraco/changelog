@@ -45,3 +45,13 @@ def ul_list(value):
             ul += f'<li>{val}.</li>'
     ul += '</ul>'
     return ul
+
+
+@register.filter
+@stringfilter
+def replace_changelog_with_page(value):
+    if 'Changelog' in value:
+        value = value.replace('Changelog', 'Page')
+    if 'changelog' in value:
+        value = value.replace('changelog', 'page')
+    return value
