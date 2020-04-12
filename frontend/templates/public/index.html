@@ -36,9 +36,6 @@
     {% endfor %}
 </div>
 <script>
-    let banner = document.getElementById('c-banner');
-    banner.style.backgroundColor = "{{ color }}";
-    let body = document.getElementsByTagName('body')[0];
-    body.style.fontFamily = "Lato";
+{% include 'public/customize-page.js' %}
 </script>
 {% endblock %}
