@@ -51,7 +51,12 @@ class CustomDomainMiddleware(MiddlewareMixin):
                     response = requests.get(url)
                     return self.frame_response(response)
                 else:
-                    pass
+                    path = request.path
+                    if path.startswith('/'):
+                        path = path[1:]
+                    url = f'{settings.HOST}{company_name}/{changelog_terminology}/{path}'
+                    response = requests.get(url)
+                    return self.frame_response(response)
             else:
                 pass
 

@@ -8,3 +8,8 @@ def snake_case_field_name(sender, instance, *args, **kwargs):
 def either_template_name_or_template_content_is_required(sender, instance, *args, **kwargs):
     if not (instance.template_file or instance.template_content):
         raise RuntimeError(TEMPLATE_NAME_OR_CONTENT_REQUIRED_ERROR)
+
+
+def private_theme_requires_company(sender, instance, *args, **kwargs):
+    if instance.is_private and not instance.company:
+        raise RuntimeError('Private theme requires company to be set.')

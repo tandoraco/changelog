@@ -58,7 +58,6 @@ def theme_form(request):
     form = ThemeForm(company=company)
     if request.method == "GET" and company.theme:
         form.fields['theme'].initial = StaticSiteTheme.objects.get(name__iexact=company.theme)
-        print(form.fields['theme'].initial)
 
     if request.method == "POST":
         form = ThemeForm(company=company, data=request.POST)
