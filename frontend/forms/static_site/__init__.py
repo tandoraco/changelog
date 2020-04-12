@@ -53,7 +53,7 @@ class StaticSiteForm(forms.Form):
 
 
 class ThemeForm(forms.Form):
-    theme = forms.ModelChoiceField(queryset=StaticSiteTheme.objects.all())
+    theme = forms.ModelChoiceField(queryset=StaticSiteTheme.objects.filter(is_private=False))
 
     def __init__(self, company, *args, **kwargs):
         super(ThemeForm, self).__init__(*args, **kwargs)

@@ -79,7 +79,11 @@
     {% for message in messages %}
             <div class="alert {% if message.tags %}alert-{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}danger{% else %}{{ message.tags }}{% endif %}{% endif %}" role="alert">
                 <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                {{ message|safe }}
+                {% if request.user.company.use_case == 'c' %}
+                    {{ message|safe }}
+                {% elif request.user.company.use_case == 's' %}
+                    {{ message|replace_changelog_with_page|safe }}
+                {% endif %}
             </div>
     {% endfor %}
 {% endif %}
