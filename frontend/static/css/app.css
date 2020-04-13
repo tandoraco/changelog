@@ -184,3 +184,9 @@ footer {
   background: #FAFAFA;
   padding: 20px;
 }
+
+.form-container {
+    border:1px solid white;
+    background-color:white;
+    height:100%;
+}
