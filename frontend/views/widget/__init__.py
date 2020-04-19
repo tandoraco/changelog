@@ -11,7 +11,7 @@ from frontend.constants import (WIDGET_DOES_NOT_EXIST,
                                 WIDGET_CODE_EDIT_WARNING, NOT_ALLOWED)
 from frontend.custom.decorators import is_authenticated
 from frontend.custom.forms import TandoraForm
-from frontend.custom.utils import get_company_from_slug_and_changelog_terminology
+from frontend.custom.utils import get_company_from_slug_and_changelog_terminology, get_public_changelog_limit
 from frontend.forms.auth.utils import get_plan_features
 from frontend.forms.widget import WidgetForm
 from v1.accounts.models import Company
@@ -76,13 +76,16 @@ def render_widget(request, company, changelog_terminology):
         changelogs = company.changelog_set.filter(company=company,
                                                   published=True,
                                                   deleted=False).order_by('-created_at').select_related()[:10]
+
         return render(request, 'public/widget.html',
                       context={
                           'company': company,
                           'widget': widget,
                           'changelogs': changelogs,
                           'hide_tandora_logo': True,
-                          'plan_features': get_plan_features(company.id, company=company)
+                          'page_title': f'{str(company)} widget'.title(),
+                          'plan_features': get_plan_features(company.id, company=company),
+                          'changelog_limit': get_public_changelog_limit(company)
                       })
     except (Company.DoesNotExist, Embed.DoesNotExist, IndexError):
         raise Http404

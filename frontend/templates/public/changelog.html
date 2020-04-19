@@ -1,14 +1,7 @@
 {% extends "base.html" %}
 {% load humanize %}
 {% block content %}
-<div id='c-banner' class="banner">
-    <div class="container">
-        <h1 class="logo-font">
-            {{ company_name }}
-        </h1>
-        <p style="text-align:center;">{{ terminology }} </p>
-    </div>
-</div>
+{% include 'public/banner.html' %}
 <div class="container">
     <center><h1>{{ changelog.title }}</h1></center>
     <span style="color: white; background-color:{{ changelog.category.color }};">&nbsp{{ changelog.category.name }}&nbsp</span><br>

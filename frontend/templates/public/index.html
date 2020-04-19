@@ -2,14 +2,7 @@
 {% load humanize %}
 {% load frontend_tags %}
 {% block content %}
-<div id="c-banner" class="banner">
-    <div class="container">
-        <h1 class="logo-font">
-            {{ company_name }}
-        </h1>
-        <p style="text-align:center;">{{ terminology }} </p>
-    </div>
-</div>
+{% include 'public/banner.html' %}
 <div class="container page">
     {% for changelog in changelogs|slice:changelog_limit %}
     <div class="row">

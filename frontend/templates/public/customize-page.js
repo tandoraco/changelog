@@ -2,7 +2,11 @@ let banner = document.getElementById('c-banner');
 {% if company.publicpage.banner_color %}
     banner.style.backgroundColor = "{{ company.publicpage.banner_color }}";
 {% else %}
-    banner.style.backgroundColor = "{{ color }}";
+    banner.style.backgroundColor = "#428bca";
+{% endif %}
+{% if company.publicpage.banner_font_color %}
+    banner.style.color = '{{ company.publicpage.banner_font_color }}';
+    document.getElementById('banner-company-link').style.color = '{{ company.publicpage.banner_font_color }}';
 {% endif %}
 {% if company.publicpage.font %}
     let font = "{{ company.publicpage.font }}";
@@ -11,6 +15,5 @@ let banner = document.getElementById('c-banner');
     fontFamily = fontFamily.replace(/\+/g, ' ');
     document.body.style.fontFamily = fontFamily;
 {% else %}
-    let body = document.getElementsByTagName('body')[0];
-    body.style.fontFamily = "Lato";
+    document.body.style.fontFamily = "Lato";
 {% endif %}
