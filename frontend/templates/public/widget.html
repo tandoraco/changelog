@@ -1,16 +1,9 @@
 {% extends "base.html" %}
 {% load humanize %}
 {% block content %}
-<div id="c-banner" class="banner">
-    <div class="container">
-        <h1 class="logo-font">
-            <a href="{{ company.website }}">{{ company.company_name }}</a>
-        </h1>
-        <p style="text-align:center;">{{ company.changelog_terminology }} </p>
-    </div>
-</div>
+{% include 'public/banner.html' %}
 <div class="container page">
-    {% for changelog in changelogs %}
+    {% for changelog in changelogs|slice:changelog_limit %}
     <div class="row">
         <div class="col-md-12">
             <div class="article-preview">
@@ -35,13 +28,15 @@
     {% endfor %}
 </div>
 <script>
-    let banner = document.getElementById('c-banner');
-    banner.style.backgroundColor = "{{ widget.color }}";
-    let body = document.getElementsByTagName('body')[0];
-    body.style.fontFamily = "Lato";
+    {% include 'public/customize-page.js' %}
 </script>
 {{ widget.javascript|safe }}
 <style>
 {{ widget.css }}
 </style>
+<script>
+{% if widget.hide_banner %}
+    document.getElementById('c-banner').style.display = 'none';
+{% endif %}
+</script>
 {% endblock %}

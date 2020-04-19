@@ -65,3 +65,5 @@ INTEGRATION_EDIT_FAILED_ERROR = _("Integration editing failed. Please try again 
 WEB_BUILDER_SETUP_COMPLETED_PREVIEW_WEBSITE_MESSAGE = _(
     'You have successfully completed website setup. Click <a target="_blank" '
     'href="url">here</a> to view preview of website.')
+
+PUBLIC_PAGE_CHANGELOG_10_MULTIPLE_ERROR = _('This value should be a multiple of 10.')

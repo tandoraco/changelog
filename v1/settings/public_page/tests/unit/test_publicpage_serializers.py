@@ -13,10 +13,10 @@ class TestPublicPageSerializer(SerializerTestBase):
     def test_publicpage_serializer(self, company):
         data = []
 
-        data.append(SerializerTestData(data={"color": "123"}, is_valid=False))
-        data.append(SerializerTestData(data={"color": "qweert"}, is_valid=False))
-        data.append(SerializerTestData(data={"color": "000033"}, is_valid=False))
-        data.append(SerializerTestData(data={"company": company.id, "color": "#000033"}, is_valid=True))
+        data.append(SerializerTestData(data={"banner_color": "123"}, is_valid=False))
+        data.append(SerializerTestData(data={"banner_color": "qweert"}, is_valid=False))
+        data.append(SerializerTestData(data={"banner_color": "000033"}, is_valid=False))
+        data.append(SerializerTestData(data={"company": company.id, "bannercolor": "#000033"}, is_valid=True))
 
         self.run_data_assertions(test_data=data)
 
@@ -24,11 +24,11 @@ class TestPublicPageSerializer(SerializerTestBase):
         data = []
 
         color = "123"
-        data.append(SerializerTestData(data={"company": company.id, "color": color}, is_valid=True))
+        data.append(SerializerTestData(data={"company": company.id, "banner_color": color}, is_valid=True))
         self.run_data_assertions(test_data=data, create_db_entry=True)
 
         public_page = PublicPage.objects.get(company=company)
-        assert public_page.color == color
+        assert public_page.banner_color == color
         # they fall back to defaults, if no values are provided
         assert public_page.hide_from_crawlers
 
@@ -39,12 +39,12 @@ class TestPublicPageSerializer(SerializerTestBase):
         data.append(
             SerializerTestData(data={
                 "company": company.id,
-                "color": color,
+                "banner_color": color,
                 "hide_from_crawlers": True,
             }, is_valid=True))
         self.run_data_assertions(test_data=data, create_db_entry=True)
 
         public_page = PublicPage.objects.get(company=company)
         assert public_page.company.id == company.id
-        assert public_page.color == color
+        assert public_page.banner_color == color
         assert public_page.hide_from_crawlers

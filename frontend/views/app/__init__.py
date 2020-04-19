@@ -14,7 +14,7 @@ from frontend.custom import views as custom_views
 from frontend.custom.decorators import is_authenticated, is_admin, is_allowed
 from frontend.custom.forms import TandoraForm
 from frontend.custom.utils import get_company_from_slug_and_changelog_terminology, \
-    get_changelogs_from_company_name_and_changelog_terminology
+    get_changelogs_from_company_name_and_changelog_terminology, get_public_changelog_limit
 from frontend.forms.auth import UserForm, StaffNewUserForm
 from frontend.views.app.public_helpers import get_context_and_template_name, render_custom_theme
 from v1.accounts.constants import INACTIVE_USER_ADMIN_ERROR
@@ -114,7 +114,7 @@ def public_index(request, company, changelog_terminology):
             # So when I take company from index 0, only one object from queryset is evaluated
             # and when rendering in template queryset is again evaluated
             # which makes the number of db calls to 2.
-            # So hacking this behaviour to evaulate the queryset only once and
+            # So hacking this behaviour to evaluate the queryset only once and
             # keep the db call to 1
             company = changelog.company
         if not company:
@@ -126,7 +126,7 @@ def public_index(request, company, changelog_terminology):
                 '-created_at').select_related('category')
 
         context, template = get_context_and_template_name(company)
-
+        context['changelog_limit'] = get_public_changelog_limit(company)
         if context.get('config'):
             context['config']['home_page_title'] = ''
             return render_custom_theme(company, context, request)
