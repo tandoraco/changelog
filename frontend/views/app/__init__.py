@@ -14,13 +14,12 @@ from frontend.custom import views as custom_views
 from frontend.custom.decorators import is_authenticated, is_admin, is_allowed
 from frontend.custom.forms import TandoraForm
 from frontend.custom.utils import get_company_from_slug_and_changelog_terminology, \
-    get_changelogs_from_company_name_and_changelog_terminology
+    get_changelogs_from_company_name_and_changelog_terminology, get_public_changelog_limit
 from frontend.forms.auth import UserForm, StaffNewUserForm
 from frontend.views.app.public_helpers import get_context_and_template_name, render_custom_theme
 from v1.accounts.constants import INACTIVE_USER_ADMIN_ERROR
 from v1.accounts.models import Company, User, ForgotPassword
 from v1.core.models import Changelog
-from v1.settings.public_page.models import PublicPage
 
 
 def index(request):
@@ -127,12 +126,7 @@ def public_index(request, company, changelog_terminology):
                 '-created_at').select_related('category')
 
         context, template = get_context_and_template_name(company)
-
-        try:
-            context['changelog_limit'] = str(company.publicpage.changelog_limit)
-        except PublicPage.DoesNotExist:
-            context['changelog_limit'] = str(10)
-
+        context['changelog_limit'] = get_public_changelog_limit(company)
         if context.get('config'):
             context['config']['home_page_title'] = ''
             return render_custom_theme(company, context, request)

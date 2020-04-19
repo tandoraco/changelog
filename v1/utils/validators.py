@@ -1,4 +1,6 @@
 from django import forms
+from django.core.exceptions import ValidationError
+from django.utils.translation import ugettext as _
 from rest_framework import serializers
 
 from frontend.constants import COMPANY_DOES_NOT_EXIST
@@ -34,3 +36,9 @@ def validate_category_name(company, name, serializer=True):
             raise obj.ValidationError(CATEGORY_EXISTS)
     except Category.DoesNotExist:
         return name
+
+
+def validate_logo(file):
+    max_file_size = int(0.5 * 1024 * 1024)  # 500 Kb
+    if file and file.size > max_file_size:
+        raise ValidationError(_('File too large. Size should not exceed 500 kb.'))

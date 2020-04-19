@@ -6,6 +6,8 @@
     <title>{{ changelog.title }}</title>
     {% elif company_name %}
     <title>{{ company_name }} - {{ terminology }}</title>
+    {% elif page_title %}
+    <title>{{ page_title }}</title>
     {% else %}
     <title>Tandora</title>
     {% endif %}

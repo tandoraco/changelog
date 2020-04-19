@@ -20,15 +20,17 @@ from django.urls import include, path
 
 from frontend.admin import admin_site
 
-urlpatterns = [
+urlpatterns = []
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+urlpatterns += [
     url(r'^tinymce/', include('tinymce.urls')),
     url(r"api/v1/", include("v1.urls"), name="v1-api"),
     path('admin/', admin_site.urls),
     url(r"", include("frontend.urls"), name="v1-frontend"),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-
-if settings.DEBUG:
-    urlpatterns = urlpatterns + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if (settings.DEBUG or settings.TESTING) and 'debug_toolbar' in settings.INSTALLED_APPS:
     import debug_toolbar
