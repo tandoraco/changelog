@@ -23,26 +23,28 @@ INITIAL_CSS = '{}'
 
 @is_authenticated
 def widget_form(request):
-    company_id = request.session['company-id']
     extra = None
 
-    company = Company.objects.get(id=company_id)
+    company = request.user.company
     if company.is_static_site:
         messages.info(request, NOT_ALLOWED)
         return HttpResponseRedirect('/staff')
+    try:
+        embed = company.embed
+        embed_exists = True
+    except Embed.DoesNotExist:
+        embed = None
+        embed_exists = False
 
-    if Embed.objects.filter(company__id=company_id).count() == 0:
+    if not embed_exists:
         action = 'create'
         initial = {
             'javascript': INITIAL_JAVASCRIPT,
             'css': INITIAL_CSS
         }
-        id = None
     else:
         action = 'edit'
         initial = None
-        embed = Embed.objects.get(company__id=company_id)
-        id = embed.id
 
         embed_changed = False
 
@@ -63,8 +65,8 @@ def widget_form(request):
 
     return TandoraForm(Embed, WidgetForm, action, 'staff/form.html',
                        reverse('frontend-manage-widget'), initial=initial) \
-        .get_form(request, success_message=WIDGET_CREATED_OR_EDITED_SUCCESSFULLY,
-                  error_message=WIDGET_DOES_NOT_EXIST, id=id, extra=extra)
+        .get_form(request, instance=embed, success_message=WIDGET_CREATED_OR_EDITED_SUCCESSFULLY,
+                  error_message=WIDGET_DOES_NOT_EXIST, extra=extra)
 
 
 def render_widget(request, company, changelog_terminology):
