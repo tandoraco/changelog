@@ -10,6 +10,8 @@ class Embed(models.Model):
     company = models.OneToOneField(Company, null=False, on_delete=models.CASCADE)
     css = models.TextField(blank=True, null=True)
     javascript = models.TextField(blank=True, null=True)
+    hide_banner = models.BooleanField(default=True,
+                                      help_text="Enable this if you don't want the banner to be shown in widget.")
     enabled = models.BooleanField(default=False)
 
     def get_default_embed_script(self):

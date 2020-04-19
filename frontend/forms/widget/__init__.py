@@ -9,7 +9,8 @@ class WidgetForm(forms.ModelForm):
 
     class Meta:
         model = Embed
-        fields = ['javascript', 'css', 'enabled']
+        fields = ['javascript', 'css', 'enabled', 'hide_banner', ]
 
     def __init__(self, *args, **kwargs):
         super(WidgetForm, self).__init__(*args, **kwargs)
+        self.fields['enabled'].label = 'Enable Widget'
