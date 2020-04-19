@@ -20,6 +20,7 @@ from frontend.views.app.public_helpers import get_context_and_template_name, ren
 from v1.accounts.constants import INACTIVE_USER_ADMIN_ERROR
 from v1.accounts.models import Company, User, ForgotPassword
 from v1.core.models import Changelog
+from v1.settings.public_page.models import PublicPage
 
 
 def index(request):
@@ -114,7 +115,7 @@ def public_index(request, company, changelog_terminology):
             # So when I take company from index 0, only one object from queryset is evaluated
             # and when rendering in template queryset is again evaluated
             # which makes the number of db calls to 2.
-            # So hacking this behaviour to evaulate the queryset only once and
+            # So hacking this behaviour to evaluate the queryset only once and
             # keep the db call to 1
             company = changelog.company
         if not company:
@@ -126,6 +127,11 @@ def public_index(request, company, changelog_terminology):
                 '-created_at').select_related('category')
 
         context, template = get_context_and_template_name(company)
+
+        try:
+            context['changelog_limit'] = str(company.publicpage.changelog_limit)
+        except PublicPage.DoesNotExist:
+            context['changelog_limit'] = str(10)
 
         if context.get('config'):
             context['config']['home_page_title'] = ''
