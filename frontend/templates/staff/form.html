@@ -6,7 +6,11 @@
     {% if extra %}
     <span>{{ extra|safe }}</span>
     {% endif %}
-    <form id="staff_form" method="post" action="{{ action }}">
+    <form id="staff_form" method="post" action="{{ action }}"
+          {% if is_multipart_form %}
+          enctype='multipart/form-data'
+          {% endif %}
+    >
         {% csrf_token %}
         {{ form|crispy }}
         <center>
@@ -36,6 +40,15 @@
             copyApiKeyButton.innerHTML = '<i class="far fa-copy"></i>&nbsp;&nbsp;Copy Api key';
             copyApiKeyButton.onclick = copyApiKey;
             extraActions.appendChild(copyApiKeyButton);
+        }
+    </script>
+    <script>
+        // Logo validation error is not shown; On inspecting, it's display was set to none;
+        // In order to ensure, we do not miss out any validation errors, getting all error messages
+        // and if their display is none, we are enabling it's display.
+        errorElements = document.getElementsByClassName('invalid-feedback');
+        for(i=0; i<errorElements.length; i++) {
+            errorElements[i].style.display = 'block';
         }
     </script>
 </div>

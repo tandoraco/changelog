@@ -1,3 +1,5 @@
+from django.forms import model_to_dict
+
 from v1.accounts.models import User
 from v1.categories.models import Category
 from v1.settings.public_page.models import PublicPage
@@ -24,12 +26,7 @@ def get_company(company):
 
 def get_public_page(company):
     public_page = PublicPage.objects.get(company=company)
-
-    return {
-        'color': public_page.color,
-        'hide_from_crawlers': public_page.hide_from_crawlers,
-        'settings': public_page.settings
-    }
+    return model_to_dict(public_page, exclude=['id', ])
 
 
 def get_categories(company):
