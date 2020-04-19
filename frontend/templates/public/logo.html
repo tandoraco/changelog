@@ -1,0 +1,5 @@
+{% if company.publicpage.logo %}
+<div style="float:left; width:110px; height: 110px; background-color: white;">
+    <a href="{{ company.website }}"><img width="100" height="100" src="{{ company.publicpage.logo.url }}"/></a>
+</div>
+{% endif %}

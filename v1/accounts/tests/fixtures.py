@@ -1,3 +1,4 @@
+from datetime import datetime
 import json
 import random
 import uuid
@@ -19,7 +20,7 @@ def company_data():
     return {
         'email': 'test@test.com',
         'password': 'Test123.',
-        'company_name': fake.name(),
+        'company_name': f'Test {round(datetime.now().timestamp())}',
         'website': 'http://www.test.com',
         'name': 'Test Admin'
     }

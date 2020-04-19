@@ -38,7 +38,6 @@ class TestWidgetViews:
         assert response.status_code == status.HTTP_200_OK
         assert response_data['css'] == embed.css
         assert response_data['javascript'] == embed.javascript
-        assert response_data["color"] == embed.color
 
     def test_embed_create_with_no_data(self, user, embed_data):
         self.client.force_authenticate(user)
@@ -48,7 +47,6 @@ class TestWidgetViews:
         assert response.status_code == status.HTTP_201_CREATED
         assert response_data['css'] == embed.css
         assert response_data['javascript'] == embed.javascript
-        assert response_data["color"] == embed.color
 
     def test_embed_create_with_data(self, user, embed):
         self.client.force_authenticate(user)
@@ -68,7 +66,6 @@ class TestWidgetViews:
         self.client.force_authenticate(user)
         data = {
             'company': user.company.id,
-            'color': '#123456',
             'javascript': '<script></script>',
             'css': 'css'
         }

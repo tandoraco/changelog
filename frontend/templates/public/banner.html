@@ -1,0 +1,15 @@
+<div id="c-banner" class="banner">
+    <div class="container">
+        {% include 'public/logo.html' %}
+        <h1 class="logo-font">
+            <a id='banner-company-link' style="color:white;" href="{{ company.website }}">
+                {% if company.publicpage.banner_title %}
+                {{ company.publicpage.banner_title }}
+                {% else %}
+                {{ company.company_name }}
+                {% endif %}
+            </a>
+        </h1>
+        <p style="text-align:center;">{% if company.publicpage.banner_tag_line %}{{ company.publicpage.banner_tag_line }}{% else %}{{ company.changelog_terminology }}{% endif %}</p>
+    </div>
+</div>
