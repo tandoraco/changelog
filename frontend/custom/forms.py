@@ -34,7 +34,7 @@ class TandoraForm:
             raise Http404
 
     def get_form(self, request, success_message=None, error_message=None, id=None, extra=None,
-                 title=None, post_data=None, instance=None):
+                 title=None, post_data=None, instance=None, is_multipart_form=False):
         form = self.form() if not self.initial else self.form(initial=self.initial)
 
         if not success_message:
@@ -55,10 +55,7 @@ class TandoraForm:
         if request.method == 'POST':
 
             if self.action == ACTION_CREATE:
-                if not post_data:
-                    form = self.form(request.POST)
-                else:
-                    form = self.form(post_data)
+                form = self.form(post_data or request.POST, request.FILES)
 
             if self.action == ACTION_EDIT:
                 if not (id or instance):
@@ -66,7 +63,7 @@ class TandoraForm:
 
                 post_data = request.POST.copy()
                 post_data["id"] = id
-                form = self.form(post_data, instance=self._get_instance(id, request, error_message))
+                form = self.form(post_data, request.FILES, instance=self._get_instance(id, request, error_message))
 
             if form.is_valid():
                 try:
@@ -83,4 +80,4 @@ class TandoraForm:
                 return HttpResponseRedirect(self.response_redirect_path)
 
         return render(request, self.form_html,
-                      {'form': form, 'title': title, 'extra': extra})
+                      {'form': form, 'title': title, 'extra': extra, 'is_multipart_form': is_multipart_form})

@@ -172,5 +172,19 @@ function showToast(toast_type, title, body) {
     toastr[toast_type](title, body);
 }
 </script>
+<script>
+    function changeColorFieldBackground() {
+        this.style.backgroundColor = this.value;
+    }
+
+    let colorFields = document.getElementsByClassName('colorfieldwidget');
+    for(i=0; i<colorFields.length; i++) {
+        colorField = colorFields[i];
+        if(colorField.value) {
+            colorField.style.backgroundColor = colorField.value;
+        }
+        colorField.addEventListener('change', changeColorFieldBackground);
+    }
+</script>
 </body>
 </html>

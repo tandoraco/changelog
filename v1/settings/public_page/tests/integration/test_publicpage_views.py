@@ -17,13 +17,12 @@ class TestPublicPageViewSet(ModelViewSetTestBase):
     def test_allowed_methods(self, user, public_page):
         self.queryset = PublicPage.objects.all()
         keys = [
-            "color",
             "hide_from_crawlers",
         ]
         self.run_assertions_for_retrieve(user, keys=keys)
 
         update_data = {
-            "valid_data": {"color": "#000000"},
-            "invalid_data": {"color": "asdnbfd"}
+            "valid_data": {"banner_color": "#000000"},
+            "invalid_data": {"banner_color": "asdnbfd"}
         }
         self.run_assertions_for_partial_update(user, update_data=update_data)

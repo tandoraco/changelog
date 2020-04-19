@@ -27,16 +27,16 @@ def delete_model(request, model, id, success_redirect_path, error_redirect_path,
 
 def get_company_from_slug_and_changelog_terminology(company, changelog_terminology=None):
     company = company.replace("-", " ")
-
     if changelog_terminology:
         changelog_terminology = changelog_terminology.replace("-", " ")
         company = Company.objects.select_related(
+            'publicpage',
             'embed',
             'subscription',
             'subscription__plan').filter(company_name__iexact=company,
                                          changelog_terminology__iexact=changelog_terminology)[0]
     else:
-        company = Company.objects.select_related('embed', 'subscription',
+        company = Company.objects.select_related('publicpage', 'embed', 'subscription',
                                                  'subscription__plan').filter(company_name__iexact=company)[0]
 
     return company
@@ -47,8 +47,16 @@ def get_changelogs_from_company_name_and_changelog_terminology(company, changelo
     changelogs = Changelog.objects.filter(company__company_name__iexact=company,
                                           company__changelog_terminology__iexact=changelog_terminology,
                                           deleted=False, published=True).\
-        select_related('company', 'company__subscription', 'category').order_by('-created_at')
+        select_related('company', 'company__publicpage', 'company__subscription', 'category').order_by('-created_at')
     return changelogs
+
+
+def get_public_changelog_limit(company):
+    from v1.settings.public_page.models import PublicPage
+    try:
+        return str(company.publicpage.changelog_limit)
+    except PublicPage.DoesNotExist:
+        return str(10)
 
 
 def get_company_from_request(request):

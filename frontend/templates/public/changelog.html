@@ -1,14 +1,7 @@
 {% extends "base.html" %}
 {% load humanize %}
 {% block content %}
-<div id='c-banner' class="banner">
-    <div class="container">
-        <h1 class="logo-font">
-            {{ company_name }}
-        </h1>
-        <p style="text-align:center;">{{ terminology }} </p>
-    </div>
-</div>
+{% include 'public/banner.html' %}
 <div class="container">
     <center><h1>{{ changelog.title }}</h1></center>
     <span style="color: white; background-color:{{ changelog.category.color }};">&nbsp{{ changelog.category.name }}&nbsp</span><br>
@@ -23,10 +16,7 @@
     </span>
 </div>
 <script>
-    let banner = document.getElementById('c-banner');
-    banner.style.backgroundColor = "{{ color }}";
-    let body = document.getElementsByTagName('body')[0];
-    body.style.fontFamily = "Lato";
+    {% include 'public/customize-page.js' %}
 </script>
 <script defer>
     window.addEventListener("load", function() {

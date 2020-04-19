@@ -32,6 +32,7 @@ def get_context_and_template_name(company, changelog=False):
     else:
         template = 'public/index.html' if not changelog else 'public/changelog.html'
         context = {
+            'company': company,
             'company_name': company.company_name,
             'terminology': company.changelog_terminology,
             'hide_tandora_logo': True
