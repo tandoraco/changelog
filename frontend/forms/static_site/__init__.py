@@ -15,7 +15,8 @@ FONT_CHOICES = (
     ('https://fonts.googleapis.com/css?family=Source+Sans+Pro&display=swap', 'Source Sans Pro'),
     ('https://fonts.googleapis.com/css?family=Lilita+One&display=swap', 'Lilita One'),
     ('https://fonts.googleapis.com/css?family=Oswald&display=swap', 'Oswald'),
-    ('https://fonts.googleapis.com/css?family=Playfair+Display&display=swap', 'Playfair Display')
+    ('https://fonts.googleapis.com/css?family=Playfair+Display&display=swap', 'Playfair Display'),
+    ('https://fonts.googleapis.com/css?family=Manrope&display=swap', 'Manrope'),
 )
 FONT_CHOICES = tuple(sorted(FONT_CHOICES, key=lambda f: f[1]))
 
