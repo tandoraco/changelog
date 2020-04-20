@@ -104,6 +104,6 @@ class ZapierHandler(IntegrationHandlerBase):
             from v1.core.serializers import ChangelogSerializer
             changelog = Changelog.objects.filter(company=self.company).order_by('-created_at')[0]
             data = ChangelogSerializer(changelog).data
-            return Response(status=status.HTTP_200_OK, data=data)
+            return Response(status=status.HTTP_200_OK, data=[data])
         except IndexError:
             return Response(status=status.HTTP_204_NO_CONTENT)
