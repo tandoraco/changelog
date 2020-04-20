@@ -1,7 +1,6 @@
 from random import randint
 
 import requests
-from django.conf import settings
 from django.utils.text import slugify
 
 from v1.integrations.zapier.models import Zapier, ZapierWebhookTrigger
@@ -11,10 +10,6 @@ def post_to_zapier(instance, zapier):
     from v1.core.serializers import ChangelogSerializer
 
     data = ChangelogSerializer(instance=instance).data
-    data['company'] = slugify(instance.company.company_name)
-    data['changelog_terminology'] = slugify(instance.company.changelog_terminology)
-    data['view_url'] = \
-        f"{settings.HOST}{data['company']}/{data['changelog_terminology']}/{instance.slug}"
 
     if zapier.zapier_webhook_url:
         response = requests.post(zapier.zapier_webhook_url, data=data)

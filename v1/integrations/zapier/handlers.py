@@ -95,3 +95,15 @@ class ZapierHandler(IntegrationHandlerBase):
             return Response(status=status.HTTP_201_CREATED, data={'success': True})
         else:
             return serializer_error_response(serializer)
+
+    def poll(self, request):
+        if request.method != 'GET':
+            raise MethodNotAllowed(request.method)
+        try:
+            from v1.core.models import Changelog
+            from v1.core.serializers import ChangelogSerializer
+            changelog = Changelog.objects.filter(company=self.company).order_by('-created_at')[0]
+            data = ChangelogSerializer(changelog).data
+            return Response(status=status.HTTP_200_OK, data=data)
+        except IndexError:
+            return Response(status=status.HTTP_204_NO_CONTENT)

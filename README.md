@@ -34,7 +34,7 @@ Developed using Python, Django and Django Rest Framework
 ## Running tests locally
 
 Run the following commands to run test suite.
-- ``docker exec -it tandora-backend_web_1 /bin/sh`
+- `docker exec -it tandora-backend_web_1 /bin/sh`
 - `pytest`
 
 ## Activating admin
@@ -51,6 +51,13 @@ to admin page. You should make yourselves a super user to access admin.
     In [5]: u.save()
     ```
 - After the above steps, visit the admin url in browser and use default credentials.
+
+## Debugging in dev
+
+- When you up the container using `docker-compose -f dev.yml up` ipdb cannot be used. So stop the container using `docker-compose -f dev.yml stop`
+- Then start the container using the following command to use ipdb and other debuggers.
+    - `docker-compose -f dev.yml run --service-ports web`
+    - Bash shell of container cannot be used in this mode.
 
 ## Other useful links
 

@@ -1,3 +1,5 @@
+from django.conf import settings
+from django.utils.text import slugify
 from rest_framework import serializers
 
 from v1.core.models import Changelog, InlineImageAttachment
@@ -15,6 +17,14 @@ class ChangelogSerializer(serializers.ModelSerializer):
         if custom_url_path and (custom_url_path.startswith('/') or custom_url_path.endswith('/')):
             return custom_url_path.strip('/')
         return custom_url_path
+
+    def to_representation(self, instance):
+        data = super(ChangelogSerializer, self).to_representation(instance)
+        data['company'] = slugify(instance.company.company_name)
+        data['changelog_terminology'] = slugify(instance.company.changelog_terminology)
+        data['view_url'] = \
+            f"{settings.HOST}{data['company']}/{data['changelog_terminology']}/{instance.slug}"
+        return data
 
 
 class InlineImageAttachmentSerializer(serializers.ModelSerializer):
