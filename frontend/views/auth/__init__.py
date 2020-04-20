@@ -81,7 +81,7 @@ def affiliate_signup(request):
     affiliate_content = '''<b>Want to become the Tandora man (affiliate) of Tandora?</b><br>
 
 Becoming a Tandora man is simple but make sure to do loud noises about Tandora. When your noise brings us customers,
-you get 12% of the total bill as affiliate charge for every customer you bring in.<br>
+you will be rewarded with attractive perks and incentives for every customer you bring in.<br>
 
 <ul>
 <li>Hassle-free payments guaranteed.</li>
