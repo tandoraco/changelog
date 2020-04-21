@@ -7,9 +7,9 @@ from v1.integrations.zapier.models import Zapier, ZapierWebhookTrigger
 
 
 def post_to_zapier(instance, zapier):
-    from v1.core.serializers import ChangelogSerializer
+    from v1.core.serializers import ChangelogSerializerForZapier
 
-    data = ChangelogSerializer(instance=instance).data
+    data = ChangelogSerializerForZapier(instance=instance).data
 
     if zapier.zapier_webhook_url:
         response = requests.post(zapier.zapier_webhook_url, data=data)
