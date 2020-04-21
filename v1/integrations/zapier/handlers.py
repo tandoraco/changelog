@@ -101,9 +101,12 @@ class ZapierHandler(IntegrationHandlerBase):
             raise MethodNotAllowed(request.method)
         try:
             from v1.core.models import Changelog
-            from v1.core.serializers import ChangelogSerializer
-            changelog = Changelog.objects.filter(company=self.company).order_by('-created_at')[0]
-            data = ChangelogSerializer(changelog).data
+            from v1.core.serializers import ChangelogSerializerForZapier
+            changelog = Changelog.objects.filter(
+                company=self.company,
+                published=True,
+                deleted=False).order_by('-created_at')[0]
+            data = ChangelogSerializerForZapier(changelog).data
             return Response(status=status.HTTP_200_OK, data=[data])
         except IndexError:
             return Response(status=status.HTTP_204_NO_CONTENT)

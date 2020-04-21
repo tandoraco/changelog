@@ -1,7 +1,9 @@
 import json
 import uuid
+from html.parser import HTMLParser
 
 import requests
+from bs4 import BeautifulSoup
 from django.utils.safestring import mark_safe
 from pygments import highlight
 from pygments.formatters.html import HtmlFormatter
@@ -49,3 +51,23 @@ def send_to_slack(message):
         'text': '@channel ' + message
     }
     requests.post(SLACK_URL, json=data)
+
+
+def html_2_text(html):
+
+    class HTML2TextParser(HTMLParser):
+        text = ""
+
+        def handle_data(self, data):
+            self.text += data
+
+    html_parser = HTML2TextParser()
+    html_parser.feed(html)
+
+    return html_parser.text
+
+
+def extract_all_image_src_urls(html):
+    soup = BeautifulSoup(html, 'html.parser')
+    img_tags = soup.find_all('img')
+    return [img_tag['src'] for img_tag in img_tags]
