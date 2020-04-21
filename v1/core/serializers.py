@@ -29,6 +29,7 @@ class ChangelogSerializerForZapier(ChangelogSerializer):
         company_name = slugify(instance.company.company_name)
         terminology = slugify(instance.company.changelog_terminology)
         return {
+            'id': instance.id,
             'title': instance.title,
             'content': instance.content,
             'content_text': html_2_text(instance.content),
