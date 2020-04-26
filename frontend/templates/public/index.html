@@ -17,7 +17,7 @@
                 </div-->
                 <div class="preview-link">
                     <h2><a href="/{{ company_name}}/{{ terminology }}/{{ changelog.slug }}">{{ changelog.title }}</a></h2>
-                    <span style="font-size:16px; color: white; background-color: {{ changelog.category.color }};">&nbsp{{ changelog.category.name }}&nbsp</span><br>
+                    <span class="category" style="color: white; background-color: {{ changelog.category.color }};">&nbsp{{ changelog.category.name }}&nbsp</span><br>
                     <i><span style="color:grey;">Created: {{ changelog.created_at|naturaltime }}</span><br></i><br>
                     <span style="color:black;font-size:16px;">{{ changelog.content|extract_text_and_truncate }}</span>
                     <span><a href="/{{ company_name}}/{{ terminology }}/{{ changelog.slug }}">Read more..</a></span>
