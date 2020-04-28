@@ -109,3 +109,27 @@ def setup_web_builder(request, stage_id):
         return HttpResponseRedirect(current_stage_view)
     except (KeyError, ValueError):
         raise Http404
+
+
+@is_authenticated
+@requires_static_site
+def static_site_builder(request):
+    before_body_html = '''
+    <html>
+    <head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    crossorigin="anonymous">
+    </head>
+    <body>
+    '''
+    after_body_html = '''
+    <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js' crossorigin='anonymous'>
+    </script>
+    </body>
+    </html>
+    '''
+    context = {
+        'before_body': before_body_html,
+        'after_body': after_body_html
+    }
+    return render(request, 'staff/web-builder-form.html', context=context)

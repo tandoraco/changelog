@@ -47,6 +47,7 @@ urlpatterns = [
     path('staff/web-builder/setup/stage/<int:stage_id>', static_site.setup_web_builder,
          name='frontend-setup-web-builder'),
     path('staff/manage/theme', static_site.theme_form, name="frontend-manage-theme"),
+    path('staff/manage/web-builder', static_site.static_site_builder, name='frontend-site-builder'),
     path('staff/manage/static-site', static_site.static_site_form, name="frontend-manage-static-site"),
     path('staff/manage/public-page', settings.manage_public_page, name="frontend-manage-public-page"),
     path('staff/admin/actions/delete-company/<str:company_name>', admin_actions.delete_company,

@@ -1,0 +1,72 @@
+{% extends "staff/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<script>
+    let beforeBody = `{{ before_body|safe }}`;
+    let afterBody = "<script src='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js' crossorigin='anonymous'>" + "<\/script><\/body><\/html>";
+</script>
+<div class="container">
+    <div class="row">
+        <div class="col-md-7">
+            <div class="row">
+                <center><b>Text format elements</b></center><br>
+                <button class="btn btn-block btn-outline-dark" onclick="showTextareaPrompt('Enter Heading 1 text', processHeading1);">Heading 1</button>
+                <button class="btn btn-block btn-outline-dark" onclick="showTextareaPrompt('Enter Heading 2 text', processHeading2);">Heading 2</button>
+                <button class="btn btn-block btn-outline-dark" onclick="showTextareaPrompt('Enter Heading 3 text', processHeading3);">Heading 3</button>
+                <button class="btn btn-block btn-outline-dark" onclick="showTextareaPrompt('Enter Heading 4 text', processHeading4);">Heading 4</button>
+                <button class="btn btn-block btn-outline-dark" onclick="showTextareaPrompt('Enter Heading 5 text', processHeading5);">Heading 5</button>
+                <button class="btn btn-block btn-outline-dark" onclick="showTextareaPrompt('Enter Heading 6 text', processHeading6);">Heading 6</button>
+                <button class="btn btn-block btn-outline-dark" onclick="showTextareaPrompt('Enter paragraph', processPara);">Paragraph</button>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <center><h3>Preview</h3></center>
+            <iframe id="preview-iframe" style="overflow:hidden;height:100%;width:100%" height="100%"
+                    width="100%">
+
+            </iframe>
+        </div>
+    </div>
+</div>
+<span id="buildHtml" style="display:none;"></span>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.4.0/bootbox.min.js"></script>
+<script>
+    function showTextareaPrompt(title, callbackFunction) {
+        bootbox.prompt({
+            title: title,
+            inputType: 'textarea',
+            callback: callbackFunction
+        });
+    }
+    function setPreviewInIframe(html, skipSave=false){
+        iframe = document.getElementById('preview-iframe');
+        iframedoc = iframe.contentDocument || iframe.contentWindow.document;
+        previousHtml = $('#buildHtml').html();
+        newHtml = previousHtml + html;
+        $('#buildHtml').html(newHtml)
+        iframedoc.body.innerHTML = beforeBody + newHtml + afterBody;
+    }
+    function processHeading1(result) {
+        setPreviewInIframe(`<h1>${result}</h1>`);
+    }
+    function processHeading2(result) {
+        setPreviewInIframe(`<h2>${result}</h2>`);
+    }
+    function processHeading3(result) {
+        setPreviewInIframe(`<h3>${result}</h3>`);
+    }
+    function processHeading4(result) {
+        setPreviewInIframe(`<h4>${result}</h4>`);
+    }
+    function processHeading5(result) {
+        setPreviewInIframe(`<h5>${result}</h5>`);
+    }
+    function processHeading6(result) {
+        setPreviewInIframe(`<h6>${result}</h6>`);
+    }
+    function processPara(result){
+        setPreviewInIframe(`<p>${result}</p>`);
+    }
+    setPreviewInIframe(beforeBody + afterBody, true);
+</script>
+{% endblock %}
