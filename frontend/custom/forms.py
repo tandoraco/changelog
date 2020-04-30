@@ -55,7 +55,7 @@ class TandoraForm:
         if request.method == 'POST':
 
             if self.action == ACTION_CREATE:
-                form = self.form(post_data or request.POST, request.FILES)
+                form = self.form(post_data or request.POST, request.FILES or None)
 
             if self.action == ACTION_EDIT:
                 if not (id or instance):
@@ -63,7 +63,8 @@ class TandoraForm:
 
                 post_data = request.POST.copy()
                 post_data["id"] = id
-                form = self.form(post_data, request.FILES, instance=self._get_instance(id, request, error_message))
+                form = self.form(post_data, request.FILES or None,
+                                 instance=self._get_instance(id, request, error_message))
 
             if form.is_valid():
                 try:
