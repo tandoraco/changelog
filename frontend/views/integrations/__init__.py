@@ -1,5 +1,6 @@
 from collections import namedtuple
 
+import stringcase as stringcase
 from django import forms
 from django.apps import apps
 from django.contrib import messages
@@ -66,7 +67,7 @@ def integration_form(request, integration):
         messages.warning(request, INTEGRATION_NOT_AVAILABLE_FOR_PLAN_ERROR)
         return HttpResponseRedirect(reverse('frontend-view-integrations'))
 
-    model_class = apps.get_model('v1', integration.replace('_', '').title())
+    model_class = apps.get_model('v1', stringcase.pascalcase(integration))
     instance, created = model_class.objects.get_or_create(company=request.user.company)
     integration_field_meta = INTEGRATION_FORM_FIELDS_DICT.get(integration, {})
 
