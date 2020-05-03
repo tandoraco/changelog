@@ -13,7 +13,7 @@
             <div class="article-preview">
                 <div class="preview-link">
                     <h2><a href="/staff/changelog/{{ changelog.slug }}">{{ changelog.title }}</a></h2>
-                    <span style="font-size:16px; color: white; background-color: {{ changelog.category.color }};">&nbsp{{ changelog.category.name }}&nbsp</span><br>
+                    <span class="staff-category" style="background-color: {{ changelog.category.color }};">&nbsp{{ changelog.category.name }}&nbsp</span><br>
                     <i><span style="color:grey;">Created: {{ changelog.created_at|naturaltime }}</span><br></i><br>
                     <span style="color:black;font-size:16px;">{{ changelog.content|safe|extract_text_and_truncate }} ...</span>
                 </div>
