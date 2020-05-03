@@ -65,3 +65,4 @@ to admin page. You should make yourselves a super user to access admin.
 - [Coding conventions](https://bitbucket.org/tandoraco/tandora-backend/wiki/Coding%20conventions)
 - [Writing tests](https://bitbucket.org/tandoraco/tandora-backend/wiki/Writing%20tests)
 - [App workflow](https://bitbucket.org/tandoraco/tandora-backend/wiki/Workflow%20of%20app)
+- [Adding a new integration](https://bitbucket.org/tandoraco/tandora-backend/wiki/New%20Integration%20Guidelines)
