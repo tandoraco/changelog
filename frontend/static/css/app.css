@@ -190,3 +190,15 @@ footer {
     background-color:white;
     height:100%;
 }
+
+.staff-category {
+    font-size: 16px;
+    color: white;
+    margin-right: 10px;
+    border-radius: 20px;
+    padding: 1px 9px;
+    height: 20px;
+    line-height: 19px;
+    margin-bottom: 5px;
+    transition: background-color .15s;
+}
