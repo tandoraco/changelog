@@ -1,5 +1,5 @@
-{% if company.publicpage.logo %}
+{% if company.publicpage.logo and company.settings.company_logo %}
 <div style="float:left; width:110px; height: 110px; background-color: white;">
-    <a href="{{ company.website }}"><img width="100" height="100" src="{{ company.publicpage.logo.url }}"/></a>
+    <a href="{{ company.website }}"><img width="100" height="100" src="{{ company.settings.company_logo }}"/></a>
 </div>
 {% endif %}
