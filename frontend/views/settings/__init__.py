@@ -17,4 +17,5 @@ def manage_public_page(request):
     '''
     return TandoraForm(public_page_model, PublicPageForm, 'edit', 'staff/form.html',
                        '/') \
-        .get_form(request, id=public_page.id, is_multipart_form=True, extra=extra, title=title)
+        .get_form(request, id=public_page.id, is_multipart_form=True, extra=extra, title=title,
+                  update_file_in_company='logo')

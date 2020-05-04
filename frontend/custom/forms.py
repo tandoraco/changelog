@@ -34,7 +34,8 @@ class TandoraForm:
             raise Http404
 
     def get_form(self, request, success_message=None, error_message=None, id=None, extra=None,
-                 title=None, post_data=None, instance=None, is_multipart_form=False):
+                 title=None, post_data=None, instance=None, is_multipart_form=False,
+                 update_file_in_company=None):
         form = self.form() if not self.initial else self.form(initial=self.initial)
 
         if not success_message:
@@ -76,6 +77,14 @@ class TandoraForm:
                     obj.save()
                 except TypeError:  # This happens, when the passed form is not a ModelForm
                     obj = form.save()
+
+                if request.FILES and update_file_in_company and hasattr(obj, update_file_in_company):
+                    fil = getattr(obj, update_file_in_company)
+                    file_path_url = fil.url
+                    company_settings = request.user.company.settings
+                    company_settings[f'company_{update_file_in_company}'] = file_path_url
+                    request.user.company.settings = company_settings
+                    request.user.company.save()
 
                 messages.success(request, message=success_message.format(self.action, str(obj)))
                 return HttpResponseRedirect(self.response_redirect_path)
