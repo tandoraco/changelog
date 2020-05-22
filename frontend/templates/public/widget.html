@@ -16,7 +16,7 @@
                 </div-->
                 <div>
                     <h2><!--a href="/{{ company_name}}/{{ terminology }}/{{ changelog.slug }}"-->{{ changelog.title }}<!--/a--></h2>
-                    <span style="color: white; background-color: {{ changelog.category.color }};">&nbsp{{ changelog.category.name }}&nbsp</span><br>
+                    <span class="category" style="background-color: {{ changelog.category.color }};">&nbsp{{ changelog.category.name }}&nbsp</span><br>
                     <i><span style="color:grey;">Created: {{ changelog.created_at|naturaltime }}</span><br></i><br>
                     <span style="font-color:black;">{{ changelog.content|safe }}</span>
                     <!--span><a href="/{{ company_name}}/{{ terminology }}/{{ changelog.slug }}">Read more..</a></span-->
