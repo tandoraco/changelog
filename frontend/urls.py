@@ -5,7 +5,7 @@ from django.urls import path
 from django.views.generic import RedirectView
 
 from frontend.sitemaps import SITEMAPS
-from frontend.views import auth, app, categories, widget, static_site, integrations, settings, admin_actions
+from frontend.views import auth, app, categories, widget, static_site, integrations, settings, admin_actions, billing
 from frontend.views.core import changelog
 
 urlpatterns = [
@@ -19,6 +19,7 @@ urlpatterns = [
     url(r'^verify-user/(?P<token>[0-9A-Fa-f-]+)', auth.verify_user, name='frontend-verify-user'),
     path('webhook/razorpay', auth.razorpay_webhook, name="razorpay-webhook"),
     path('staff', app.ChangeLogList.as_view(), name="frontend-staff-index"),
+    path('staff/billing', billing.billing_page, name='frontend-billing-page'),
     path('staff/create-changelog', changelog.changelog_form, name="frontend-create-changelog"),
     path('staff/edit-changelog/<int:id>', changelog.edit_changelog, name="frontend-edit-changelog"),
     path('staff/delete-changelog/<int:id>', changelog.delete_changelog, name="frontend-delete-changelog"),
