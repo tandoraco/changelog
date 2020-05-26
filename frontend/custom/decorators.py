@@ -39,7 +39,8 @@ def is_authenticated(func):
         company = None
         try:
             token = ClientToken.objects.filter(token=request.session['auth-token']).\
-                select_related('user__company', 'user__company__subscription')[0]
+                select_related('user__company', 'user__company__subscription',
+                               'user__company__subscription__plan')[0]
             company = token.user.company
         except (KeyError, IndexError):
             messages.info(request, message=LOGIN_AGAIN_INFO, fail_silently=True)

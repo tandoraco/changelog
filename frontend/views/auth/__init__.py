@@ -3,6 +3,7 @@ from django.db import transaction
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view, authentication_classes
 from rest_framework.response import Response
 
@@ -113,7 +114,7 @@ def company_form(request):
         .get_form(request, success_message=COMPANY_CREATED_OR_EDITED_SUCCESSFULLY,
                   error_message=COMPANY_DOES_NOT_EXIST, id=id)
 
-
+@csrf_exempt
 @api_view(['POST'])
 @authentication_classes([])
 @transaction.atomic
