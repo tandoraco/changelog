@@ -59,6 +59,12 @@ to admin page. You should make yourselves a super user to access admin.
     - `docker-compose -f dev.yml run --service-ports web`
     - Bash shell of container cannot be used in this mode.
 
+## Setup GIT Hooks
+
+- Flake8 is used as a linter and pre-commit hooks.
+- Add flake8 as a pre-commit hook so that code is checked for pep8 conventions. If this is not followed, the code may fail the style check test in pipeline.
+- `flake8 --install-hook git`
+
 ## Other useful links
 
 - [Writing DB migrations](https://bitbucket.org/tandoraco/tandora-backend/wiki/DB%20migrations)
