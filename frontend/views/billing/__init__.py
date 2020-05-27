@@ -27,14 +27,21 @@ def billing_page(request):
         except JSONDecodeError:
             pass
 
+        invoice_url = subscription.invoice_url
+        if invoice_url == '~':
+            invoice = '~'
+        else:
+            invoice = f'<a href="{invoice_url}">Click here</a> to download invoice'
+
         context = {
             'plan_name': subscription.plan.name,
             'expires_on': expires_on,
             'billing_name': company.admin.name,
             'billing_email': company.admin.email,
             'billing_address': billing_address,
-            'invoice': 'df'
+            'invoice': invoice
         }
+
     except apps.get_model('v1', 'Subscription').DoesNotExist:
         context = {key: '~' for key in billing_keys}
 
