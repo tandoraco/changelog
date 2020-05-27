@@ -21,6 +21,8 @@ DEFAULT_PLAN_FEATURES = {
     'show_tandora_branding_at_footer': True,
     'users': 1
 }
+INVOICE_URL = 'https://invoices.razorpay.com/v1/invoices/{invoice_id}/pdf?download=1'
+NOT_APPLICABLE = 'NA'
 
 
 class User(AbstractBaseUser):
@@ -146,6 +148,7 @@ class Subscription(models.Model):
     razorpay_account_id = models.CharField(max_length=50, unique=True, db_index=True)
     razorpay_data = models.TextField()
     last_paid_time = models.DateTimeField(null=True)
+    invoice_id = models.CharField(max_length=50, default=NOT_APPLICABLE)
 
     @property
     def all_plan_features(self):
@@ -163,6 +166,13 @@ class Subscription(models.Model):
                 pass
 
         return features
+
+    @property
+    def invoice_url(self):
+        if self.invoice_id.lower() == NOT_APPLICABLE.lower():
+            return '~'
+        else:
+            return INVOICE_URL.replace('{invoice_id}', self.invoice_id)
 
     def __str__(self):
         return f'{str(self.company)} is in {self.plan.name if self.plan else ""}'
