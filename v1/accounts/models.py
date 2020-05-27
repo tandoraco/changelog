@@ -178,6 +178,15 @@ class Subscription(models.Model):
         return f'{str(self.company)} is in {self.plan.name if self.plan else ""}'
 
 
+class PendingInvoice(models.Model):
+    company = models.OneToOneField('Company', on_delete=models.CASCADE)
+    invoice_id = models.CharField(max_length=50)
+    short_url = models.URLField(max_length=50)
+
+    def __str__(self):
+        return f'{self.invoice_id} - {self.short_url}'
+
+
 class ForgotPassword(models.Model):
     token = models.UUIDField(db_index=True)
     email = models.EmailField()
