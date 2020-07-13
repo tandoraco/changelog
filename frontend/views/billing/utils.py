@@ -17,9 +17,13 @@ def generate_inr_invoice(plan, company, yearly=True):
 
     invoice_expiry_time = int((datetime.datetime.now() + datetime.timedelta(weeks=1)).timestamp())
 
+    product = 'Changelog'
+    if company.use_case == 's':
+        product = 'Web Builder'
+
     data = {
         'type': 'invoice',
-        'description': f'Invoice for purchase of 1 {period} subscription of Tandora Changelog',
+        'description': f'Invoice for purchase of 1 {period} subscription of Tandora {product}',
         'partial_payment': False,
         'customer': {
             'name': company.admin.name,
@@ -28,7 +32,7 @@ def generate_inr_invoice(plan, company, yearly=True):
         'line_items': [
             {
                 'name': f'Tandora Changelog - {plan.name} plan',
-                'description': f'{period.title()}ly subscription for Tandora Changelog',
+                'description': f'{period.title()}ly subscription for Tandora {product}',
                 'amount': amount,
                 'currency': 'INR',
                 'quantity': 1
@@ -39,6 +43,9 @@ def generate_inr_invoice(plan, company, yearly=True):
         'expire_by': invoice_expiry_time
     }
 
-    razorpay_client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_SECRET))
-    invoice = razorpay_client.invoice.create(data=data)
-    return invoice
+    try:
+        razorpay_client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_SECRET))
+        invoice = razorpay_client.invoice.create(data=data)
+        return invoice
+    except Exception:
+        return None
