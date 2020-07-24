@@ -8,6 +8,7 @@ FONT_CHOICES = (
     ('https://fonts.googleapis.com/css?family=Poppins&display=swap', 'Poppins'),
     ('https://fonts.googleapis.com/css?family=Lato&display=swap', 'Lato'),
     ('https://fonts.googleapis.com/css?family=Open+Sans&display=swap', 'Open Sans'),
+    ('https://fonts.googleapis.com/css?family=Nunito&display=swap', 'Nunito'),
     ('https://fonts.googleapis.com/css?family=Gupter&display=swap', 'Gupter'),
     ('https://fonts.googleapis.com/css?family=Roboto&display=swap', 'Roboto'),
     ('https://fonts.googleapis.com/css?family=Gelasio&display=swap', 'Gelasio'),
