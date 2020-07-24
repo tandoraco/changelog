@@ -8,6 +8,7 @@ from django.utils.text import slugify
 from django.utils.translation import ugettext as _
 
 from frontend.forms.auth import TandoraAdminLoginForm
+from v1.audit import models as audit_models
 from v1.accounts import models as v1_account_models
 from v1.accounts.utils import hash_password
 from v1.settings.public_page.models import PublicPage
@@ -155,3 +156,4 @@ admin_site.register(apps.get_model('v1', 'Zapier'), ReadOnlyModelAdmin)
 admin_site.register(apps.get_model('v1', 'ZapierWebhookTrigger'), ReadOnlyModelAdmin)
 admin_site.register(apps.get_model('v1', 'Embed'), EmbedWidgetAdmin)
 admin_site.register(PublicPage)
+admin_site.register(audit_models.AuditLog, ReadOnlyModelAdmin)
