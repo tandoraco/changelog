@@ -2,6 +2,7 @@ from rest_framework import status
 from rest_framework.exceptions import MethodNotAllowed
 from rest_framework.response import Response
 
+from v1.audit.actions import AuditLogAction
 from v1.integrations.handlers import IntegrationSettingsHandlerBase, IntegrationHandlerBase
 from v1.integrations.zapier.models import Zapier
 from v1.integrations.zapier.serializers import ZapierSerializer
@@ -93,6 +94,7 @@ class ZapierHandler(IntegrationHandlerBase):
             changelog = serializer.save()
             from v1.core.serializers import ChangelogSerializerForZapier
             data = ChangelogSerializerForZapier(changelog).data
+            AuditLogAction(request, changelog, 'zapier').set_audit_log()
             return Response(status=status.HTTP_201_CREATED, data=data)
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST, data=serializer.custom_full_errors_str)
