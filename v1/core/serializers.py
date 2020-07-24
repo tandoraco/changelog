@@ -21,6 +21,19 @@ class ChangelogSerializer(serializers.ModelSerializer):
             return custom_url_path.strip('/')
         return custom_url_path
 
+    @property
+    def custom_full_errors_str(self):
+        """
+        Returns full errors formatted as per requirements
+        """
+        default_errors = self.errors  # default errors dict
+        errors_messages = []
+        for field_name, field_errors in default_errors.items():
+            for field_error in field_errors:
+                error_message = '%s: %s' % (field_name.title(), field_error)
+                errors_messages.append(error_message)  # append error message to 'errors_messages'
+        return '\n'.join(errors_messages)
+
 
 class ChangelogSerializerForZapier(ChangelogSerializer):
 
