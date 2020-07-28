@@ -15,5 +15,5 @@ let banner = document.getElementById('c-banner');
     fontFamily = fontFamily.replace(/\+/g, ' ');
     document.body.style.fontFamily = fontFamily;
 {% else %}
-    document.body.style.fontFamily = "Lato";
+    document.body.style.fontFamily = "Nunito";
 {% endif %}
