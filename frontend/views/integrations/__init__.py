@@ -4,7 +4,8 @@ import stringcase as stringcase
 from django import forms
 from django.apps import apps
 from django.contrib import messages
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
+from django.shortcuts import render
 from django.urls import reverse
 
 from frontend.constants import INTEGRATION_NOT_AVAILABLE_FOR_PLAN_ERROR, INTEGRATION_EDITED_SUCCESSFULLY, \
@@ -32,6 +33,16 @@ INTEGRATION_FRONTEND_META_DICT = {
                        'This enables you to seamlessly post Tandora Changelog to all of the connected Zapier Apps.'
                        'In a nutshell you can create a changelog once and post it to any of the connected Zapier Apps '
                        'using this integration.'
+                       '<a href="/staff/manage/integrations/zapier/embed">Click here</a> '
+                       'to view list of zaps available.'
+    }
+}
+
+
+INTEGRATION_EMBED_DICT = {
+    'zapier': {
+        'title': 'Tandora Changelog Zaps',
+        'embed': '<script src="https://zapier.com/apps/embed/widget.js?services=tandora-changelog&limit=10"></script>'
     }
 }
 
@@ -66,7 +77,6 @@ def integration_form(request, integration):
     except Subscription.DoesNotExist:
         messages.warning(request, INTEGRATION_NOT_AVAILABLE_FOR_PLAN_ERROR)
         return HttpResponseRedirect(reverse('frontend-view-integrations'))
-
     model_class = apps.get_model('v1', stringcase.pascalcase(integration))
     instance, created = model_class.objects.get_or_create(company=request.user.company)
     integration_field_meta = INTEGRATION_FORM_FIELDS_DICT.get(integration, {})
@@ -95,3 +105,13 @@ def integration_form(request, integration):
         .get_form(request,
                   success_message=INTEGRATION_EDITED_SUCCESSFULLY,
                   error_message=INTEGRATION_EDIT_FAILED_ERROR, instance=instance)
+
+
+@is_authenticated
+@is_admin
+def embed_details(request, integration):
+    try:
+        context = INTEGRATION_EMBED_DICT[integration.lower()]
+        return render(request, 'staff/integration-embed.html', context=context)
+    except KeyError:
+        raise Http404
