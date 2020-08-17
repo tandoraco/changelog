@@ -1,5 +1,7 @@
 import json
 
+from django.conf import settings
+
 from v1.utils import send_to_slack
 
 
@@ -9,7 +11,7 @@ def post_new_affiliate_signup_to_slack(sender, instance, created, **kwargs):
 
 
 def notify_new_company_signup_in_slack(sender, instance, created, **kwargs):
-    if created:
+    if created and not settings.DEBUG:
         data = {
             'company_name': instance.company_name,
             'website': instance.website,
