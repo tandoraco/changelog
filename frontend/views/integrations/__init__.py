@@ -19,8 +19,8 @@ integration_meta = namedtuple('integration_meta', 'name logo description')
 
 INTEGRATION_FORM_FIELDS_DICT = {
     'zapier': {
-        'read_only_fields': ['api_key', 'zapier_webhook_url'],
-        'exclude': ['company', ]
+        'read_only_fields': ['api_key'],
+        'exclude': ['company', 'zapier_webhook_url', ]
     }
 }
 
