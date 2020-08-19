@@ -5,6 +5,7 @@ from django.contrib.messages import get_messages
 from django.http import HttpResponseRedirect
 
 from v1.accounts.models import Company
+from v1.audit.actions import AuditLogAction
 from v1.core.models import Changelog
 
 
@@ -16,6 +17,8 @@ def delete_model(request, model, id, success_redirect_path, error_redirect_path,
             instance.save()
         else:
             instance.delete()
+
+        AuditLogAction(request, instance, 'ui').set_audit_log('delete')
 
         msgs.success(request, message=success_message)
     except model.DoesNotExist:
