@@ -25,7 +25,9 @@ class AuditLogAction:
             if hasattr(self.request, 'data'):
                 request_data = json.dumps(self.request.data)
             elif hasattr(self.request, 'POST'):
-                request_data = json.dumps(self.request.POST)
+                post_data = self.request.POST.copy()
+                post_data.pop('csrfmiddlewaretoken', None)
+                request_data = json.dumps(post_data)
             else:
                 request_data = None
         else:
