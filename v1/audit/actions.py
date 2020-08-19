@@ -20,16 +20,25 @@ class AuditLogAction:
         self.resource = resource
         self.source = source
 
-    def set_audit_log(self):
+    def set_audit_log(self, action=None):
+        if self.request.method.lower() in {'post', 'patch'}:
+            if hasattr(self.request, 'data'):
+                request_data = json.dumps(self.request.data)
+            elif hasattr(self.request, 'POST'):
+                request_data = json.dumps(self.request.POST)
+            else:
+                request_data = None
+        else:
+            request_data = None
         data = {
             'company': self.request.user.company,
             'resource_name': self.resource.__class__.__name__,
             'resource_id': self.resource.id,
-            'action': ACTION_MAP.get(self.request.method.lower()),
+            'action': action or ACTION_MAP.get(self.request.method.lower()),
             'performed_by': str(self.request.user.email),
             'source': self.source,
             'endpoint': self.request.path,
-            'payload': json.dumps(self.request.data) if self.request.method.lower() in {'post', 'patch'} else None,
+            'payload': request_data,
             'ip_address': get_client_ip(self.request.META),
             'user_agent': self.request.META.get('HTTP_USER_AGENT')
         }
