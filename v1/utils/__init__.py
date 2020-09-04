@@ -11,7 +11,7 @@ from pygments.lexers.data import JsonLexer
 from rest_framework import status
 from rest_framework.response import Response
 
-SLACK_URL = "https://hooks.slack.com/services/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"
+SLACK_URL = "https://hooks.slack.com/services/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"
 
 
 def serializer_error_response(serializer):
@@ -48,7 +48,7 @@ def random_uuid():
 
 def send_to_slack(message):
     data = {
-        'text': '@channel ' + message
+        'text': '<!channel> ' + message
     }
     requests.post(SLACK_URL, json=data)
 

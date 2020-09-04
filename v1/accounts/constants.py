@@ -25,5 +25,5 @@ RESET_TOKEN_INVALID = _("Forgot password token is invalid.")
 
 USE_CASE_CHOICES = (
     ('c', 'Tandora Changelog',),
-    ('s', 'Tandora Web builder'),
+    # ('s', 'Tandora Web builder'),
 )

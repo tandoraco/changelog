@@ -65,7 +65,7 @@ class Command(BaseCommand):
         if not all(arguments):
             raise AssertionError("All required arguments are not present.")
 
-        self.stdout.write(f"Creating company ..")
+        self.stdout.write("Creating company ..")
 
         data = {
             'company_name': company_name,
