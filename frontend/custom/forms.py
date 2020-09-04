@@ -2,6 +2,8 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render
 
+from v1.audit.actions import AuditLogAction
+
 ACTION_CREATE = "create"
 ACTION_EDIT = "edit"
 ID_NOT_PROVIDED_ERROR = "Form edit. Id not provided"
@@ -77,6 +79,8 @@ class TandoraForm:
                     obj.save()
                 except TypeError:  # This happens, when the passed form is not a ModelForm
                     obj = form.save()
+
+                AuditLogAction(request, obj, 'ui').set_audit_log(self.action)
 
                 if request.FILES and update_file_in_company and hasattr(obj, update_file_in_company):
                     fil = getattr(obj, update_file_in_company)

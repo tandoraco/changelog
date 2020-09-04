@@ -7,6 +7,7 @@ from frontend.constants import CHANGELOG_DOES_NOT_EXIST_ERROR, CHANGELOG_CREATED
 from frontend.custom.decorators import is_authenticated, is_allowed
 from frontend.custom.utils import delete_model
 from frontend.forms.core.changelog import ChangelogForm
+from v1.audit.actions import AuditLogAction
 from v1.core.models import Changelog
 from v1.core.serializers import ChangelogSerializer
 
@@ -49,8 +50,9 @@ def _changelog_form(request, form, action, changelog_id=None, instance=None):
 
         serializer = ChangelogSerializer(data=data) if not instance else ChangelogSerializer(instance, data=data)
         if serializer.is_valid():
-            serializer.save()
+            instance = serializer.save()
             messages.success(request, message=CHANGELOG_CREATED_OR_EDITED_SUCCESSFULLY.format(f"{action}"))
+            AuditLogAction(request, instance, 'ui').set_audit_log(action=action)
             return HttpResponseRedirect("/staff")
     changelog_id = f"/{str(changelog_id)}" if changelog_id else ""
 

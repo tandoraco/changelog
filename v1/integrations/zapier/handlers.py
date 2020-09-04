@@ -2,10 +2,10 @@ from rest_framework import status
 from rest_framework.exceptions import MethodNotAllowed
 from rest_framework.response import Response
 
+from v1.audit.actions import AuditLogAction
 from v1.integrations.handlers import IntegrationSettingsHandlerBase, IntegrationHandlerBase
 from v1.integrations.zapier.models import Zapier
 from v1.integrations.zapier.serializers import ZapierSerializer
-from v1.utils import serializer_error_response
 
 
 class ZapierSettingsHandler(IntegrationSettingsHandlerBase):
@@ -91,10 +91,13 @@ class ZapierHandler(IntegrationHandlerBase):
         serializer = ChangelogSerializer(data=data)
 
         if serializer.is_valid():
-            serializer.save()
-            return Response(status=status.HTTP_201_CREATED, data={'success': True})
+            changelog = serializer.save()
+            from v1.core.serializers import ChangelogSerializerForZapier
+            data = ChangelogSerializerForZapier(changelog).data
+            AuditLogAction(request, changelog, 'zapier').set_audit_log()
+            return Response(status=status.HTTP_201_CREATED, data=data)
         else:
-            return serializer_error_response(serializer)
+            return Response(status=status.HTTP_400_BAD_REQUEST, data=serializer.custom_full_errors_str)
 
     def poll(self, request):
         if request.method != 'GET':
@@ -109,4 +112,4 @@ class ZapierHandler(IntegrationHandlerBase):
             data = ChangelogSerializerForZapier(changelog).data
             return Response(status=status.HTTP_200_OK, data=[data])
         except IndexError:
-            return Response(status=status.HTTP_204_NO_CONTENT)
+            return Response(status=status.HTTP_200_OK, data=[])
