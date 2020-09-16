@@ -14,6 +14,19 @@ services:
       - 8000:8000
     depends_on:
       - db
+  graphql-engine:
+    image: hasura/graphql-engine:v1.0.0-alpha13
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    restart: always
+    environment:
+      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:@tandora-backend_db_1/postgres
+    command:
+      - graphql-engine
+      - serve
+      - --enable-console
 
 volumes:
   postgres_data:
