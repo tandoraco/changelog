@@ -10,6 +10,6 @@ RUN apk add build-base py-pip jpeg-dev zlib-dev
 ENV LIBRARY_PATH=/lib:/usr/lib
 
 RUN pip install --upgrade pip
-RUN pip install -r requirements_dev.txt
+RUN pip install -r requirements_dev.txt --use-feature=2020-resolver
 RUN pip install django-storages==1.8
 ENV PYTHONUNBUFFERED=1

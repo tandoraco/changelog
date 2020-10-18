@@ -10,7 +10,7 @@ echo "PostgreSQL started"
 sleep 2
 
 echo "Install requirements"
-pip install -r requirements_dev.txt
+pip install -r requirements_dev.txt --use-feature=2020-resolver
 
 echo "Running db migrations"
 python manage.py migrate

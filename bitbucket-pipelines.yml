@@ -13,21 +13,21 @@ pipelines:
           caches:
             - pip
           script: # Modify the commands below to build your repository.
-            - pip install -r requirements_dev.txt
+            - pip install -r requirements_dev.txt --use-feature=2020-resolver
             - pytest -m unit
       - step:
           name: Run Integration tests
           caches:
             - pip
           script:
-            - pip install -r requirements_dev.txt
+            - pip install -r requirements_dev.txt --use-feature=2020-resolver
             - pytest -m integration
       - step:
           name: Run Frontend tests
           caches:
             - pip
           script:
-            - pip install -r requirements_dev.txt
+            - pip install -r requirements_dev.txt --use-feature=2020-resolver
             - pytest frontend
       - step:
           name: Style checks (flake8)
