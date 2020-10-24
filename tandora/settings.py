@@ -87,6 +87,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'frontend.custom.utils.messages',
                 'django.template.context_processors.static',
+                'django.contrib.messages.context_processors.messages'
             ],
         },
     },
