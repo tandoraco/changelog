@@ -148,7 +148,7 @@ class Subscription(models.Model):
     razorpay_account_id = models.CharField(max_length=50, unique=True, db_index=True)
     razorpay_data = models.TextField()
     last_paid_time = models.DateTimeField(null=True)
-    invoice_id = models.CharField(max_length=50, default=NOT_APPLICABLE)
+    invoice_id = models.CharField(max_length=60, default=NOT_APPLICABLE)
 
     @property
     def all_plan_features(self):
@@ -169,7 +169,7 @@ class Subscription(models.Model):
 
     @property
     def invoice_url(self):
-        if self.invoice_id.lower() == NOT_APPLICABLE.lower():
+        if hasattr(self, 'invoice_id') and getattr(self, 'invoice_id', False):
             return '~'
         else:
             return INVOICE_URL.replace('{invoice_id}', self.invoice_id)
