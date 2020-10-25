@@ -33,6 +33,6 @@
     </table>
 </div>
 {% if pending_invoice %}
-
+<center>There is one pending invoice for your account. Please pay before {{ pending_invoice_expiry_time }} to continue using Tandora Changelog. <a href="{{ pending_invoice_url }}" target="_blank">Click here</a> to pay.</center>
 {% endif %}
 {% endblock %}
