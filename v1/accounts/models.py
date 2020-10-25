@@ -148,7 +148,7 @@ class Subscription(models.Model):
     razorpay_account_id = models.CharField(max_length=50, unique=True, db_index=True)
     razorpay_data = models.TextField()
     last_paid_time = models.DateTimeField(null=True)
-    invoice_id = models.CharField(max_length=60, default=NOT_APPLICABLE)
+    invoice_id = models.CharField(max_length=50, default=NOT_APPLICABLE)
 
     @property
     def all_plan_features(self):
@@ -180,8 +180,11 @@ class Subscription(models.Model):
 
 class PendingInvoice(models.Model):
     company = models.OneToOneField('Company', on_delete=models.CASCADE)
+    plan = models.ForeignKey('PricePlan', on_delete=models.DO_NOTHING)
     invoice_id = models.CharField(max_length=50)
     short_url = models.URLField(max_length=50)
+    created_time = models.DateTimeField(auto_now_add=True)
+    expiry_time = models.DateTimeField(blank=False, null=False)
 
     def __str__(self):
         return f'{self.invoice_id} - {self.short_url}'

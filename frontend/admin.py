@@ -1,4 +1,6 @@
 # Register your models here.
+from datetime import datetime
+
 from django.apps import apps
 from django.contrib import admin
 from django.contrib.admin import AdminSite
@@ -9,6 +11,7 @@ from django.utils.translation import ugettext as _
 
 from frontend.forms.auth import TandoraAdminLoginForm
 from v1.audit import models as audit_models
+from frontend.views.billing.utils import generate_inr_invoice
 from v1.accounts import models as v1_account_models
 from v1.accounts.utils import hash_password
 from v1.settings.public_page.models import PublicPage
@@ -34,12 +37,14 @@ class ModelAdminWithSyntaxHighlighter(SyntaxHighlighterMixin, admin.ModelAdmin):
 
 
 class CompanyAdmin(ModelAdminWithSyntaxHighlighter):
-    list_display = ('company_name', 'company_actions', )
+    list_display = ('company_name', 'company_actions',)
 
     def company_actions(self, obj):
-        delete_action_url = reverse('admin-delete-company', args=(obj.company_name, ))
+        delete_action_url = reverse('admin-delete-company', args=(obj.company_name,))
+
         return format_html(
-            f'<a class="button" href="{delete_action_url}">Delete Company</a>'
+            f'<a class="button" onclick="return confirm(\'Are you sure to delete?\')"href="{delete_action_url}">'
+            f'Delete Company</a> &nbsp '
         )
 
     company_actions.short_description = 'ACTIONS'
@@ -81,6 +86,12 @@ class CreateOnlyModelAdmin(admin.ModelAdmin):
 class CreateUpdateModelAdmin(admin.ModelAdmin):
     def has_delete_permission(self, request, obj=None):
         return False
+
+
+class CreateDeleteModelAdmin(CreateOnlyModelAdmin):
+
+    def has_delete_permission(self, request, obj=None):
+        return True
 
 
 class UserAdmin(admin.ModelAdmin):
@@ -140,6 +151,17 @@ class EmbedWidgetAdmin(ModelAdminWithSyntaxHighlighter):
         return format_html(f'<a target="_blank" href="{_widget_url}">{_widget_url}</a>')
 
 
+class PendingInvoiceAdmin(CreateDeleteModelAdmin):
+
+    def save_model(self, request, obj, form, change):
+        data = form.cleaned_data
+        invoice = generate_inr_invoice(plan=data['plan'], company=data['company'])
+        obj.invoice_id = invoice['id']
+        obj.short_url = invoice['short_url']
+        obj.expiry_time = datetime.fromtimestamp(invoice['expire_by'])
+        return super(PendingInvoiceAdmin, self).save_model(request, obj, form, change)
+
+
 admin_site = TandoraLoginAdminSite()
 admin_site.register(v1_account_models.Company, CompanyAdmin)
 admin_site.register(v1_account_models.User, UserAdmin)
@@ -148,6 +170,7 @@ admin_site.register(v1_account_models.Subscription, SubscriptionAdmin)
 admin_site.register(v1_account_models.AngelUser, AngelUserAdmin)
 admin_site.register(v1_account_models.Affiliate, CreateReadModelAdmin)
 admin_site.register(v1_account_models.Referral, ReferralAdmin)
+admin_site.register(v1_account_models.PendingInvoice, PendingInvoiceAdmin)
 admin_site.register(v1_account_models.CustomDomain)
 admin_site.register(v1_static_site_models.StaticSiteTheme, ModelAdminWithSyntaxHighlighter)
 admin_site.register(v1_static_site_models.StaticSiteField, CreateUpdateModelAdmin)
