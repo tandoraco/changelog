@@ -71,5 +71,5 @@ urlpatterns = [
 if not django_settings.DEBUG:
     # This is to prevent debug tool bar not getting rendered during development.
     urlpatterns += [
-        url(r'^.*/$', app.view_changelog_custom_url, name='frontend-view-changelog-custom-url'),
+        # url(r'^.*/$', app.view_changelog_custom_url, name='frontend-view-changelog-custom-url'),
     ]
