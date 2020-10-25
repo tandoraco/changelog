@@ -20,7 +20,6 @@ def published_changelog_data(category, company):
         "content": fake.text(),
         "category": category.pk,
         "published": True,
-        "custom_url_path": None
     }
 
 
@@ -31,8 +30,7 @@ def unpublished_changelog_data(category, company):
         "title": fake.name(),
         "content": fake.text(),
         "category": category.pk,
-        "published": False,
-        "custom_url_path": None
+        "published": False
     }
 
 
