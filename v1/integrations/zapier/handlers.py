@@ -86,7 +86,6 @@ class ZapierHandler(IntegrationHandlerBase):
         data['company'] = self.company.id
         data['created_by'] = self.company.admin.id
         data['last_edited_by'] = self.company.admin.id
-        data['custom_url_path'] = None
         from v1.core.serializers import ChangelogSerializer
         serializer = ChangelogSerializer(data=data)
 
