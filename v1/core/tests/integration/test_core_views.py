@@ -73,7 +73,6 @@ def test_image_inline_attachment(company, image, text_file):
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
     data = {
-        'file': None,
         'company': company.id
     }
     request = factory.post(url, data)

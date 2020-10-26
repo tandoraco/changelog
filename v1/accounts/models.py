@@ -21,6 +21,8 @@ DEFAULT_PLAN_FEATURES = {
     'show_tandora_branding_at_footer': True,
     'users': 1
 }
+INVOICE_URL = 'https://invoices.razorpay.com/v1/invoices/{invoice_id}/pdf?download=1'
+NOT_APPLICABLE = 'NA'
 
 
 class User(AbstractBaseUser):
@@ -146,6 +148,7 @@ class Subscription(models.Model):
     razorpay_account_id = models.CharField(max_length=50, unique=True, db_index=True)
     razorpay_data = models.TextField()
     last_paid_time = models.DateTimeField(null=True)
+    invoice_id = models.CharField(max_length=50, default=NOT_APPLICABLE)
 
     @property
     def all_plan_features(self):
@@ -164,8 +167,27 @@ class Subscription(models.Model):
 
         return features
 
+    @property
+    def invoice_url(self):
+        if hasattr(self, 'invoice_id') and getattr(self, 'invoice_id', False):
+            return '~'
+        else:
+            return INVOICE_URL.replace('{invoice_id}', self.invoice_id)
+
     def __str__(self):
         return f'{str(self.company)} is in {self.plan.name if self.plan else ""}'
+
+
+class PendingInvoice(models.Model):
+    company = models.OneToOneField('Company', on_delete=models.CASCADE)
+    plan = models.ForeignKey('PricePlan', on_delete=models.DO_NOTHING)
+    invoice_id = models.CharField(max_length=50)
+    short_url = models.URLField(max_length=50)
+    created_time = models.DateTimeField(auto_now_add=True)
+    expiry_time = models.DateTimeField(blank=False, null=False)
+
+    def __str__(self):
+        return f'{self.invoice_id} - {self.short_url}'
 
 
 class ForgotPassword(models.Model):
