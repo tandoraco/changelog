@@ -170,9 +170,9 @@ class Subscription(models.Model):
     @property
     def invoice_url(self):
         if hasattr(self, 'invoice_id') and getattr(self, 'invoice_id', False):
+            return '~'
+        else:
             return INVOICE_URL.replace('{invoice_id}', self.invoice_id)
-
-        return '~'
 
     def __str__(self):
         return f'{str(self.company)} is in {self.plan.name if self.plan else ""}'
