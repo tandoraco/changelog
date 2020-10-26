@@ -9,6 +9,7 @@ from frontend.custom.test_utils import TandoraTestClient
 class TestWidgetViews:
     client = TandoraTestClient()
 
+    @pytest.mark.django_db
     def test_manage_widget_view(self, company, active_user, widget):
         if company.is_trial_account:
             company.is_trial_account = False
@@ -26,6 +27,7 @@ class TestWidgetViews:
         response = self.client.get(url)
         assert response.status_code == status.HTTP_200_OK
 
+    @pytest.mark.django_db
     def test_public_widget_view_when_widget_disabled(self, company, user, widget):
         assert not widget.enabled
 
@@ -34,6 +36,7 @@ class TestWidgetViews:
         response = self.client.get(url)
         assert response.status_code == status.HTTP_404_NOT_FOUND
 
+    @pytest.mark.django_db
     def test_public_widget_view_when_widget_enabled(self, company, user, widget):
         company.use_case = 'c'
         company.save()
@@ -44,6 +47,7 @@ class TestWidgetViews:
         response = self.client.get(self.client.get_public_widget_url(company))
         assert response.status_code == status.HTTP_200_OK
 
+    @pytest.mark.django_db
     def test_widget_not_allowed_when_static_site_is_enabled(self, company, active_user, widget):
         assert company.use_case == 'c'
         company.use_case = 's'
@@ -59,6 +63,7 @@ class TestWidgetViews:
         assert response.url != url
         assert response.url == '/staff'
 
+    @pytest.mark.django_db
     def test_manage_widget_shows_widget_create_form_when_company_has_no_widget(self, company, active_user):
         url = reverse('frontend-manage-widget')
         self.client.force_login(active_user)
@@ -68,6 +73,7 @@ class TestWidgetViews:
         response_content = response.content.decode('utf-8')
         assert 'create embed' in response_content.lower()
 
+    @pytest.mark.django_db
     def test_manage_widget_shows_widget_edit_form_when_company_has_widget(self, company, active_user, widget):
         url = reverse('frontend-manage-widget')
         self.client.force_login(active_user)

@@ -87,6 +87,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'frontend.custom.utils.messages',
                 'django.template.context_processors.static',
+                'django.contrib.messages.context_processors.messages'
             ],
         },
     },
@@ -235,3 +236,6 @@ SITE_ID = 1
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_URLS_REGEX = r'.?widget.?'
+
+RAZORPAY_KEY_ID = os.environ.get('RAZORPAY_KEY_ID')
+RAZORPAY_SECRET = os.environ.get('RAZORYPAY_SECRET')

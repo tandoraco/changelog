@@ -86,7 +86,7 @@ class Command(BaseCommand):
             print(company_serializer.errors)
             raise RuntimeError('Creating company failed')
 
-        self.stdout.write(f"Populating initial data ..")
+        self.stdout.write("Populating initial data ..")
 
         current_path = pathlib.Path(__file__).parent
         initial_data_json = current_path / 'initial_data_for_changelog.json'

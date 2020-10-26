@@ -18,9 +18,9 @@ EDIT_CATEGORY = 'frontend-edit-category'
 DELETE_CATEGORY = 'frontend-delete-category'
 
 
-@pytest.mark.django_db
 class TestFrontEndCategoryViews:
 
+    @pytest.mark.django_db
     def test_category_frontend_views(self, active_user, company, categories, category):
         urls = [
             test_url('create', reverse(CREATE_CATEGORY)),
@@ -40,6 +40,7 @@ class TestFrontEndCategoryViews:
             instance=category
         )
 
+    @pytest.mark.django_db
     def test_frontend_create_category(self, active_user, category_data):
         url = reverse('frontend-create-category')
 
@@ -53,6 +54,7 @@ class TestFrontEndCategoryViews:
 
         assert Category.objects.count() == len(category_data)
 
+    @pytest.mark.django_db
     def test_frontend_update_category(self, active_user, category, categories):
         url = reverse('frontend-edit-category', kwargs={'id': category.id})
 
@@ -75,6 +77,7 @@ class TestFrontEndCategoryViews:
         response = client.post(url, data=data)
         assert response.status_code == status.HTTP_404_NOT_FOUND
 
+    @pytest.mark.django_db
     def test_category_plan_limits(self, active_user):
         # Default category limit is 5
         category_names = [
