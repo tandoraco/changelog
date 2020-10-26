@@ -14,9 +14,9 @@ EDIT_CHANGELOG = 'frontend-edit-changelog'
 DELETE_CHANGELOG = 'frontend-delete-changelog'
 
 
-@pytest.mark.django_db
 class TestFrontEndChangelogViews:
 
+    @pytest.mark.django_db
     def test_changelog_frontend_views(self, active_user, company, changelogs, changelog):
         urls = [
             test_url('create', reverse(CREATE_CHANGELOG)),
@@ -36,6 +36,7 @@ class TestFrontEndChangelogViews:
             instance=changelog
         )
 
+    @pytest.mark.django_db
     def test_frontend_get_single_changelog(self, active_user, company, changelog):
         url = reverse('frontend-view-changelog', kwargs={'slug': changelog.slug})
         from frontend.custom.test_utils import TandoraTestClient
@@ -54,9 +55,8 @@ class TestFrontEndChangelogViews:
         response = client.get(url)
         assert response.status_code == status.HTTP_404_NOT_FOUND
 
+    @pytest.mark.django_db
     def test_frontend_create__update_changelog(self, active_user, published_changelog_data, unpublished_changelog_data):
-        published_changelog_data.pop('custom_url_path', None)
-        unpublished_changelog_data.pop('custom_url_path', None)
         url = reverse('frontend-create-changelog')
 
         from frontend.custom.test_utils import TandoraTestClient
@@ -85,6 +85,7 @@ class TestFrontEndChangelogViews:
         response = client.post(url, data=unpublished_changelog_data)
         assert response.status_code == status.HTTP_404_NOT_FOUND
 
+    @pytest.mark.django_db
     def test_frontend_changelog_limits(self, active_user, category):
         url = reverse('frontend-create-changelog')
         data = {

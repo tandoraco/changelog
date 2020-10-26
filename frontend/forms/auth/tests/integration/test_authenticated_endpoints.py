@@ -20,11 +20,11 @@ AUTHENTICATED_ENDPOINTS = [
 ]
 
 
-@pytest.mark.django_db
 @pytest.mark.integration
 class TestAuthenticatedEndpoints:
     client = Client()
 
+    @pytest.mark.django_db
     def test_authenticated_endpoints_without_logging_in(self, user, company):
         # When we do not login and hit an endpoint that requires authentication
         # we will be redirected to login page with redirect_to set to requested endpoint
@@ -38,6 +38,7 @@ class TestAuthenticatedEndpoints:
             parsed_response_url_query = parse_qs(parsed_response_url.query)
             assert parsed_response_url_query['redirect_to'][0] == endpoint
 
+    @pytest.mark.django_db
     def test_trial_check(self, company, user):
         company.is_trial_account = True
         company.save()

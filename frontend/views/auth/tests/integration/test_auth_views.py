@@ -26,6 +26,7 @@ class TestAuthViews:
         assert response.status_code == status.HTTP_200_OK
         assert response.context['form'].errors['email'][0] == INACTIVE_USER_ERROR
 
+    @pytest.mark.django_db
     def test_login_logout(self, user, user_data):
         assert not user.is_active
 
@@ -75,6 +76,7 @@ class TestAuthViews:
         # on successful logout, redirect to login page
         assert response.status_code == status.HTTP_200_OK
 
+    @pytest.mark.django_db
     def test_forgot_reset_password(self, user, PASSWORD_CONSTRAINTS_NOT_MET=None):
         user.is_active = True
         user.save()
@@ -154,6 +156,7 @@ class TestAuthViews:
         assert response.status_code == status.HTTP_302_FOUND
         assert response.url == '/staff'
 
+    @pytest.mark.django_db
     def test_user_account_verification(self, company, company_data):
         assert not company.admin.is_active
 

@@ -80,7 +80,10 @@ class TandoraForm:
                 except TypeError:  # This happens, when the passed form is not a ModelForm
                     obj = form.save()
 
-                AuditLogAction(request, obj, 'ui').set_audit_log(self.action)
+                try:
+                    AuditLogAction(request, obj, 'ui').set_audit_log(self.action)
+                except AttributeError:
+                    pass
 
                 if request.FILES and update_file_in_company and hasattr(obj, update_file_in_company):
                     fil = getattr(obj, update_file_in_company)

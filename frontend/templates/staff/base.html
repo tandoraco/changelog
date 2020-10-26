@@ -69,6 +69,11 @@
             <a class="nav-link" target="_blank" href="{% public_page_url %}">View Website</a>
           {% endif %}
       </li>
+      {% if request.user.company.admin == request.user %}
+        <li class="nav-item">
+            <a class="nav-link" href="/staff/billing">Billing</a>
+        </li>
+      {% endif %}
       <li class="nav-item">
         <a class="nav-link" href="/logout">Logout</a>
       </li>

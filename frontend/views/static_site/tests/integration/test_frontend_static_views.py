@@ -9,6 +9,7 @@ from frontend.custom.test_utils import TandoraTestClient
 class TestFrontendStaticViews:
     client = TandoraTestClient()
 
+    @pytest.mark.django_db
     def test_static_site_not_allowed_when_company_use_case_is_changelog(self, company, active_user, widget):
         assert company.use_case == 'c'
 
@@ -20,6 +21,7 @@ class TestFrontendStaticViews:
         assert response.url != url
         assert response.url == '/staff'
 
+    @pytest.mark.django_db
     def test_404_when_static_site_is_not_configured(self, company):
         company.use_case = 's'
         company.save()
@@ -29,6 +31,7 @@ class TestFrontendStaticViews:
         response = self.client.get(url)
         assert response.status_code == status.HTTP_404_NOT_FOUND
 
+    @pytest.mark.django_db
     def test_custom_static_site_is_rendered_when_config_is_present(self, company,
                                                                    theme,
                                                                    static_site_field_values,
@@ -46,6 +49,7 @@ class TestFrontendStaticViews:
         #     if field_name != 'font':
         #         assert field_name in response_content
 
+    @pytest.mark.django_db
     def test_company_name_alone_in_url_redirects_to_public_company_index(self, company):
         url = f'/{company.company_name.lower()}'
 
@@ -53,6 +57,7 @@ class TestFrontendStaticViews:
         assert response.status_code == status.HTTP_302_FOUND
         assert response['Location'].lower() == f'/{company.company_name}/{company.changelog_terminology}'.lower().replace(' ', '-')
 
+    @pytest.mark.django_db
     def test_manage_widget_not_present_for_tandora_web_builder_product(self, company, active_user):
         company.use_case = 's'
         company.save()
@@ -66,6 +71,7 @@ class TestFrontendStaticViews:
         assert reverse('frontend-manage-theme') in response_content
         assert reverse('frontend-manage-static-site') in response_content
 
+    @pytest.mark.django_db
     def test_manage_static_site_is_not_in_tandora_changelog_product(self, company, active_user):
         assert company.use_case == 'c'
 
@@ -79,6 +85,7 @@ class TestFrontendStaticViews:
         assert reverse('frontend-manage-theme') not in response_content
         assert reverse('frontend-manage-static-site') not in response_content
 
+    @pytest.mark.django_db
     def test_web_builder_setup_at_first_login(self, company, active_user, user_data):
         assert company.is_first_login
         company.use_case = 's'
@@ -106,6 +113,7 @@ class TestFrontendStaticViews:
         assert response.status_code == status.HTTP_302_FOUND
         assert 'setup/stage/1' not in response.url
 
+    @pytest.mark.django_db
     def test_web_builder_setup_stage_1(self, static_site_company, active_user, user_data):
         assert static_site_company.is_first_login
         stage_1 = 1
@@ -115,6 +123,7 @@ class TestFrontendStaticViews:
         response = self.client.get(url)
         assert response.url == reverse('frontend-manage-theme')
 
+    @pytest.mark.django_db
     def test_web_builder_setup_stage_2(self, static_site_company, active_user, user_data):
         assert static_site_company.is_first_login
         stage_2 = 2
@@ -124,6 +133,7 @@ class TestFrontendStaticViews:
         response = self.client.get(url)
         assert response.url == reverse('frontend-manage-static-site')
 
+    @pytest.mark.django_db
     def test_web_builder_setup_stage_3(self, static_site_company, active_user, user_data):
         assert static_site_company.is_first_login
 
