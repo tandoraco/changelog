@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('v1', '0049_auto_20200819_0515'),
+        ('v1', '0047_embed_hide_banner'),
     ]
     operations = [
         migrations.AddField(
