@@ -1,13 +1,15 @@
+import pytest
+
 from django.urls import reverse
 from rest_framework import status
 
-from frontend.constants import PLAN_LIMIT_REACHED_MESSAGE
 from frontend.custom.test_utils import FrontEndTestBase
 from v1.accounts import models as accounts_models
 
 
 class TestManageUsers(FrontEndTestBase):
 
+    @pytest.mark.django_db
     def test_user_list(self, active_admin, active_user):
         url = reverse('frontend-view-users')
 
@@ -42,6 +44,7 @@ class TestManageUsers(FrontEndTestBase):
         response_content = response.content.decode().lower()
         assert 'activate' in response_content and 'deactivate' not in response_content
 
+    @pytest.mark.django_db
     def test_create_user(self, active_admin, active_user, subscription):
         url = reverse('frontend-create-user')
 
@@ -67,6 +70,7 @@ class TestManageUsers(FrontEndTestBase):
         assert response.status_code == status.HTTP_302_FOUND
         assert 'staff/manage/users' in response['Location']
 
+    @pytest.mark.django_db
     def test_edit_user(self, active_admin, active_user):
         url = reverse('frontend-edit-user', args=(active_user.id, ))
 
@@ -85,6 +89,7 @@ class TestManageUsers(FrontEndTestBase):
         active_user.refresh_from_db()
         assert active_user.name == new_name
 
+    @pytest.mark.django_db
     def test_activate_user(self, active_admin, user):
         assert not user.is_active
         url = reverse('frontend-activate-user', args=(user.id,))
@@ -95,6 +100,7 @@ class TestManageUsers(FrontEndTestBase):
         user.refresh_from_db()
         assert user.is_active
 
+    @pytest.mark.django_db
     def test_deactivate_user(self, active_admin, active_user):
         assert active_user.is_active
         url = reverse('frontend-deactivate-user', args=(active_user.id,))
@@ -105,6 +111,7 @@ class TestManageUsers(FrontEndTestBase):
         active_user.refresh_from_db()
         assert not active_user.is_active
 
+    @pytest.mark.django_db
     def test_admin_reset_password(self, active_admin, active_user):
         url = reverse('frontend-admin-reset-password', args=(active_user.id,))
 
