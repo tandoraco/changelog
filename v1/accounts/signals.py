@@ -18,5 +18,6 @@ def notify_new_company_signup_in_slack(sender, instance, created, **kwargs):
             'admin_email_id': instance.admin.email,
             'admin_name': instance.admin.name,
         }
-        data = json.dumps(data, indent=4)
-        send_to_slack(f'New company signup notification\n ```{data}```')
+        if 'test.com' not in data['admin_email_id']:
+            data = json.dumps(data, indent=4)
+            send_to_slack(f'New company signup notification\n ```{data}```')
