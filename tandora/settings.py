@@ -215,7 +215,7 @@ if DEBUG:
     MEDIA_ROOT = BASE_DIR + '/media/'
     MEDIA_URL = '/media/'
 else:
-    EMAIL_BACKEND = 'django_ses.SESBackend'
+    EMAIL_BACKEND = 'payanpaadu.email.backends.MailGunBackend'
     DEFAULT_FILE_STORAGE = 'tandora.storage_backends.MediaStorage'
 
 AWS_SES_ACCESS_KEY_ID = os.environ.get('AWS_SES_ACCESS_KEY_ID')
@@ -240,3 +240,8 @@ CORS_URLS_REGEX = r'.?widget.?'
 
 RAZORPAY_KEY_ID = os.environ.get('RAZORPAY_KEY_ID')
 RAZORPAY_SECRET = os.environ.get('RAZORYPAY_SECRET')
+
+
+MAILGUN_API_KEY = os.environ.get('MAILGUN_API_KEY')
+TANDORA_APP_NAME = os.environ.get('TANDORA_APP_NAME')
+DEFAULT_FROM_EMAIL = os.environ.get('no-reply-changelog@mg.tandora.co')
