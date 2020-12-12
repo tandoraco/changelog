@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'v1',
     'frontend',
     'tandoramaster',
+    'payanpaadu',
 ]
 
 MIDDLEWARE = [
