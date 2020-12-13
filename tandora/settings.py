@@ -51,7 +51,6 @@ INSTALLED_APPS = [
     'drfpasswordless',
     'django_extensions',
     'crispy_forms',
-    'tinymce',
     'knox',
     'django_ace',
     'storages',
