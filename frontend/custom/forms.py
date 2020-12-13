@@ -37,7 +37,7 @@ class TandoraForm:
 
     def get_form(self, request, success_message=None, error_message=None, id=None, extra=None,
                  title=None, post_data=None, instance=None, is_multipart_form=False,
-                 update_file_in_company=None):
+                 update_file_in_company_settings=None):
         form = self.form() if not self.initial else self.form(initial=self.initial)
 
         if not success_message:
@@ -85,11 +85,11 @@ class TandoraForm:
                 except AttributeError:
                     pass
 
-                if request.FILES and update_file_in_company and hasattr(obj, update_file_in_company):
-                    fil = getattr(obj, update_file_in_company)
+                if request.FILES and update_file_in_company_settings and hasattr(obj, update_file_in_company_settings):
+                    fil = getattr(obj, update_file_in_company_settings)
                     file_path_url = fil.url
                     company_settings = request.user.company.settings
-                    company_settings[f'company_{update_file_in_company}'] = file_path_url
+                    company_settings[f'company_{update_file_in_company_settings}'] = file_path_url
                     request.user.company.settings = company_settings
                     request.user.company.save()
 
