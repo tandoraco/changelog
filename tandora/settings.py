@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'django_ace',
     'storages',
     'corsheaders',
+    'background_task',
     'v1',
     'frontend',
     'tandoramaster',
@@ -248,3 +249,4 @@ DEFAULT_FROM_EMAIL = 'no-reply-changelog@mg.tandora.co'
 
 AZURE_STORAGE_ACCOUNT_NAME = os.environ.get('AZURE_STORAGE_ACCOUNT_NAME')
 AZURE_STORAGE_ACCOUNT_KEY = os.environ.get('AZURE_STORAGE_ACCOUNT_KEY')
+BACKGROUND_JOB_AUTH_KEY = os.environ.get('BACKGROUND_JOB_AUTH_KEY')
