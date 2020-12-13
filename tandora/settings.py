@@ -216,7 +216,7 @@ if DEBUG:
     MEDIA_URL = '/media/'
 else:
     EMAIL_BACKEND = 'payanpaadu.email.backends.MailGunBackend'
-    DEFAULT_FILE_STORAGE = 'tandora.storage_backends.MediaStorage'
+    DEFAULT_FILE_STORAGE = os.environ.get('DEFAULT_FILE_STORAGE')
 
 AWS_SES_ACCESS_KEY_ID = os.environ.get('AWS_SES_ACCESS_KEY_ID')
 AWS_SES_SECRET_ACCESS_KEY = os.environ.get('AWS_SES_SECRET_ACCESS_KEY')
@@ -244,4 +244,7 @@ RAZORPAY_SECRET = os.environ.get('RAZORYPAY_SECRET')
 
 MAILGUN_API_KEY = os.environ.get('MAILGUN_API_KEY')
 TANDORA_APP_NAME = os.environ.get('TANDORA_APP_NAME')
-DEFAULT_FROM_EMAIL = os.environ.get('no-reply-changelog@mg.tandora.co')
+DEFAULT_FROM_EMAIL = 'no-reply-changelog@mg.tandora.co'
+
+AZURE_STORAGE_ACCOUNT_NAME = os.environ.get('AZURE_STORAGE_ACCOUNT_NAME')
+AZURE_STORAGE_ACCOUNT_KEY = os.environ.get('AZURE_STORAGE_ACCOUNT_KEY')
