@@ -215,7 +215,7 @@ if DEBUG:
     MEDIA_ROOT = BASE_DIR + '/media/'
     MEDIA_URL = '/media/'
 else:
-    EMAIL_BACKEND = 'payanpaadu.email.backends.MailGunBackend'
+    EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND')
     DEFAULT_FILE_STORAGE = os.environ.get('DEFAULT_FILE_STORAGE')
 
 AWS_SES_ACCESS_KEY_ID = os.environ.get('AWS_SES_ACCESS_KEY_ID')
