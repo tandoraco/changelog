@@ -29,6 +29,7 @@ urlpatterns += [
     url(r'^tinymce/', include('tinymce.urls')),
     url(r"api/v1/", include("v1.urls"), name="v1-api"),
     path('admin/', admin_site.urls),
+    path('', include('payanpaadu.background_tasks.urls')),
     url(r"", include("frontend.urls"), name="v1-frontend"),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
