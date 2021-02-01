@@ -430,3 +430,4 @@ static/
 config/
 staging.yml
 prod.yml
+newrelic.ini
