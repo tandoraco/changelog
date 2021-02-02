@@ -27,3 +27,4 @@ razorpay==1.2.0
 https://tandoraassets.blob.core.windows.net/packages/tandora-payanpaadu-1.0.3.tar.gz
 azure-storage-blob==2.1.0
 django-background-tasks==1.2.5
+newrelic

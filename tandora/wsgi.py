@@ -11,7 +11,11 @@ import os
 
 from dj_static import Cling
 from django.core.wsgi import get_wsgi_application
+import newrelic.agent
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tandora.settings')
 
 application = Cling(get_wsgi_application())
+
+newrelic.agent.initialize(os.path.join(os.path.dirname(__file__), "newrelic.ini"))
+application = newrelic.agent.WSGIApplicationWrapper(application)
