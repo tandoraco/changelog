@@ -14,6 +14,7 @@ import os
 from datetime import timedelta
 
 from dotenv import load_dotenv
+from payanpaadu.logger.aws import AWS_LOGGING_CONFIG
 
 load_dotenv()
 
@@ -249,3 +250,6 @@ DEFAULT_FROM_EMAIL = 'no-reply-changelog@mg.tandora.co'
 AZURE_STORAGE_ACCOUNT_NAME = os.environ.get('AZURE_STORAGE_ACCOUNT_NAME')
 AZURE_STORAGE_ACCOUNT_KEY = os.environ.get('AZURE_STORAGE_ACCOUNT_KEY')
 BACKGROUND_JOB_AUTH_KEY = os.environ.get('BACKGROUND_JOB_AUTH_KEY')
+
+if not DEBUG:
+    LOGGING = AWS_LOGGING_CONFIG
