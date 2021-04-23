@@ -2,6 +2,7 @@ import uuid
 from urllib.parse import unquote
 
 from django.contrib import messages
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db import transaction
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
@@ -105,9 +106,10 @@ def view_changelog_custom_url(request):
 def public_index(request, company, changelog_terminology):
     try:
         company_name = company
-        changelogs = get_changelogs_from_company_name_and_changelog_terminology(company_name, changelog_terminology)
+        changelogs_list = get_changelogs_from_company_name_and_changelog_terminology(company_name,
+                                                                                     changelog_terminology)
         company = None
-        for changelog in changelogs:
+        for changelog in changelogs_list:
             # Why I am iterating here instead of taking the company from index[0]
             # when all changelogs belong to one company ?
             # Reason: Django evaluates queryset lazily
@@ -122,11 +124,21 @@ def public_index(request, company, changelog_terminology):
             # when there are no published pages/changelogs but static site config is present
             # this is required to render the website
             company = get_company_from_slug_and_changelog_terminology(company_name, changelog_terminology)
-            changelogs = Changelog.objects.filter(company=company, deleted=False, published=True).order_by(
+            changelogs_list = Changelog.objects.filter(company=company, deleted=False, published=True).order_by(
                 '-created_at').select_related('category')
 
         context, template = get_context_and_template_name(company)
         context['changelog_limit'] = get_public_changelog_limit(company)
+
+        paginator = Paginator(changelogs_list, context['changelog_limit'])
+        page = request.GET.get('page', 1)
+        try:
+            changelogs = paginator.page(page)
+        except PageNotAnInteger:
+            changelogs = paginator.page(1)
+        except EmptyPage:
+            changelogs = paginator.page(paginator.num_pages)
+
         if context.get('config'):
             context['config']['home_page_title'] = ''
             return render_custom_theme(company, context, request)
