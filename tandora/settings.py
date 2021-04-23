@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'storages',
     'corsheaders',
     'background_task',
+    'user_visit',
     'v1',
     'frontend',
     'tandoramaster',
@@ -73,6 +74,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'frontend.custom.middlewares.CustomDomainMiddleware',
+    'user_visit.middleware.UserVisitMiddleware',
 ]
 
 ROOT_URLCONF = 'tandora.urls'

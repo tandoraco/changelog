@@ -8,6 +8,7 @@ from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.text import slugify
 from django.utils.translation import ugettext as _
+from user_visit.models import UserVisit
 
 from frontend.forms.auth import TandoraAdminLoginForm
 from v1.audit import models as audit_models
@@ -180,3 +181,4 @@ admin_site.register(apps.get_model('v1', 'ZapierWebhookTrigger'), ReadOnlyModelA
 admin_site.register(apps.get_model('v1', 'Embed'), EmbedWidgetAdmin)
 admin_site.register(PublicPage)
 admin_site.register(audit_models.AuditLog, ReadOnlyModelAdmin)
+admin_site.register(UserVisit, ReadOnlyModelAdmin)

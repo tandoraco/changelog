@@ -8,6 +8,7 @@ WORKDIR /code
 
 RUN apk add build-base py-pip jpeg-dev zlib-dev
 ENV LIBRARY_PATH=/lib:/usr/lib
+ENV CRYPTOGRAPHY_DONT_BUILD_RUST=1
 
 RUN pip install --upgrade pip
 RUN pip install -r requirements_dev.txt
