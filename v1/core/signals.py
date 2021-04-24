@@ -1,9 +1,11 @@
 from random import randint
 
 import requests
+from django.forms import model_to_dict
 from django.utils.text import slugify
 
 from v1.integrations.zapier.models import Zapier, ZapierWebhookTrigger
+from v1.utils import random_uuid
 
 
 def post_to_zapier(instance, zapier):
@@ -17,6 +19,20 @@ def post_to_zapier(instance, zapier):
                                             changelog=instance,
                                             zapier_response_status_code=response.status_code,
                                             zapier_response=response.content)
+
+
+def post_webhook(instance, webhook):
+    from v1.integrations.webhooks.models import WebhookLogs
+
+    payload = model_to_dict(instance, exclude=['company', ])
+    if webhook.active:
+        _hash = random_uuid().replace('-', '')
+        response = requests.post(webhook.url, data=payload, headers={'TANDORA_HASH': _hash})
+        WebhookLogs.objects.create(webhook=webhook,
+                                   payload=payload,
+                                   status_code=response.status_code,
+                                   response=response.content.decode(),
+                                   hash=_hash)
 
 
 def get_or_populate_slug_field(sender, instance, *args, **kwargs):
@@ -46,3 +62,18 @@ def trigger_zapier_webhook(sender, instance, created, **kwargs):
                 ZapierWebhookTrigger.objects.get(changelog=instance)
             except ZapierWebhookTrigger.DoesNotExist:
                 post_to_zapier(instance, zapier)
+
+
+def trigger_webhook(sender, instance, created, **kwargs):
+    from v1.integrations.webhooks.models import Webhooks
+
+    webhook = None
+    try:
+        webhook = Webhooks.objects.get(company=instance.company, active=True)
+    except Webhooks.DoesNotExist:
+        pass
+    else:
+        if created and webhook.trigger_when_created:
+            post_webhook(instance, webhook)
+        elif webhook.trigger_when_published and instance.published:
+            post_webhook(instance, webhook)

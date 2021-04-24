@@ -178,6 +178,8 @@ admin_site.register(v1_static_site_models.StaticSiteField, CreateUpdateModelAdmi
 admin_site.register(v1_static_site_models.StaticSiteThemeConfig, CreateUpdateModelAdmin)
 admin_site.register(apps.get_model('v1', 'Zapier'), ReadOnlyModelAdmin)
 admin_site.register(apps.get_model('v1', 'ZapierWebhookTrigger'), ReadOnlyModelAdmin)
+admin_site.register(apps.get_model('v1', 'Webhooks'))
+admin_site.register(apps.get_model('v1', 'WebhookLogs'), ReadOnlyModelAdmin)
 admin_site.register(apps.get_model('v1', 'Embed'), EmbedWidgetAdmin)
 admin_site.register(PublicPage)
 admin_site.register(audit_models.AuditLog, ReadOnlyModelAdmin)
