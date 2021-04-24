@@ -1,13 +1,13 @@
 from django.db import models
 from payanpaadu.webhooks.models import Webhook, WebhookLog
 
-from v1.integrations.constants import TRIGGER_CHOICES
+from v1.integrations.constants import NEW_CHANGELOG_TEXT, CHANGELOG_PUBLISHED_TEXT
 
 
 class Webhooks(Webhook):
-    company = models.ForeignKey('Company', on_delete=models.DO_NOTHING)
-    trigger_event = models.CharField(max_length=2, choices=TRIGGER_CHOICES)
-    categories = models.ManyToManyField('Category')
+    company = models.OneToOneField('Company', on_delete=models.DO_NOTHING)
+    trigger_when_created = models.BooleanField(default=False, help_text=NEW_CHANGELOG_TEXT)
+    trigger_when_published = models.BooleanField(default=False, help_text=CHANGELOG_PUBLISHED_TEXT)
 
 
 class WebhookLogs(WebhookLog):
