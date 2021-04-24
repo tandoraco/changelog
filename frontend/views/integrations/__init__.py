@@ -41,9 +41,13 @@ INTEGRATION_FRONTEND_META_DICT = {
                        'to view list of zaps available.'
     },
     'webhooks': {
-        'logo': 'https://tandora-production.s3.amazonaws.com/assets/logos/webhooks-logo.svg',
-        'description': 'Webhooks helps to post data to your favorite app whenever a changelog is published '
+        'logo': 'https://tandora-production.s3.amazonaws.com/assets/logos/webhooks-logo.png',
+        'description': 'A Webhook helps to post data to your favorite app whenever a changelog is published '
                        'or created.'
+                       'Zapier says they are a simple way your online accounts can "speak" to each other and get '
+                       'notified automatically when something new happens.'
+                       'In many cases, you\'ll need to know how to use webhooks if you want to '
+                       'automatically push data from one app to another.'
     }
 }
 

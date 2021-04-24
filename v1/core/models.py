@@ -39,3 +39,4 @@ class InlineImageAttachment(models.Model):
 
 pre_save.connect(core_signals.get_or_populate_slug_field, sender=Changelog)
 post_save.connect(core_signals.trigger_zapier_webhook, sender=Changelog)
+post_save.connect(core_signals.trigger_webhook, sender=Changelog)
