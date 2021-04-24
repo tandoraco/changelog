@@ -21,6 +21,10 @@ INTEGRATION_FORM_FIELDS_DICT = {
     'zapier': {
         'read_only_fields': ['api_key'],
         'exclude': ['company', 'zapier_webhook_url', ]
+    },
+    'webhooks': {
+        'read_only_fields': ['key'],
+        'exclude': ['company', ]
     }
 }
 
@@ -35,6 +39,11 @@ INTEGRATION_FRONTEND_META_DICT = {
                        'using this integration.'
                        '<a href="/staff/manage/integrations/zapier/embed">Click here</a> '
                        'to view list of zaps available.'
+    },
+    'webhooks': {
+        'logo': 'https://tandora-production.s3.amazonaws.com/assets/logos/webhooks-logo.svg',
+        'description': 'Webhooks helps to post data to your favorite app whenever a changelog is published '
+                       'or created.'
     }
 }
 
