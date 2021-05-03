@@ -12,8 +12,11 @@
           content="width=device-width, initial-scale=1, minimum-scale=1.0, maximum-scale = 1.0, user-scalable = no">
     <title>{{ changelog.title }}</title>
     <link href="assets/images/favicon.svg" rel="shortcut icon" type="image/x-icon"/>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
-          rel="stylesheet">
+    {% if company.publicpage.font %}
+        <link href="{{ company.publicpage.font }}" rel="stylesheet">
+    {% else %}
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    {% endif %}
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/fontawesome.min.css"
           crossorigin="anonymous">
@@ -71,7 +74,7 @@
         <div class="row">
             <div class="col-12 col-sm-12 col-md-12 col-lg-12">
                 <div class="copyright-footer">
-                    <p>Copyright @ 2021 <a href="https://tandora.co">Tandora</a> | All Rights Reserved</p>
+                    <p>Powered by <a href="https://tandora.co">Tandora</a></p>
                 </div>
             </div>
         </div>
