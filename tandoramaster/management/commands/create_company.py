@@ -62,6 +62,7 @@ class Command(BaseCommand):
             terminology,
             use_case,
         ]
+
         if not all(arguments):
             raise AssertionError("All required arguments are not present.")
 
