@@ -30,7 +30,7 @@ def get_context_and_template_name(company, changelog=False):
             'font_name': font_name
         }
     else:
-        template = 'public/index.html' if not changelog else 'public/changelog.html'
+        template = 'public/index.html' if not changelog else 'public_v2/changelog.html'
         context = {
             'company': company,
             'company_name': company.company_name,
