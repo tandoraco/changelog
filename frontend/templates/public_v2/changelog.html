@@ -24,18 +24,20 @@
 </head>
 <body>
 <div class="main-wrapper pt-0">
-    <section class="section-breadcrumbs">
+    <section id="c-banner" class="section-breadcrumbs">
         <div class="container">
             <div class="row">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-6">
                     <div class="breadcrumbs-title">
-                        <h1>{% if company.publicpage.banner_title %}
+                        <h1><a id='banner-company-link' href="{{ company.website }}">
+                            {% if company.publicpage.banner_title %}
                             {{ company.publicpage.banner_title }}
                             {% else %}
                             {{ company.company_name }}
                             {% endif %}
+                        </a>
                         </h1>
-                        <h3>{% if company.publicpage.banner_tag_line %}{{ company.publicpage.banner_tag_line }}{% else %}{{ company.changelog_terminology }}{% endif %}</h3>
+                        <h3 id="banner-tag-line">{% if company.publicpage.banner_tag_line %}{{ company.publicpage.banner_tag_line }}{% else %}{{ company.changelog_terminology }}{% endif %}</h3>
                     </div>
                 </div>
             </div>
@@ -93,6 +95,8 @@
         }
         xhr.send({});
     });
-
+</script>
+<script>
+    {% include 'public/customize-page.js' %}
 </script>
 </html>
