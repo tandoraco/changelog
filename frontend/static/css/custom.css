@@ -402,9 +402,28 @@ p.check_box {
       font-weight: 500;
       font-size: 17px;
       line-height: 28px;
-      text-transform: capitalize;
       color: #263238;
       text-align: left;
+  }
+
+  .section-doctorparoma-details .doctorparoma-details-title .doctorparoma-details .doctorparoma-message li {
+    display: list-item;
+    list-style-position: inside;
+    padding-left: 8px;
+    margin-left: 10px;
+  }
+
+  .section-doctorparoma-details .doctorparoma-details-title .doctorparoma-details .doctorparoma-message ul {
+      list-style-type: circle;
+  }
+
+  .section-doctorparoma-details .doctorparoma-details-title .doctorparoma-details .doctorparoma-message a {
+      color: blue;
+      text-decoration: underline;
+  }
+
+  .section-doctorparoma-details .doctorparoma-details-title .doctorparoma-details .doctorparoma-message ol {
+       list-style-type: decimal;
   }
 
   .section-doctorparoma-details .doctorparoma-details-title .doctorparoma-details .doctorparoma-message p {
@@ -421,7 +440,6 @@ p.check_box {
     font-weight: 500;
     font-size: 17px;
     line-height: 28px;
-    text-transform: capitalize;
     color: #263238;
   }
 
@@ -431,7 +449,6 @@ p.check_box {
     font-weight: 500;
     font-size: 17px;
     line-height: 28px;
-    text-transform: capitalize;
     color: #527EF9;
     display: flex;
   }
