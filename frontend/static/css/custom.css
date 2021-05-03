@@ -1,0 +1,805 @@
+
+/*----------------Home Page---------------*/
+
+
+
+.section-breadcrumbs{
+    background-color: #EDF0FA;
+    padding: 34px 0;
+}
+
+.section-breadcrumbs  .breadcrumbs-title h1 {
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 46px;
+    line-height: 46px;
+    color: #284BB0;
+    margin-bottom: 10px;
+}
+.section-breadcrumbs  .breadcrumbs-title h3 {
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 17px;
+    line-height: 22px;
+    color: #84849D;
+    margin-bottom: 0;
+}
+.listing-page .listing {
+    background: #EDF0FA;
+    border: 1px solid transparent;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    border-radius: 10px;
+    font-family: "Poppins", sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 16px;
+    text-align: left;
+    color: #1D1E22;
+    padding: 24px 40px;
+    -webkit-appearance: none;
+    position: relative;
+    margin-bottom: 20px;
+}
+.listing-page .listing img.listing-menu {
+  float: right;
+  cursor: pointer;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+.pagination a {
+  font-family: poppins;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+  color: #B0B0CD;
+  padding: 0 30px;
+  text-transform: uppercase;
+  line-height: 40px;
+  }
+
+  .pagination a img {
+    margin: 0 10px;
+  }
+ .pagination ul {
+    list-style-type: none;
+    display: inline-block;
+    font-size: 100%;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+.pagination ul li {
+    display: inline-block;
+    font-size: 100%;
+    width: auto;
+    border-radius: 3px;
+    margin: 0;
+}
+
+.pagination li.active a {
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    background: #284BB0;
+    box-shadow: 0px 4px 8px rgba(94, 73, 135, 0.27);
+    border-radius: 25px;
+    padding: 0;
+    display: inline-block;
+}
+
+.pagination ul li a {
+    padding: 0;
+    font-size: 20px;
+    font-family: poppins;
+    color: #B0B0CD;
+    text-transform: uppercase;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    font-weight: 500;
+    font-style: normal;
+    display: inline-block;
+}
+
+.pagination ul li a:hover {
+    width: 40px;
+    height: 40px;
+    background: #284BB0;
+    box-shadow: 0px 4px 8px rgba(94, 73, 135, 0.27);
+    border-radius: 25px;
+    padding: 0;
+}
+
+.listing-page .listing:hover {
+    outline: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    color: #2E3E38;
+    border: 1px solid #722BFB;
+    -webkit-box-shadow: 0px 6px 9px rgb(94 73 135 / 9%);
+    box-shadow: 0px 6px 9px rgb(94 73 135 / 9%);
+}
+
+.listing-page .listing .listing-text h3 {
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 26px;
+    line-height: 22px;
+    color: #284BB0;
+    margin-bottom: 12px;
+}
+.listing-page .listing  .listing-text h3 span.blue {
+  font-family: Poppins;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 14px;
+  text-align: center;
+  width: 93px;
+  height: 30px;
+  background: #527EF9;
+  padding: 8px 26px;
+  border-radius: 100px;
+  color: #fff;
+  margin-left: 10px;
+ }
+
+ .listing-page .listing  .listing-text h3 span {
+  font-family: Poppins;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 14px;
+  text-align: center;
+  width: 93px;
+  height: 30px;
+  background: #FA4B4B;
+  padding: 8px 26px;
+  border-radius: 100px;
+  color: #fff;
+  margin-left: 10px;
+ }
+
+ .listing-page .listing  .listing-text h3 span.blue-dark {
+  font-family: Poppins;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 14px;
+  text-align: center;
+  width: 93px;
+  height: 30px;
+  background: #284BB0;
+  padding: 8px 26px;
+  border-radius: 100px;
+  color: #fff;
+  margin-left: 10px;
+ }
+
+
+.listing-page .listing  .listing-text h4 {
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    color: #A2A2BE;
+    margin-bottom: 16px;
+
+}
+
+.listing-page .listing  .listing-text p {
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 17px;
+    line-height: 28px;
+    color: #84849D;
+    margin-bottom: 0;
+}
+
+/*----------------End Home Page---------------*/
+
+
+/*----------------Tandora  Page---------------*/
+.title {
+   position: relative;
+}
+.title::after {
+  background-image: url(../images/background.svg);
+  position: absolute;
+  content: "";
+  height: 527px;
+  width: 548px;
+  z-index: -1;
+  top: -220px;
+}
+
+form .form-group input.your-content {
+  height: 140px;
+}
+.theme-button .reset-btn {
+    background: #E2E2F1;
+    color: #606574;
+    margin-top: 15px;
+
+}
+.main-wrapper .signin-page .profile-image img {
+    max-width: 70%;
+}
+
+form .publish-now {
+  justify-content: flex-start !important;
+  display: flex  !important;
+}
+
+.inputWithIcon {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.signin-form input[type=checkbox] {
+    display: none;
+}
+.signin-form input[type=checkbox]+label {
+    display: flex;
+    margin: 0.2em;
+    cursor: pointer;
+    padding: 0.2em;
+    float: left;
+    position: relative;
+}
+
+.signin-form input[type=checkbox]+label:before {
+    content: "";
+    border: 2px solid #b3b3b3;
+    border-radius: 0;
+    display: inline-block;
+    min-width: 20px;
+    height: 20px;
+    padding-left: 3px;
+    padding-bottom: 0px;
+    margin-right: 0.2em;
+    vertical-align: bottom;
+    color: transparent;
+    transition: .2s;
+    line-height: 18px;
+}
+.signin-form  input[type=checkbox]:checked+label:before {
+    background-color: #284BB0;
+    border-color: #284BB0;
+    color: #fff;
+}
+.signin-form input[type=checkbox]:checked + label:after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 5px;
+    left: 10px;
+    width: 7px;
+    height: 12px;
+    border: solid #ffffff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+p.check_box {
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 15px;
+    color: #b3b3b3;
+    font-weight: 500;
+    margin-left: 5px;
+}
+
+
+/*----------------------Footer section---------------------*/
+
+
+
+
+/*----------------------Doctorparoma-page---------------------*/
+
+.listing-page .listing .listing-text h3 span {
+  background-color:#FA4B4B;
+}
+.listing-page .col-lg-12:last-of-type .listing {
+  margin: 0;
+}
+
+
+/*----------------------Doctorparoma-details---------------------*/
+
+.section-doctorparoma-details {
+  padding: 50px;
+
+}
+
+
+.section-doctorparoma-details .doctorparoma-details-title h3 {
+   font-family: Poppins;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 36px;
+  line-height: 34px;
+  color: #284BB0;
+  text-align: center;
+  margin-bottom: 35px;
+}
+
+
+.section-doctorparoma-details .doctorparoma-details-title .doctorparoma-details {
+  background: #EDF0FA;
+    border: 1px solid transparent;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    border-radius: 10px;
+    font-family: "Poppins", sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 16px;
+    text-align: left;
+    color: #1D1E22;
+    padding: 20px 40px;
+    -webkit-appearance: none;
+    position: relative;
+    margin-bottom: 20px;
+}
+.section-doctorparoma-details .doctorparoma-details-title .doctorparoma-details .doctorparoma-top {
+  margin-bottom: 40px;
+}
+
+.section-doctorparoma-details .doctorparoma-details-title .doctorparoma-details .doctorparoma-top a  {
+  font-family: Poppins;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 14px;
+    text-align: center;
+    width: 93px;
+    height: 30px;
+    background-color: #FA4B4B;
+    padding: 8px 26px;
+    border-radius: 100px;
+    color: #fff;
+}
+
+.section-doctorparoma-details .doctorparoma-details-title .doctorparoma-details .doctorparoma-top  span {
+  font-family: Poppins;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 28px;
+  color: #84849D;
+  margin-left: 28px;
+}
+
+.section-doctorparoma-details .doctorparoma-details-title .doctorparoma-details .doctorparoma-top  span:last-child {
+  font-family: Poppins;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 20px;
+  color: #A2A2BE;
+  float: right;
+  }
+
+  .section-doctorparoma-details .doctorparoma-details-title .doctorparoma-details .doctorparoma-message h3 {
+      font-family: Poppins;
+      font-style: normal;
+      font-weight: 500;
+      font-size: 17px;
+      line-height: 28px;
+      text-transform: capitalize;
+      color: #263238;
+      text-align: left;
+  }
+
+  .section-doctorparoma-details .doctorparoma-details-title .doctorparoma-details .doctorparoma-message p {
+      font-family: Poppins;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 16px;
+      line-height: 33px;
+}
+
+  .section-doctorparoma-details .doctorparoma-details-title .doctorparoma-details .doctorparoma-message span {
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 17px;
+    line-height: 28px;
+    text-transform: capitalize;
+    color: #263238;
+  }
+
+   .section-doctorparoma-details .doctorparoma-details-title .doctorparoma-details .doctorparoma-message span:last-child {
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 17px;
+    line-height: 28px;
+    text-transform: capitalize;
+    color: #527EF9;
+    display: flex;
+  }
+
+
+  .list-view .card > .card-img-top {
+  width: auto;
+}
+
+.list-view .card .card-body {
+  display: inline-block;
+}
+
+
+.btn-primary:hover, .btn-primary.focus, .btn-primary:focus, .btn-primary:not(:disabled):not(.disabled):active {
+    background-color: #E2E9FF;
+}
+
+.btn-primary:not(:disabled):not(.disabled).active:focus, .btn-primary:not(:disabled):not(.disabled):active:focus, .show>.btn-primary.dropdown-toggle:focus {
+  box-shadow: none;
+}
+
+.grid-container .listing .listing-text  h3 {
+      font-size: 20px;
+}
+
+.list-view .listing .listing-text  h3 {
+      font-size: 26px;
+}
+
+.btn-primary:not(:disabled):not(.disabled).active, .btn-primary:not(:disabled):not(.disabled):active, .show>.btn-primary.dropdown-toggle {
+  border-color: transparent;
+}
+
+.listing-page  .list-button button:last-child {
+  margin-left: 15px;
+
+}
+
+.listing-page .listing .listing-button {
+  padding-top: 20px;
+}
+
+.listing-page .listing .listing-button ul {
+
+}
+
+.listing-page .listing .listing-button ul li {
+      display: contents;
+
+}
+
+.listing-page .listing .listing-button ul li button {
+      color: #84849D;
+      padding: 8px 5px;
+     border: 1px solid #D1D4DF;
+     background: #EDF0FA;
+      display: inline-block;
+      text-align: center;
+      border-radius: 8px;
+      width: 100px;
+      margin-right: 8px;
+      background-color: #fff;
+}
+
+.listing-page .listing .listing-button ul li button:hover {
+    background: #FBFBFF;
+    -webkit-box-shadow: -17px 27px 47px rgb(129 129 129 / 11%);
+    box-shadow: -17px 27px 47px rgb(129 129 129 / 11%);
+    border: 1px solid transparent;
+}
+
+.listing-page .listing .listing-button ul li button img {
+          width: 19px;
+          margin-right: 10px;
+}
+
+
+.btn-primary:not(:disabled):not(.disabled).active, .btn-primary:not(:disabled):not(.disabled):active, .show>.btn-primary.dropdown-toggle {
+  background: #EDF0FA;
+}
+
+
+
+
+.dropdown_box select {
+   display: none;
+}
+ .dropdown_box .dropdown {
+   background: #EDF0FA;
+    border: 1px solid transparent;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    border-radius: 10px;
+    font-family: "Poppins", sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 16px;
+    text-align: left;
+    color: #1D1E22;
+    padding: 20px 15px;
+    -webkit-appearance: none;
+    margin-bottom: 20px;
+}
+ @media (max-width: 767px) {
+   .dropdown_box .dropdown {
+     padding: 12px 15px;
+  }
+}
+ .dropdown_box .dropdown .current {
+   color: #1D1E22;
+}
+ .dropdown_box .dropdown.open .option {
+   cursor: pointer;
+}
+ .dropdown_box .dropdown.open .option:hover {
+   background: #f9f9f9;
+}
+ .dropdown_box .dropdown.open::after {
+   transform: rotate(-180deg);
+}
+ .dropdown_box .dropdown.open .list {
+   transform: scale(1);
+   opacity: 1;
+   pointer-events: auto;
+   width: 100%;
+}
+ .dropdown_box .dropdown.open .list li {
+   color: #353535;
+}
+ .dropdown_box .dropdown .list {
+   box-sizing: border-box;
+   transition: all 0.15s cubic-bezier(0.25, 0, 0.25, 1.75), opacity 0.1s linear;
+   transform: scale(0.75);
+   transform-origin: 50% 0;
+   box-shadow: 0 0 0 1px rgba(0, 0, 0, .09);
+   background-color: rgba(255, 255, 255, 1);
+   border-radius: 6px;
+   margin-top: 4px;
+   padding: 3px 0;
+   opacity: 0;
+   overflow: hidden;
+   pointer-events: none;
+   position: absolute;
+   top: 100%;
+   left: 0;
+   z-index: 999;
+   height: 145px;
+   overflow: auto;
+}
+ .dropdown_box .dropdown .list::-webkit-scrollbar-track {
+   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+   background: transparent;
+   border-radius: 20px;
+}
+ .dropdown_box .dropdown .list::-webkit-scrollbar {
+   width: 5px;
+   background: transparent;
+}
+ .dropdown_box .dropdown .list::-webkit-scrollbar-thumb {
+   background: #527EF9;
+   border: 2px solid #527EF9;
+   border-radius: 20px;
+}
+ .dropdown_box .dropdown .list ul {
+   padding: 0px;
+   width: 100%;
+}
+ .dropdown_box .dropdown .list li {
+   list-style: none;
+   margin: 0;
+}
+ .dropdown_box .dropdown .list li::before {
+   display: none;
+}
+ .dropdown_box .dropdown::after {
+   height: 0;
+   width: 0;
+   border-left: 4px solid transparent;
+   border-right: 4px solid transparent;
+   border-top: 4px solid #161414;
+   transform: origin(50% 20%);
+   transition: all 0.125s ease-in-out;
+   content: '';
+   display: block;
+   margin-top: -2px;
+   pointer-events: none;
+   position: absolute;
+   right: 10px;
+   top: 50%;
+}
+ .dropdown_box .dropdown .option {
+   cursor: default;
+   font-weight: 400;
+   line-height: 40px;
+   outline: none;
+   padding-left: 18px;
+   padding-right: 29px;
+   text-align: left;
+   transition: all 0.2s;
+   color: #161414;
+}
+ .dropdown_box .dropdown .option.selected {
+   font-weight: 600;
+}
+
+
+
+@media screen and (min-width: 768px) and (max-width: 991px) {
+  .listing-page .listing .listing-text h3 {
+    font-size: 18px;
+    line-height: 28px;
+}
+  .listing-page .listing {
+        padding: 24px 22px;
+  }
+  .listing-page .listing .listing-button ul li button {
+    width: 86px;
+    margin-right: 0;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .section-breadcrumbs .breadcrumbs-title h1 {
+    font-size: 26px;
+    line-height: 26px;
+    text-align: center;
+  }
+  .listing-page .listing .listing-button {
+    display: flex;
+    justify-content: center;
+  }
+  .section-breadcrumbs .breadcrumbs-title h3 {
+    text-align: center;
+  }
+  .listing-page .listing {
+    padding: 20px 15px;
+  }
+  .listing-page .listing .listing-text p {
+    font-size: 14px;
+    line-height: 22px;
+    text-align: center;
+  }
+  .listing-page .listing .listing-text h4 {
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: 12px;
+  }
+  .listing-page .listing .listing-text h3 {
+    font-size: 20px;
+    line-height: 26px;
+    text-align: center;
+    margin: 0 0 20px 0;
+  }
+  .listing-page .listing .listing-text h3 span {
+    background-color: #FA4B4B;
+    margin: 10px 0 0 0;
+    display: inline-block;
+    width: auto;
+  }
+  .listing-page .listing::after {
+    display: none;
+  }
+  .section-doctorparoma-details {
+    padding: 20px 0;
+  }
+  .section-doctorparoma-details .doctorparoma-details-title .doctorparoma-details {
+    padding: 20px 15px;
+  }
+  .section-doctorparoma-details .doctorparoma-details-title .doctorparoma-details .doctorparoma-message p {
+    font-size: 14px;
+    line-height: 28px;
+    text-align: left;
+  }
+  .section-doctorparoma-details .doctorparoma-details-title h3 {
+    margin-bottom: 10px;
+    font-size: 26px;
+  }
+  .section-doctorparoma-details .doctorparoma-details-title .doctorparoma-details .doctorparoma-top span {
+    display: inline-block;
+    margin-left: 24px;
+  }
+  .section-doctorparoma-details .doctorparoma-details-title .doctorparoma-details .doctorparoma-top span:last-child {
+    display: inline-block;
+    width: 100%;
+    margin: 10px 0 0 0;
+    text-align: right;
+  }
+  .pagination a {
+    padding: 0 5px;
+    font-size: 12px;
+    line-height: 30px;
+  }
+  .pagination a img {
+    margin: 0;
+  }
+  .pagination ul li a,
+  .pagination ul li.active a {
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    font-size: 14px;
+  }
+  .pagination {
+    margin-top: 20px;
+  }
+}
+
+
+.listing-page button {
+   background-color: #F0F0F0;
+   border: 0;
+}
+
+
+.card {
+  margin-bottom: 1rem;
+}
+
+.list-view .row > [class*=col-] {
+  max-width: 100%;
+  flex: 0 0 100%;
+}
+.list-view .card {
+  flex-direction: row;
+}
+
+
+@media (max-width: 575.98px) {
+  .list-view .card {
+    flex-direction: column;
+  }
+  .listing-page .listing .listing-button {
+    display: flex;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .listing-page .listing .listing-button {
+    display: flex;
+    justify-content: center;
+  }
+
+    .listing-page .listing .listing-button ul li button {
+      width: 83px;
+      margin-right: 0px;
+    }
+
+    .listing-page .listing .listing-button ul li button span {
+      font-size: 12px;
+    }
+}
+
+
+@media (max-width: 320px) {
+
+    .listing-page .listing .listing-button ul li button {
+      width: 81px;
+      margin-right: 0px;
+    }
+
+    .listing-page .listing .listing-button ul li button span {
+      font-size: 12px;
+    }
+}
+
+
