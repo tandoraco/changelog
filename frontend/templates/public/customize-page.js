@@ -8,6 +8,10 @@ let banner = document.getElementById('c-banner');
     banner.style.color = '{{ company.publicpage.banner_font_color }}';
     document.getElementById('banner-company-link').style.color = '{{ company.publicpage.banner_font_color }}';
     document.getElementById('banner-tag-line').style.color = '{{ company.publicpage.banner_font_color }}';
+{% else %}
+    banner.style.color = 'white';
+    document.getElementById('banner-company-link').style.color = 'white';
+    document.getElementById('banner-tag-line').style.color = 'white';
 {% endif %}
 {% if company.publicpage.font %}
     let font = "{{ company.publicpage.font }}";
