@@ -166,7 +166,7 @@ def create_user(request):
     initial = {
         'company': request.user.company
     }
-    return TandoraForm(User, StaffNewUserForm, 'create', 'staff/form.html',
+    return TandoraForm(User, StaffNewUserForm, 'create', 'staff/signup.html',
                        reverse('frontend-view-users'), initial=initial) \
         .get_form(request,
                   success_message=frontend_constants.USER_CREATED_OR_EDITED_SUCCESSFULLY,
@@ -176,7 +176,7 @@ def create_user(request):
 @is_authenticated
 @is_admin
 def edit_user(request, id):
-    return TandoraForm(User, UserForm, 'edit', 'staff/form.html',
+    return TandoraForm(User, UserForm, 'edit', 'staff/signup.html',
                        reverse('frontend-view-users')) \
         .get_form(request,
                   success_message=frontend_constants.USER_CREATED_OR_EDITED_SUCCESSFULLY,

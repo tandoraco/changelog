@@ -8,7 +8,7 @@ from django.utils.translation import ugettext as _
 
 from frontend.constants import PASSWORD_DOES_NOT_MATCH, EMAIL_EXISTS_ERROR, WEBSITE_EXISTS_ERROR, INVALID_REFERRAL_CODE
 from v1.accounts.constants import MAX_EMAIL_LENGTH, PASSWORD_INCORRECT_ERROR, EMAIL_NOT_FOUND_ERROR, \
-    MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH, USE_CASE_CHOICES, INACTIVE_USER_ERROR
+    MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH, INACTIVE_USER_ERROR
 from v1.accounts.models import User, Company, ForgotPassword, Affiliate, Referral
 from v1.accounts.utils import verify_password, hash_password
 from v1.accounts.validators import form_password_validator, form_no_symbols_validator, \
@@ -76,7 +76,7 @@ class StaffNewUserForm(BasicUserForm):
 
 class CompanySignupForm(BasicUserForm):
     website = forms.URLField(max_length=200, required=True)
-    use_case = forms.ChoiceField(choices=USE_CASE_CHOICES, required=True, label='Product')
+    use_case = forms.CharField(widget=forms.HiddenInput, initial='c', required=False)
     company_name = forms.CharField(max_length=100)
     referral_code = forms.CharField(max_length=50, required=False, label=REFERRAL_CODE)
     # changelog_terminology = forms.CharField(max_length=50, initial='', required=False)
