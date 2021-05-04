@@ -113,7 +113,7 @@ def integration_form(request, integration):
             else:
                 fields = '__all__'
 
-    return TandoraForm(model_class, IntegrationModelForm, 'edit', 'staff/form.html',
+    return TandoraForm(model_class, IntegrationModelForm, 'edit', 'staff/signup.html',
                        reverse('frontend-view-integrations')) \
         .get_form(request,
                   success_message=INTEGRATION_EDITED_SUCCESSFULLY,
