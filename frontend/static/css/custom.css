@@ -217,7 +217,7 @@
    position: relative;
 }
 .title::after {
-  background-image: url(../images/background.svg);
+  background-image: url(https://tandora-production.s3.amazonaws.com/assets/assets/background.svg);
   position: absolute;
   content: "";
   height: 527px;

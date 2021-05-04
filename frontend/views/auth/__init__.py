@@ -46,7 +46,7 @@ def login(request):
 
     set_redirect_in_session(request, redirect_to)
 
-    return render(request, 'login.html', {'form': form})
+    return render(request, 'staff_v2/login.html', {'form': form})
 
 
 @is_authenticated
