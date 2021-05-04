@@ -2,26 +2,25 @@
 {% load crispy_forms_tags %}
 {% block content %}
 <div class="main-wrapper">
-    {% include 'staff_v2/menu_prelogin.html' %}
+    {% include 'staff_v2/menu_postlogin.html' %}
     <section class="section-wrapper signin-page">
         <div class="container">
             <div class="row align-center">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-6">
                     <div class="title">
-                        <h3>{{ title }}</h3>
-                    </div>
-                    <div class="profile-image">
-                        <img src="https://tandora-production.s3.amazonaws.com/assets/assets/sign-up-img.svg" alt="profile-image">
+                        <h2>{{ action_name }} <br><span>{{ model_name }}</span></h2>
+                        <!--p>Lorem Ipsum is simply dummy text of <br>the printing</p-->
                     </div>
                 </div>
                 <div class="col-12 col-sm-12 col-md-12 col-lg-6">
                     <div class="signin-form">
                         <div class="account-content">
-                            <form method="POST" class="form" action="">
+                            <form class="form" method="post" action="">
                                 {% csrf_token %}
                                 {{ form|crispy }}
                                 <div class="theme-button">
                                     <button type="submit" class="submit-btn">Submit</button>
+                                    <button type="reset" class="submit-btn reset-btn">Reset</button>
                                 </div>
                             </form>
                         </div>
@@ -31,4 +30,11 @@
         </div>
     </section>
 </div>
+<script>
+    let categoryDiv = document.getElementById('div_id_category');
+    categoryDiv.classList.add('dropdown_box');
+    let publishDiv = document.getElementById('div_id_published');
+    publishDiv.classList.add('inputWithIcon')
+    publishDiv.classList.add('inputIconBg');
+</script>
 {% endblock %}

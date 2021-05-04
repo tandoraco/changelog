@@ -100,7 +100,7 @@ you will be rewarded with attractive perks and incentives for every customer you
 def profile_form(request):
     email = request.session.get('email', '')
     id = User.objects.get(email=email).id
-    return TandoraForm(User, UserForm, 'edit', 'staff/form.html',
+    return TandoraForm(User, UserForm, 'edit', 'staff_v2/postlogin_form.html',
                        '/') \
         .get_form(request, id=id)
 
@@ -108,7 +108,7 @@ def profile_form(request):
 @is_authenticated
 def company_form(request):
     id = request.session["company-id"]
-    return TandoraForm(Company, CompanyForm, 'edit', 'staff/form.html',
+    return TandoraForm(Company, CompanyForm, 'edit', 'staff_v2/postlogin_form.html',
                        "/login") \
         .get_form(request, success_message=COMPANY_CREATED_OR_EDITED_SUCCESSFULLY,
                   error_message=COMPANY_DOES_NOT_EXIST, id=id)

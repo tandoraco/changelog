@@ -96,5 +96,7 @@ class TandoraForm:
                 messages.success(request, message=success_message.format(self.action, str(obj)))
                 return HttpResponseRedirect(self.response_redirect_path)
 
+        action_name, model_name = title.split(' ')
         return render(request, self.form_html,
-                      {'form': form, 'title': title, 'extra': extra, 'is_multipart_form': is_multipart_form})
+                      {'form': form, 'title': title, 'extra': extra, 'is_multipart_form': is_multipart_form,
+                       'action': action_name, 'model_name': model_name})
