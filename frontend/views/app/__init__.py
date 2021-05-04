@@ -33,7 +33,7 @@ class ChangeLogList(custom_views.TandoraListViewMixin):
 
     def get_template_names(self):
         if int(self.request.GET.get('page', 1)) > 1:
-            return ['staff/changelogs/index.html']
+            return ['staff_v2/changelogs/index.html']
         return ['app.html']
 
     def get_queryset(self):
@@ -166,7 +166,7 @@ def create_user(request):
     initial = {
         'company': request.user.company
     }
-    return TandoraForm(User, StaffNewUserForm, 'create', 'staff/signup.html',
+    return TandoraForm(User, StaffNewUserForm, 'create', 'staff/form.html',
                        reverse('frontend-view-users'), initial=initial) \
         .get_form(request,
                   success_message=frontend_constants.USER_CREATED_OR_EDITED_SUCCESSFULLY,
@@ -176,7 +176,7 @@ def create_user(request):
 @is_authenticated
 @is_admin
 def edit_user(request, id):
-    return TandoraForm(User, UserForm, 'edit', 'staff/signup.html',
+    return TandoraForm(User, UserForm, 'edit', 'staff/form.html',
                        reverse('frontend-view-users')) \
         .get_form(request,
                   success_message=frontend_constants.USER_CREATED_OR_EDITED_SUCCESSFULLY,

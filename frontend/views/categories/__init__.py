@@ -20,7 +20,7 @@ def category_form(request):
     else:
         post_data = None
 
-    return TandoraForm(Category, CategoryForm, 'create', 'staff/signup.html',
+    return TandoraForm(Category, CategoryForm, 'create', 'staff/form.html',
                        '/')\
         .get_form(request, success_message=CATEGORY_CREATED_OR_EDITED_SUCCESSFULLY,
                   error_message=CATEGORY_DOES_NOT_EXIST, post_data=post_data)
@@ -28,7 +28,7 @@ def category_form(request):
 
 @is_authenticated
 def edit_category(request, id):
-    return TandoraForm(Category, CategoryForm, 'edit', 'staff/signup.html',
+    return TandoraForm(Category, CategoryForm, 'edit', 'staff/form.html',
                        '/')\
         .get_form(request,
                   success_message=CATEGORY_CREATED_OR_EDITED_SUCCESSFULLY,
