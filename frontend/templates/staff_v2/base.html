@@ -37,7 +37,7 @@
             <div class="row">
                <div class="col-12 col-sm-12 col-md-12 col-lg-12">
                   <div class="copyright-footer">
-                     <p>Copyright @ 2021 <a href="index.html">Tandora</a> | All Rights Reserved</p>
+                     <p>Copyright @ 2021 <a href="https://tandora.co">Tandora</a> | All Rights Reserved</p>
                   </div>
                </div>
             </div>
@@ -49,4 +49,106 @@
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
 <script src="{% static 'js/custom.js' %}"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<!--script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/js/all.min.js"></script-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script src="{% static 'js/codemirror.js' %}"></script>
+<script src="{% static 'js/codemirror-css.js' %}"></script>
+<script src="{% static 'js/codemirror-js.js' %}"></script>
+<script src="{% static 'js/codemirror-html-mixed.js' %}"></script>
+<script src="https://cdn.tiny.cloud/1/5go3l67jw81vbd2io38hy95ya2zlyg7fnyjp2mjhnw41zudn/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+<script>
+  let javascriptTextarea = document.getElementById("id_javascript");
+  if(javascriptTextarea) {
+    var editor = CodeMirror.fromTextArea(javascriptTextarea, {
+      lineNumbers: true, mode: {"name": "javascript"}
+    });
+  }
+  let cssTextarea = document.getElementById("id_css");
+  if(cssTextarea) {
+    var editor = CodeMirror.fromTextArea(cssTextarea, {
+      lineNumbers: true, mode: {"name": "css"}
+    });
+  }
+</script>
+<script>
+    if(!cssTextarea && !javascriptTextarea) {
+        tinymce.init({
+        selector: 'textarea',
+        height: 300,
+        menubar: true,
+        plugins: [
+            'advlist autolink lists link image imagetools charmap print preview anchor textcolor',
+            'searchreplace visualblocks code fullscreen',
+            'insertdatetime media table paste code help wordcount'
+        ],
+        toolbar: 'undo redo | formatselect | bold italic forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | image | help',
+        content_css: [
+            '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
+            '//www.tiny.cloud/css/codepen.min.css'
+        ],
+        imagetools_cors_hosts: ['app.tandora.co', 'localhost:8000'],
+        images_upload_url: '/api/v1/inline-image/',
+        automatic_uploads: true,
+        paste_data_images: true
+        });
+    }
+</script>
+<script src="{% static 'js/modal.min.js' %}"></script>
+<script>
+function performDelete(url, name) {
+    var confirmModal = Modal.confirm('Are you sure to delete this ' + name + ' ?');
+    confirmModal.show().once('dismiss', function(modal, ev, button) {
+        if (button && button.value) {
+            console.log(url);
+            window.location.href = url;
+            return true;
+        }
+    });
+}
+function showToast(toast_type, title, body) {
+    toastr.options = {
+      "positionClass": "toast-bottom-right"
+    }
+    toastr[toast_type](title, body);
+}
+</script>
+<script>
+    function changeColorFieldBackground() {
+        this.style.backgroundColor = this.value;
+    }
+
+    let colorFields = document.getElementsByClassName('colorfieldwidget');
+    for(i=0; i<colorFields.length; i++) {
+        colorField = colorFields[i];
+        if(colorField.value) {
+            colorField.style.backgroundColor = colorField.value;
+        }
+        colorField.addEventListener('change', changeColorFieldBackground);
+    }
+</script>
+<script>
+    let menuHightlightMap = {};
+    let currentLocation = window.location.href;
+    if(window.location.pathname != '/staff') {
+        document.getElementById('menu-dashboard').classList.remove('active');
+    }
+
+    if(currentLocation.indexOf('create-changelog') > 0) {
+        document.getElementById('menu-create-changelog').classList.add('active');
+    }
+
+    else if(currentLocation.indexOf('manage/profile') > 0) {
+        document.getElementById('menu-profile').classList.add('active');
+    }
+
+    else if(currentLocation.indexOf('manage') > 0) {
+        document.getElementById('menu-manage').classList.add('active');
+    }
+
+    else if(currentLocation.indexOf('billing') > 0) {
+        document.getElementById('menu-billing').classList.add('active');
+    }
+
+</script>
 </html>

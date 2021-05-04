@@ -54,7 +54,7 @@ def _changelog_form(request, form, action, changelog_id=None, instance=None):
             return HttpResponseRedirect("/staff")
     changelog_id = f"/{str(changelog_id)}" if changelog_id else ""
 
-    return render(request, 'staff/changelogs/form.html',
+    return render(request, 'staff_v2/changelogs/form.html',
                   {'form': form, 'action': f'/staff/{action}-changelog{changelog_id}', 'title': action.title()})
 
 

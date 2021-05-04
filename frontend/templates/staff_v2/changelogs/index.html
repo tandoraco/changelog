@@ -32,7 +32,7 @@
                 <div class="col-12 col-md-6 col-lg-6">
                     <div class="card listing">
                         <div class="listing-text Doctorparoma-text">
-                            <h3>{{ changelog.title }} <span style="color: white; background-color: {{ changelog.category.color }};">{{ changelog.category.name }}</span></h3>
+                            <h3>{{ changelog.title|truncatechars:30 }} ... <span style="color: white; background-color: {{ changelog.category.color }};">{{ changelog.category.name }}</span></h3>
                             <h4>created: {{ changelog.created_at|naturaltime }}</h4>
                             <p>{{ changelog.content|extract_text_and_truncate }}<a href="/{{ company_name}}/{{ terminology }}/{{ changelog.slug }}"> &nbsp; &nbsp; Read More...</a></p>
                             <div class="listing-button">
