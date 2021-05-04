@@ -35,7 +35,7 @@ def login(request):
             create_session(form.data['email'], request)
 
             if request.user.company.use_case == 's' and request.user.company.is_first_login:
-                return HttpResponseRedirect(reverse('frontend-setup-web-builder', args=(1, )))
+                return HttpResponseRedirect(reverse('frontend-setup-web-builder', args=(1,)))
             if redirect_to:
                 return HttpResponseRedirect(redirect_to)
 
@@ -125,9 +125,9 @@ def razorpay_webhook(request):
 
 @transaction.atomic
 def forgot_password_form(request):
-    return TandoraForm(ForgotPassword, ForgotPasswordForm, 'create', 'public/signup.html',
+    return TandoraForm(ForgotPassword, ForgotPasswordForm, 'create', 'staff_v2/form.html',
                        "/login") \
-        .get_form(request, success_message=PASSWORD_RESET_INITIATED, title="Forgot Password")
+        .get_form(request, success_message=PASSWORD_RESET_INITIATED, title="Initiate password reset")
 
 
 @transaction.atomic
@@ -156,7 +156,7 @@ def reset_password_form(request, token):
         else:
             form = ResetPasswordForm()
 
-        return render(request, 'public/signup.html', {
+        return render(request, 'staff_v2/form.html', {
             'form': form,
             'title': 'Reset Password'
         })
