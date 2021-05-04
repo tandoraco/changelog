@@ -1,0 +1,47 @@
+{% extends "staff_v2/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="main-wrapper">
+    {% include 'staff_v2/menu_prelogin.html' %}
+    <section class="section-wrapper signin-page">
+        <div class="container">
+            <div class="row align-center">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-6">
+                    <div class="title">
+                        <h3>{{ title }}</h3>
+                        <p>Existing customers <br><a href="/login">Sign In Here! </a></p>
+                    </div>
+                    <div class="profile-image">
+                        <img src="https://tandora-production.s3.amazonaws.com/assets/assets/sign-up-img.svg" alt="profile-image">
+                    </div>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-6">
+                    <div class="signin-form">
+                        <div class="account-content">
+                            <form method="POST" class="form" action="{{ action }}">
+                                {% csrf_token %}
+                                {{ form|crispy }}
+                                <div class="theme-button">
+                                    <button type="submit" class="submit-btn">Register</button>
+                                </div>
+                            </form>
+                            <!--div class="form-footer wow fadeIn" data-wow-delay="0.8s">
+                                <p class="border-bottom wow fadeIn" data-wow-delay="0.9s">
+                                    <span> or cintinue with </span></p>
+                                <div class="social-share wow fadeIn" data-wow-delay="1s">
+                                    <a href="https://www.facebook.com/" class="facebook-btn"><img
+                                            src="assets/images/facebook-icon.svg" alt="facebook"></a>
+                                    <a href="https://www.google.com/" class="google-btn"><img
+                                            src="assets/images/google-icon.svg" alt="google"></a>
+                                    <a href="https://www.google.com/" class="google-btn"><img
+                                            src="assets/images/twitter.svg" alt="google"></a>
+                                </div>
+                            </div-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}

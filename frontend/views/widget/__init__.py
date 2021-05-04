@@ -63,7 +63,7 @@ def widget_form(request):
             public_page_url = reverse('frontend-public-widget', kwargs={'company': slugify(company.company_name)})
             extra = f'<i><a target="_blank" href="{public_page_url}">Click here</a> to view widget.</i>'
 
-    return TandoraForm(Embed, WidgetForm, action, 'staff/form.html',
+    return TandoraForm(Embed, WidgetForm, action, 'staff/signup.html',
                        reverse('frontend-manage-widget'), initial=initial) \
         .get_form(request, instance=embed, success_message=WIDGET_CREATED_OR_EDITED_SUCCESSFULLY,
                   error_message=WIDGET_DOES_NOT_EXIST, extra=extra)

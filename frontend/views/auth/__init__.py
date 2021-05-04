@@ -35,7 +35,7 @@ def login(request):
             create_session(form.data['email'], request)
 
             if request.user.company.use_case == 's' and request.user.company.is_first_login:
-                return HttpResponseRedirect(reverse('frontend-setup-web-builder', args=(1, )))
+                return HttpResponseRedirect(reverse('frontend-setup-web-builder', args=(1,)))
             if redirect_to:
                 return HttpResponseRedirect(redirect_to)
 
@@ -46,7 +46,7 @@ def login(request):
 
     set_redirect_in_session(request, redirect_to)
 
-    return render(request, 'login.html', {'form': form})
+    return render(request, 'staff_v2/login.html', {'form': form, 'page_title': 'Login to access Tandora Changelog'})
 
 
 @is_authenticated
@@ -71,9 +71,9 @@ def signup(request):
     else:
         form = CompanySignupForm()
 
-    return render(request, 'public/form.html', {
+    return render(request, 'staff_v2/signup.html', {
         'form': form,
-        'title': 'Signup for 7 day free trial'
+        'title': 'Signup for 7 day free trial (No credit card required)'
     })
 
 
@@ -90,7 +90,7 @@ you will be rewarded with attractive perks and incentives for every customer you
 </ul>
 <u>Fill in the below form if you would like to join the Tandora team as Tandora Man:</u>
     '''
-    return TandoraForm(Affiliate, AffiliateSignupForm, 'create', 'public/form.html',
+    return TandoraForm(Affiliate, AffiliateSignupForm, 'create', 'public/signup.html',
                        "/login") \
         .get_form(request, success_message=AFFILIATE_CREATED_SUCCESSFULLY, extra=affiliate_content,
                   title='Affiliate Signup')
@@ -100,7 +100,7 @@ you will be rewarded with attractive perks and incentives for every customer you
 def profile_form(request):
     email = request.session.get('email', '')
     id = User.objects.get(email=email).id
-    return TandoraForm(User, UserForm, 'edit', 'staff/form.html',
+    return TandoraForm(User, UserForm, 'edit', 'staff/signup.html',
                        '/') \
         .get_form(request, id=id)
 
@@ -108,7 +108,7 @@ def profile_form(request):
 @is_authenticated
 def company_form(request):
     id = request.session["company-id"]
-    return TandoraForm(Company, CompanyForm, 'edit', 'staff/form.html',
+    return TandoraForm(Company, CompanyForm, 'edit', 'staff/signup.html',
                        "/login") \
         .get_form(request, success_message=COMPANY_CREATED_OR_EDITED_SUCCESSFULLY,
                   error_message=COMPANY_DOES_NOT_EXIST, id=id)
@@ -125,9 +125,9 @@ def razorpay_webhook(request):
 
 @transaction.atomic
 def forgot_password_form(request):
-    return TandoraForm(ForgotPassword, ForgotPasswordForm, 'create', 'public/form.html',
+    return TandoraForm(ForgotPassword, ForgotPasswordForm, 'create', 'staff_v2/form.html',
                        "/login") \
-        .get_form(request, success_message=PASSWORD_RESET_INITIATED, title="Forgot Password")
+        .get_form(request, success_message=PASSWORD_RESET_INITIATED, title="Initiate password reset")
 
 
 @transaction.atomic
@@ -156,7 +156,7 @@ def reset_password_form(request, token):
         else:
             form = ResetPasswordForm()
 
-        return render(request, 'public/form.html', {
+        return render(request, 'staff_v2/form.html', {
             'form': form,
             'title': 'Reset Password'
         })
