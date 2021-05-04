@@ -44,7 +44,7 @@ def static_site_form(request):
                 if setting_name in form.fields:
                     form.fields[setting_name].initial = setting_value
 
-    return render(request, 'staff/form.html', {
+    return render(request, 'staff/signup.html', {
         'form': form,
         'title': 'Configure Website'
     })
@@ -69,7 +69,7 @@ def theme_form(request):
             else:
                 return HttpResponseRedirect('/')
 
-    return render(request, 'staff/form.html', {
+    return render(request, 'staff/signup.html', {
         'form': form,
         'title': 'Set Website Theme'
     })
