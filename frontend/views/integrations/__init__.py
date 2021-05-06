@@ -20,11 +20,11 @@ integration_meta = namedtuple('integration_meta', 'name logo description')
 INTEGRATION_FORM_FIELDS_DICT = {
     'zapier': {
         'read_only_fields': ['api_key'],
-        'exclude': ['company', 'zapier_webhook_url', ]
+        'fields': ['api_key', 'zapier_trigger_scenario', 'active', ]
     },
     'webhooks': {
         'read_only_fields': [],
-        'exclude': ['company', 'key', ]
+        'fields': ['name', 'url', 'trigger_when_created', 'trigger_when_published', 'active', ]
     }
 }
 
@@ -37,7 +37,8 @@ INTEGRATION_FRONTEND_META_DICT = {
                        'This enables you to seamlessly post Tandora Changelog to all of the connected Zapier Apps.'
                        'In a nutshell you can create a changelog once and post it to any of the connected Zapier Apps '
                        'using this integration.'
-                       '<a href="/staff/manage/integrations/zapier/embed">Click here</a> '
+                       '<a style="color:blue;text-decoration:underline;" '
+                       'href="/staff/manage/integrations/zapier/embed">Click here</a> '
                        'to view list of zaps available.'
     },
     'webhooks': {

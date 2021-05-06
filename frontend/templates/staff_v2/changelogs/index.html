@@ -19,12 +19,12 @@
     {% include 'staff_v2/menu_postlogin.html' %}
     <section class="section-wrapper listing-page">
         <div class="container mb-3 mt-3">
-            <div class="row d-flex  justify-content-end">
+            <!--div class="row d-flex  justify-content-end">
                 <div class="list-button ">
                     <button class="btn btn-primary btn-list"><img src="https://tandora-production.s3.amazonaws.com/assets/assets/list.svg"></button>
                     <button class="btn btn-primary btn-grid"><img src="https://tandora-production.s3.amazonaws.com/assets/assets/view.svg"></button>
                 </div>
-            </div>
+            </div-->
         </div>
         <div class="container grid-container">
             <div class="row">
@@ -34,7 +34,7 @@
                         <div class="listing-text Doctorparoma-text">
                             <h3>{{ changelog.title|truncatechars:30 }} ... <span style="color: white; background-color: {{ changelog.category.color }};">{{ changelog.category.name }}</span></h3>
                             <h4>created: {{ changelog.created_at|naturaltime }}</h4>
-                            <p>{{ changelog.content|extract_text_and_truncate }}<a href="/{{ company_name}}/{{ terminology }}/{{ changelog.slug }}"> &nbsp; &nbsp; Read More...</a></p>
+                            <p>{{ changelog.content|extract_text_and_truncate }} ..</p>
                             <div class="listing-button">
                                 <ul>
                                     <li>
