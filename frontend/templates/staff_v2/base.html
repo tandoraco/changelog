@@ -58,6 +58,8 @@
 <script src="{% static 'js/codemirror-html-mixed.js' %}"></script>
 <script src="https://cdn.tiny.cloud/1/5go3l67jw81vbd2io38hy95ya2zlyg7fnyjp2mjhnw41zudn/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
 <script>
+let javascriptTextarea = document.getElementById("id_javascript");
+let cssTextarea = document.getElementById("id_css");
   /*let javascriptTextarea = document.getElementById("id_javascript");
   if(javascriptTextarea) {
     var editor = CodeMirror.fromTextArea(javascriptTextarea, {
