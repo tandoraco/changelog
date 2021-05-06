@@ -1,0 +1,47 @@
+{% extends "staff_v2/base.html" %}
+{% block content %}
+<div class="main-wrapper">
+    {% include 'staff_v2/menu_postlogin.html' %}
+    <section class="section-wrapper listing-page">
+        <div class="container">
+            <div class="row align-center">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-6">
+                    <div class="title">
+                        <h2>Manage Categories<br><span><a style="color:blue;text-decoration:underline;"
+                                                          href="/staff/manage/categories/create-category">Create Category</a></span>
+                        </h2>
+                    </div>
+                </div>
+                <div class="container grid-container">
+                    <div class="row">
+                        {% for category in object_list %}
+                        <div class="col-12 col-md-6 col-lg-6">
+                            <div class="card listing">
+                                <div class="listing-text Doctorparoma-text">
+                                    <h3>{{ category.name }}</h3>
+                                    <h4 style="background-color: {{ category.color }};color:white;"></h4>
+                                    <div class="listing-button">
+                                        <ul>
+                                            <li>
+                                                <button onclick="location.href='/staff/manage/categories/edit-category/{{ category.id }}'">
+                                                    <img src="https://tandora-production.s3.amazonaws.com/assets/assets/edit.svg"><span>Edit</span>
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <button onclick="location.href='/staff/manage/categories/delete-category/{{ category.id }}'">
+                                                    <img src="https://tandora-production.s3.amazonaws.com/assets/assets/delete.svg"><span>Delete</span>
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}

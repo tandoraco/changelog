@@ -23,8 +23,8 @@ INTEGRATION_FORM_FIELDS_DICT = {
         'exclude': ['company', 'zapier_webhook_url', ]
     },
     'webhooks': {
-        'read_only_fields': ['key'],
-        'exclude': ['company', ]
+        'read_only_fields': [],
+        'exclude': ['company', 'key', ]
     }
 }
 
@@ -70,7 +70,7 @@ def uuid_form_value(self, value):
 
 
 class IntegrationList(custom_views.TandoraAdminListViewMixin):
-    template_name = 'staff/integrations/index.html'
+    template_name = 'staff_v2/integrations/index.html'
 
     def get_queryset(self):
         return INTEGRATION_FRONTEND_META_DICT.keys()
@@ -103,6 +103,9 @@ def integration_form(request, integration):
 
             for field in integration_field_meta.get('read_only_fields', []):
                 self.fields[field].disabled = True
+
+            if self.fields.get('active'):
+                self.fields['active'].label = 'Check/Uncheck this to enable/disable this integration.'
 
         class Meta:
             model = model_class
