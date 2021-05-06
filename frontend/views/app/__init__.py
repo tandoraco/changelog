@@ -151,7 +151,7 @@ def public_index(request, company, changelog_terminology):
 
 
 class UserList(custom_views.TandoraAdminListViewMixin):
-    template_name = 'staff/users/index.html'
+    template_name = 'staff_v2/users/index.html'
 
     def get_queryset(self):
         from v1.accounts.models import User

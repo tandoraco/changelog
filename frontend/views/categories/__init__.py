@@ -42,7 +42,7 @@ def delete_category(request, id):
 
 
 class CategoryList(TandoraListViewMixin):
-    template_name = 'staff/categories/index.html'
+    template_name = 'staff_v2/categories/index.html'
 
     def get_queryset(self):
         company_id = self.request.session['company-id']
