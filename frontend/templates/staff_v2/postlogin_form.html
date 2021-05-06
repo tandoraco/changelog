@@ -4,6 +4,9 @@
 <div class="main-wrapper">
     {% include 'staff_v2/menu_postlogin.html' %}
     <section class="section-wrapper signin-page">
+        <center>{% if extra %}
+                <h3>{{ extra|safe }}</h3>
+            {% endif %}</center>
         <div class="container">
             <div class="row align-center">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-6">
@@ -32,9 +35,18 @@
 </div>
 <script>
     let categoryDiv = document.getElementById('div_id_category');
-    categoryDiv.classList.add('dropdown_box');
+    if(categoryDiv) {
+        categoryDiv.classList.add('dropdown_box');
+    }
     let publishDiv = document.getElementById('div_id_published');
-    publishDiv.classList.add('inputWithIcon')
-    publishDiv.classList.add('inputIconBg');
+    if(publishDiv) {
+        publishDiv.classList.add('inputWithIcon')
+        publishDiv.classList.add('inputIconBg');
+    }
+    let zapierDiv = document.getElementById('div_id_zapier_trigger_scenario');
+    if(zapierDiv) {
+        zapierDiv.classList.add('dropdown_box');
+    }
+
 </script>
 {% endblock %}

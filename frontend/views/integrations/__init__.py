@@ -104,9 +104,6 @@ def integration_form(request, integration):
             for field in integration_field_meta.get('read_only_fields', []):
                 self.fields[field].disabled = True
 
-            if self.fields.get('active'):
-                self.fields['active'].label = 'Check/Uncheck this to enable/disable this integration.'
-
         class Meta:
             model = model_class
             if integration_field_meta.get('exclude'):
