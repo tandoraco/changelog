@@ -20,11 +20,11 @@ integration_meta = namedtuple('integration_meta', 'name logo description')
 INTEGRATION_FORM_FIELDS_DICT = {
     'zapier': {
         'read_only_fields': ['api_key'],
-        'exclude': ['company', 'zapier_webhook_url', ]
+        'fields': ['api_key', 'zapier_trigger_scenario', 'active', ]
     },
     'webhooks': {
-        'read_only_fields': ['key'],
-        'exclude': ['company', ]
+        'read_only_fields': [],
+        'fields': ['name', 'url', 'trigger_when_created', 'trigger_when_published', 'active', ]
     }
 }
 
@@ -37,7 +37,8 @@ INTEGRATION_FRONTEND_META_DICT = {
                        'This enables you to seamlessly post Tandora Changelog to all of the connected Zapier Apps.'
                        'In a nutshell you can create a changelog once and post it to any of the connected Zapier Apps '
                        'using this integration.'
-                       '<a href="/staff/manage/integrations/zapier/embed">Click here</a> '
+                       '<a style="color:blue;text-decoration:underline;" '
+                       'href="/staff/manage/integrations/zapier/embed">Click here</a> '
                        'to view list of zaps available.'
     },
     'webhooks': {
@@ -70,7 +71,7 @@ def uuid_form_value(self, value):
 
 
 class IntegrationList(custom_views.TandoraAdminListViewMixin):
-    template_name = 'staff/integrations/index.html'
+    template_name = 'staff_v2/integrations/index.html'
 
     def get_queryset(self):
         return INTEGRATION_FRONTEND_META_DICT.keys()
@@ -113,7 +114,7 @@ def integration_form(request, integration):
             else:
                 fields = '__all__'
 
-    return TandoraForm(model_class, IntegrationModelForm, 'edit', 'staff/signup.html',
+    return TandoraForm(model_class, IntegrationModelForm, 'edit', 'staff_v2/postlogin_form.html',
                        reverse('frontend-view-integrations')) \
         .get_form(request,
                   success_message=INTEGRATION_EDITED_SUCCESSFULLY,

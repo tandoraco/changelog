@@ -26,7 +26,7 @@ class TestFrontEndChangelogViews:
         ]
 
         FrontEndFormViewTestBase(
-            model_name='Tandora',
+            model_name='Changelog',
             urls=urls,
             fields=['title', 'content', 'category'],
             view_exclude_fields={'category'},

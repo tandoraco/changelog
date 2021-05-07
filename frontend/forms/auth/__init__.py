@@ -156,7 +156,6 @@ class ResetPasswordForm(forms.Form):
 
 class CompanyForm(forms.ModelForm):
     read_only_fields = [
-        'admin',
         'website',
         'company_name',
     ]
@@ -169,7 +168,7 @@ class CompanyForm(forms.ModelForm):
 
     class Meta:
         model = Company
-        exclude = ['is_trial_account', 'created_time', 'use_case', '_settings']
+        exclude = ['is_trial_account', 'created_time', 'use_case', '_settings', 'admin', ]
 
     def clean_changelog_terminology(self):
         changelog_terminology = self.cleaned_data.get('changelog_terminology')

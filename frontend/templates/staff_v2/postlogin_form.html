@@ -2,35 +2,67 @@
 {% load crispy_forms_tags %}
 {% block content %}
 <div class="main-wrapper">
-    {% include 'staff_v2/menu_prelogin.html' %}
+    {% include 'staff_v2/menu_postlogin.html' %}
     <section class="section-wrapper signin-page">
+        <center>{% if extra %}
+                <h3>{{ extra|safe }}</h3>
+            {% endif %}</center>
         <div class="container">
             <div class="row align-center">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-6">
                     <div class="title">
-                        <h3>{{ title }}</h3>
-                    </div>
-                    <div class="profile-image">
-                        <img src="https://tandora-production.s3.amazonaws.com/assets/assets/sign-up-img.svg" alt="profile-image">
+                        <h2>{{ action_name }} <br><span>{{ model_name }}</span></h2>
+                        <!--p>Lorem Ipsum is simply dummy text of <br>the printing</p-->
                     </div>
                 </div>
                 <div class="col-12 col-sm-12 col-md-12 col-lg-6">
                     <div class="signin-form">
                         <div class="account-content">
-                            <form method="POST" class="form" action="">
+                            <form class="form" method="post" action=""
+                                {% if is_multipart_form %}
+                                    enctype='multipart/form-data'
+                                {% endif %}
+                            >
                                 {% csrf_token %}
                                 {{ form|crispy }}
                                 <div class="theme-button">
                                     <button type="submit" class="submit-btn">Submit</button>
+                                    <button type="reset" class="submit-btn reset-btn">Reset</button>
                                 </div>
                             </form>
                         </div>
+                        <br>
+                        <div class="theme-button">
+                            <div id="extra_actions">
+                            </div>
+                        </div>
+                        <div id="notification_toast"></div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 </div>
+<script>
+    let categoryDiv = document.getElementById('div_id_category');
+    if(categoryDiv) {
+        categoryDiv.classList.add('dropdown_box');
+    }
+    let publishDiv = document.getElementById('div_id_published');
+    if(publishDiv) {
+        publishDiv.classList.add('inputWithIcon')
+        publishDiv.classList.add('inputIconBg');
+    }
+    let zapierDiv = document.getElementById('div_id_zapier_trigger_scenario');
+    if(zapierDiv) {
+        zapierDiv.classList.add('dropdown_box');
+    }
+    let enabledDiv = document.getElementById('  id_enabled');
+    if(enabledDiv) {
+        enabledDiv.classList.add('inputWithIcon')
+        enabledDiv.classList.add('inputIconBg');
+    }
+</script>
 <script>
         let apiKey = document.getElementById('id_api_key');
         let extraActions = document.getElementById('extra_actions');
@@ -44,7 +76,7 @@
             let copyApiKeyButton = document.createElement('button');
             copyApiKeyButton.classList.add('btn');
             copyApiKeyButton.classList.add('btn-dark');
-            copyApiKeyButton.innerHTML = '<i class="far fa-copy"></i>&nbsp;&nbsp;Copy Api key';
+            copyApiKeyButton.innerHTML = 'Copy Api key';
             copyApiKeyButton.onclick = copyApiKey;
             extraActions.appendChild(copyApiKeyButton);
         }

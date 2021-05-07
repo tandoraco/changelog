@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+{% load static %}
+{% load frontend_tags %}
+{% load humanize %}
+<html>
+<head>
+    {% if request.user.company.use_case == 'c' %}
+    <title>{{ request.user.company.company_name }} Changelog</title>
+    {% endif %}
+    {% if request.user.company.use_case == 's' %}
+    <title>{{ request.user.company.company_name }} Web builder</title>
+    {% endif %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Arimo|Nunito|Rubik|Open+Sans&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    {% include 'staff_v2/menu_postlogin.html' %}
+    <section class="section-wrapper listing-page">
+        <div class="container mb-3 mt-3">
+            <!--div class="row d-flex  justify-content-end">
+                <div class="list-button ">
+                    <button class="btn btn-primary btn-list"><img src="https://tandora-production.s3.amazonaws.com/assets/assets/list.svg"></button>
+                    <button class="btn btn-primary btn-grid"><img src="https://tandora-production.s3.amazonaws.com/assets/assets/view.svg"></button>
+                </div>
+            </div-->
+        </div>
+        <div class="container grid-container">
+            <div class="row">
+                {% for changelog in object_list %}
+                <div class="col-12 col-md-6 col-lg-6">
+                    <div class="card listing">
+                        <div class="listing-text Doctorparoma-text">
+                            <h3>{{ changelog.title|truncatechars:30 }} ... <span style="color: white; background-color: {{ changelog.category.color }};">{{ changelog.category.name }}</span></h3>
+                            <h4>created: {{ changelog.created_at|naturaltime }}</h4>
+                            <p>{{ changelog.content|extract_text_and_truncate }} ..</p>
+                            <div class="listing-button">
+                                <ul>
+                                    <li>
+                                        <button onclick="location.href='/staff/edit-changelog/{{ changelog.id }}'"><img src="https://tandora-production.s3.amazonaws.com/assets/assets/edit.svg"><span>Edit</span></button>
+                                    </li>
+                                    <li>
+                                        <button onclick="location.href='/staff/changelog/{{ changelog.slug }}'"><img src="https://tandora-production.s3.amazonaws.com/assets/assets/eye.svg"><span>View</span></button>
+                                    </li>
+                                    <li>
+                                        <button onclick="location.href='/staff/delete-changelog/{{ changelog.id }}'"><img src="https://tandora-production.s3.amazonaws.com/assets/assets/delete.svg"><span>Delete</span></button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                <!--{ % include "public_v2/pagination.html" %}-->
+            </div>
+        </div>
+    </section>
+</body>
+</html>

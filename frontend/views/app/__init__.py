@@ -33,7 +33,7 @@ class ChangeLogList(custom_views.TandoraListViewMixin):
 
     def get_template_names(self):
         if int(self.request.GET.get('page', 1)) > 1:
-            return ['staff/changelogs/index.html']
+            return ['staff_v2/changelogs/index.html']
         return ['app.html']
 
     def get_queryset(self):
@@ -46,7 +46,7 @@ def view_changelog(request, slug):
     try:
         company_id = request.session["company-id"]
         changelog = Changelog.objects.get(company__id=company_id, slug=unquote(slug), deleted=False)
-        return render(request, 'staff/changelogs/changelog.html',
+        return render(request, 'staff_v2/changelogs/changelog.html',
                       context={'changelog': changelog})
     except Changelog.DoesNotExist:
         raise Http404
@@ -151,7 +151,7 @@ def public_index(request, company, changelog_terminology):
 
 
 class UserList(custom_views.TandoraAdminListViewMixin):
-    template_name = 'staff/users/index.html'
+    template_name = 'staff_v2/users/index.html'
 
     def get_queryset(self):
         from v1.accounts.models import User
@@ -166,7 +166,7 @@ def create_user(request):
     initial = {
         'company': request.user.company
     }
-    return TandoraForm(User, StaffNewUserForm, 'create', 'staff/signup.html',
+    return TandoraForm(User, StaffNewUserForm, 'create', 'staff_v2/postlogin_form.html',
                        reverse('frontend-view-users'), initial=initial) \
         .get_form(request,
                   success_message=frontend_constants.USER_CREATED_OR_EDITED_SUCCESSFULLY,
@@ -176,7 +176,7 @@ def create_user(request):
 @is_authenticated
 @is_admin
 def edit_user(request, id):
-    return TandoraForm(User, UserForm, 'edit', 'staff/signup.html',
+    return TandoraForm(User, UserForm, 'edit', 'staff_v2/postlogin_form.html',
                        reverse('frontend-view-users')) \
         .get_form(request,
                   success_message=frontend_constants.USER_CREATED_OR_EDITED_SUCCESSFULLY,
