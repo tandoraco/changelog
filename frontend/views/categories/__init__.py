@@ -20,7 +20,7 @@ def category_form(request):
     else:
         post_data = None
 
-    return TandoraForm(Category, CategoryForm, 'create', 'staff/signup.html',
+    return TandoraForm(Category, CategoryForm, 'create', 'staff_v2/postlogin_form.html',
                        '/')\
         .get_form(request, success_message=CATEGORY_CREATED_OR_EDITED_SUCCESSFULLY,
                   error_message=CATEGORY_DOES_NOT_EXIST, post_data=post_data)
@@ -28,7 +28,7 @@ def category_form(request):
 
 @is_authenticated
 def edit_category(request, id):
-    return TandoraForm(Category, CategoryForm, 'edit', 'staff/signup.html',
+    return TandoraForm(Category, CategoryForm, 'edit', 'staff_v2/postlogin_form.html',
                        '/')\
         .get_form(request,
                   success_message=CATEGORY_CREATED_OR_EDITED_SUCCESSFULLY,
@@ -42,7 +42,7 @@ def delete_category(request, id):
 
 
 class CategoryList(TandoraListViewMixin):
-    template_name = 'staff/categories/index.html'
+    template_name = 'staff_v2/categories/index.html'
 
     def get_queryset(self):
         company_id = self.request.session['company-id']
