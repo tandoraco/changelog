@@ -14,7 +14,7 @@ class TestTemplateContent:
         response = self.client.get(self.url)
 
         response_content = response.content.decode()
-        assert f'<a class="navbar-brand" href="/">{product_name}</a>' in response_content
+        assert product_name in response_content
 
     @pytest.mark.django_db
     def test_brand_name_for_tandora_changelog_product(self, company, active_user):
