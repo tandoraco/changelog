@@ -96,14 +96,16 @@ class FrontEndFormViewTestBase:
         response = self.client.get(url)
         assert response.status_code == status.HTTP_200_OK
         response_content = response.content.decode().lower()
-        assert f'create {self.model_name.lower()}' in response_content
+        assert 'create' in response_content
+        assert self.model_name.lower() in response_content
 
     def test_edit(self, url):
         self.client.force_login(self.user)
         response = self.client.get(url)
         assert response.status_code == status.HTTP_200_OK
         response_content = response.content.decode()
-        assert f'edit {self.model_name.lower()}' in response_content.lower()
+        assert 'edit' in response_content.lower()
+        assert self.model_name.lower() in response_content
         for field in self.fields:
             assert str(getattr(self.instance, field)) in response_content
 
