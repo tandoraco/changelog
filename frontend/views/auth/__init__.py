@@ -90,7 +90,7 @@ you will be rewarded with attractive perks and incentives for every customer you
 </ul>
 <u>Fill in the below form if you would like to join the Tandora team as Tandora Man:</u>
     '''
-    return TandoraForm(Affiliate, AffiliateSignupForm, 'create', 'public/signup.html',
+    return TandoraForm(Affiliate, AffiliateSignupForm, 'create', 'staff_v2/signup.html',
                        "/login") \
         .get_form(request, success_message=AFFILIATE_CREATED_SUCCESSFULLY, extra=affiliate_content,
                   title='Affiliate Signup')
