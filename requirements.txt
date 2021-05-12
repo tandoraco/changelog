@@ -24,7 +24,7 @@ pillow==6.0.0
 django-cors-headers==3.2.1
 stringcase==1.2.0
 razorpay==1.2.0
-https://tandoraassets.blob.core.windows.net/packages/tandora-payanpaadu-1.0.6.tar.gz
+https://tandora-packages.s3.amazonaws.com/tandora-payanpaadu-1.0.7.tar.gz
 azure-storage-blob==2.1.0
 django-background-tasks==1.2.5
 newrelic
