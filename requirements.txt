@@ -16,9 +16,9 @@ dj_static==0.0.6
 gunicorn==19.9.0
 django-dynamic-db-router==0.3.0
 django-ace==1.0.5
-django-ses==0.8.12
+django-ses==2.0.0
 bs4==0.0.1
-boto3==1.11.9
+boto3==1.17.71
 django-storages==1.8
 pillow==6.0.0
 django-cors-headers==3.2.1
@@ -31,3 +31,4 @@ newrelic
 watchtower==1.0.6
 python-json-logger==2.0.1
 django-user-visit==0.4.1
+sentry-sdk==1.1.0
