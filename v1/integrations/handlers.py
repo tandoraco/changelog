@@ -76,3 +76,13 @@ class IntegrationHandlerBase(object):
     def integration(self):
         object, _ = self.model.objects.get_or_create(company=self.company)
         return object
+
+
+class BackgroundJobHandlerBase(object):
+    def __init__(self, company, integration_object, changelog):
+        self.company = company
+        self.integration_object = integration_object
+        self.changelog = changelog
+
+    def execute(self, **kwargs):
+        raise NotImplementedError
