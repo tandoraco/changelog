@@ -1,6 +1,6 @@
 Django==3.1.2
 django-rest-framework==0.1.0
-djangorestframework==3.12.1
+djangorestframework==3.12.4
 pytz==2018.9
 argon2-cffi==20.1.0
 psycopg2-binary==2.7.7
@@ -24,7 +24,7 @@ pillow==6.0.0
 django-cors-headers==3.2.1
 stringcase==1.2.0
 razorpay==1.2.0
-https://tandoraassets.blob.core.windows.net/packages/tandora-payanpaadu-1.0.6.tar.gz
+https://tandoraassets.blob.core.windows.net/packages/tandora-payanpaadu-1.0.8.tar.gz
 azure-storage-blob==2.1.0
 django-background-tasks==1.2.5
 newrelic
