@@ -58,8 +58,7 @@ INTEGRATION_FRONTEND_META_DICT = {
     },
     'twitter': {
         'logo': 'https://tandora-production.s3.amazonaws.com/assets/logos/twitter-logo.png',
-        'description': 'By activating Twitter integration you can send your changelogs as tweets in '
-                       'your company handle.'
+        'description': 'By activating Twitter integration you can tweet changelogs in the connected  Twitter account.'
     }
 }
 
