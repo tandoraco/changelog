@@ -25,6 +25,12 @@ INTEGRATION_FORM_FIELDS_DICT = {
     'webhooks': {
         'read_only_fields': [],
         'fields': ['name', 'url', 'trigger_when_created', 'trigger_when_published', 'active', ]
+    },
+    'twitter': {
+        'read_only_fields': [],
+        'fields': ['consumer_key', 'consumer_secret', 'access_token', 'access_token_secret', 'tweet_content',
+                   'tweet_when_created', 'tweet_when_published',
+                   'active', ]
     }
 }
 
@@ -49,9 +55,13 @@ INTEGRATION_FRONTEND_META_DICT = {
                        'notified automatically when something new happens.'
                        'In many cases, you\'ll need to know how to use webhooks if you want to '
                        'automatically push data from one app to another.'
+    },
+    'twitter': {
+        'logo': 'https://tandora-production.s3.amazonaws.com/assets/logos/twitter-logo.png',
+        'description': 'By activating Twitter integration you can send your changelogs as tweets in '
+                       'your company handle.'
     }
 }
-
 
 INTEGRATION_EMBED_DICT = {
     'zapier': {
@@ -86,6 +96,7 @@ def integration_form(request, integration):
 
     try:
         subscription = request.user.company.subscription
+        print(subscription.all_plan_features)
         if not subscription.all_plan_features.get(integration):
             raise Subscription.DoesNotExist
     except Subscription.DoesNotExist:
