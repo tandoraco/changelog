@@ -37,7 +37,7 @@ Run the following commands to run test suite.
 - `pytest`
 
 ## Activating admin
--  If you hit http://localhost:8000/admin/ without performing the steps, the default credentials would not take you
+-  If you hit http://localhost:8000/admin/ without performing the following steps, the default credentials would not take you
 to admin page. You should make yourselves a super user to access admin.
 - Perform the following
     - `docker exec -it changelog_web_1 /bin/sh`
@@ -62,6 +62,10 @@ to admin page. You should make yourselves a super user to access admin.
 - Flake8 is used as a linter and pre-commit hooks.
 - Add flake8 as a pre-commit hook so that code is checked for pep8 conventions. If this is not followed, the code may fail the style check test in pipeline.
 - `flake8 --install-hook git`
+
+## Payanpaadu package
+
+- To reuse code across multiple repositories, we have developed our own python package called payanpaadu. To know more read this [wiki](https://bitbucket.org/tandoraco/payanpaadu/wiki/Home).
 
 ## Other useful links
 
