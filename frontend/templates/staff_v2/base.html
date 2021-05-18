@@ -60,6 +60,7 @@
 <script>
 let javascriptTextarea = document.getElementById("id_javascript");
 let cssTextarea = document.getElementById("id_css");
+let tweetContentTextarea = document.getElementById("id_tweet_content");
   /*let javascriptTextarea = document.getElementById("id_javascript");
   if(javascriptTextarea) {
     var editor = CodeMirror.fromTextArea(javascriptTextarea, {
@@ -74,7 +75,7 @@ let cssTextarea = document.getElementById("id_css");
   }*/
 </script>
 <script>
-    if(!cssTextarea && !javascriptTextarea) {
+    if(!cssTextarea && !javascriptTextarea && !tweetContentTextarea) {
         tinymce.init({
         selector: 'textarea',
         height: 300,
