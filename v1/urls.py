@@ -9,4 +9,5 @@ urlpatterns = [
     path(r'', include('v1.widget.urls')),
     path(r'', include('v1.static_site.urls')),
     path(r'', include('v1.integrations.urls')),
+    path('', include('payanpaadu.background_tasks.urls')),
 ]
