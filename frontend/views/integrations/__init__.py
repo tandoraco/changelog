@@ -95,7 +95,6 @@ def integration_form(request, integration):
 
     try:
         subscription = request.user.company.subscription
-        print(subscription.all_plan_features)
         if not subscription.all_plan_features.get(integration):
             raise Subscription.DoesNotExist
     except Subscription.DoesNotExist:
