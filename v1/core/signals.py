@@ -4,7 +4,6 @@ import requests
 from django.forms import model_to_dict
 from django.utils.text import slugify
 
-from v1.integrations.background_tasks import trigger_integration_background_tasks
 from v1.integrations.zapier.models import Zapier, ZapierWebhookTrigger
 from v1.utils import random_uuid
 
@@ -78,7 +77,3 @@ def trigger_webhook(sender, instance, created, **kwargs):
             post_webhook(instance, webhook)
         elif webhook.trigger_when_published and instance.published:
             post_webhook(instance, webhook)
-
-
-def run_integration_background_tasks(sender, instance, created, **kwargs):
-    trigger_integration_background_tasks(instance.company.id, instance.id, created=created)
