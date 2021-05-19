@@ -1,5 +1,7 @@
 import tweepy
 from django.conf import settings
+from sentry_sdk import capture_exception
+from tweepy import TweepError
 
 
 class TwitterClient:
@@ -17,8 +19,12 @@ class TwitterClient:
         self.api = tweepy.API(auth)
 
     def send_to_twitter(self, tweet):
-        response = self.api.update_status(status=tweet)
-        if settings.DEBUG:
-            print(response)
+        try:
+            response = self.api.update_status(status=tweet)
+        except TweepError:
+            capture_exception()
         else:
-            pass  # Todo log
+            if settings.DEBUG:
+                print(response)
+            else:
+                pass  # Todo log

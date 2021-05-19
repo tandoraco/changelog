@@ -2,12 +2,14 @@ from background_task import background
 from django.apps import apps
 
 from v1.integrations.twitter.handlers import TwitterBackgroundJobHandler
+from v1.integrations.webhooks.handlers import WebhookBackgroundJobHandler
+from v1.integrations.zapier.handlers import ZapierBackgroundJobHandler
 
 # key should be model name
 INTEGRATION_BACKGROUND_JOB_HANDLER_MAP = {
-    # 'Zapier',
-    # 'Webhooks',
-    'Twitter': TwitterBackgroundJobHandler
+    'Zapier': ZapierBackgroundJobHandler,
+    'Webhooks': WebhookBackgroundJobHandler,
+    'Twitter': TwitterBackgroundJobHandler,
 }
 
 

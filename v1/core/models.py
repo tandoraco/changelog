@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models.signals import pre_save, post_save
+from django.db.models.signals import pre_save
 from tinymce.models import HTMLField
 
 from v1.categories.models import Category
@@ -38,5 +38,3 @@ class InlineImageAttachment(models.Model):
 
 
 pre_save.connect(core_signals.get_or_populate_slug_field, sender=Changelog)
-post_save.connect(core_signals.trigger_zapier_webhook, sender=Changelog)
-post_save.connect(core_signals.trigger_webhook, sender=Changelog)

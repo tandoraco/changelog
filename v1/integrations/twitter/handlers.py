@@ -55,5 +55,5 @@ class TwitterBackgroundJobHandler(BackgroundJobHandlerBase):
         twitter_client = TwitterClient(self.integration_object)
         if kwargs.get('created') and self.integration_object.tweet_when_created:
             twitter_client.send_to_twitter(tweet)
-        elif self.integration_object.tweet_when_published:
+        elif self.integration_object.tweet_when_published and self.changelog.published:
             twitter_client.send_to_twitter(tweet)
