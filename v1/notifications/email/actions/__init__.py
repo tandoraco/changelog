@@ -17,9 +17,9 @@ class EmailActionBase:
         subject = context.get('subject')
         to = context.pop('to')
 
-        if settings.DEBUG:
-            message = context.pop('body')
+        if not settings.DEBUG:
+            message = context.get('body')
         else:
             message = render_to_string('email/generic_email_template.html', context)
 
-        send_mail(subject, message, from_email, to)
+        send_mail(subject, message, from_email, to, html_message=message)
