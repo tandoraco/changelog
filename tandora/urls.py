@@ -14,9 +14,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.conf import settings
-from django.conf.urls import url
 from django.conf.urls.static import static
-from django.urls import include, path
+from django.urls import include, path, re_path
 
 from frontend.admin import admin_site
 
@@ -26,15 +25,15 @@ if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += [
-    url(r'^tinymce/', include('tinymce.urls')),
-    url(r"api/v1/", include("v1.urls"), name="v1-api"),
+    re_path(r'^tinymce/', include('tinymce.urls')),
+    re_path(r"api/v1/", include("v1.urls"), name="v1-api"),
     path('admin/', admin_site.urls),
     path('', include('payanpaadu.background_tasks.urls')),
-    url(r"", include("frontend.urls"), name="v1-frontend"),
+    re_path(r"", include("frontend.urls"), name="v1-frontend"),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if (settings.DEBUG or settings.TESTING) and 'debug_toolbar' in settings.INSTALLED_APPS:
     import debug_toolbar
     urlpatterns += [
-        url(r'^__debug__/', include(debug_toolbar.urls), name='djdt'),
+        re_path(r'^__debug__/', include(debug_toolbar.urls), name='djdt'),
     ]
