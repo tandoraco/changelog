@@ -19,9 +19,3 @@ application = Cling(get_wsgi_application())
 
 newrelic.agent.initialize(os.path.join(os.path.dirname(__file__), "newrelic.ini"))
 application = newrelic.agent.WSGIApplicationWrapper(application)
-
-
-from django.conf import settings
-if not settings.DEBUG:
-    from payanpaadu.logger.aws import AWS_LOGGING_CONFIG
-    settings.LOGGING = AWS_LOGGING_CONFIG
