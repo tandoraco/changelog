@@ -1,10 +1,11 @@
+import requests
 from rest_framework import status
 from rest_framework.exceptions import MethodNotAllowed
 from rest_framework.response import Response
 
 from v1.audit.actions import AuditLogAction
-from v1.integrations.handlers import IntegrationSettingsHandlerBase, IntegrationHandlerBase
-from v1.integrations.zapier.models import Zapier
+from v1.integrations.handlers import IntegrationSettingsHandlerBase, IntegrationHandlerBase, BackgroundJobHandlerBase
+from v1.integrations.zapier.models import Zapier, ZapierWebhookTrigger, NEW_CHANGELOG, CHANGELOG_PUBLISHED
 from v1.integrations.zapier.serializers import ZapierSerializer
 
 
@@ -112,3 +113,31 @@ class ZapierHandler(IntegrationHandlerBase):
             return Response(status=status.HTTP_200_OK, data=[data])
         except IndexError:
             return Response(status=status.HTTP_200_OK, data=[])
+
+
+class ZapierBackgroundJobHandler(BackgroundJobHandlerBase):
+
+    def create_zapier_webhook_trigger(self, response):
+        ZapierWebhookTrigger.objects.create(zapier=self.integration_object,
+                                            changelog=self.changelog,
+                                            zapier_response_status_code=response.status_code,
+                                            zapier_response=response.content)
+
+    def trigger_zapier_webhook(self, data):
+        if self.integration_object.zapier_webhook_url:
+            response = requests.post(self.integration_object.zapier_webhook_url, data=data)
+            self.create_zapier_webhook_trigger(response)
+        else:
+            pass  # Todo Log
+
+    def execute(self, **kwargs):
+        from v1.core.serializers import ChangelogSerializerForZapier
+        data = ChangelogSerializerForZapier(instance=self.changelog).data
+
+        if kwargs.get('created') and self.integration_object.zapier_trigger_scenario == NEW_CHANGELOG:
+            self.trigger_zapier_webhook(data)
+        elif self.integration_object.zapier_trigger_scenario == CHANGELOG_PUBLISHED and self.changelog.published:
+            try:
+                ZapierWebhookTrigger.objects.get(changelog=self.changelog)
+            except ZapierWebhookTrigger.DoesNotExist:
+                self.trigger_zapier_webhook(data)

@@ -89,7 +89,7 @@ class TestAuthViews:
 
         response = self.client.get(forgot_password_url)
         response_content = response.content.decode()
-        assert "Initiate password reset" in response_content
+        assert "reset your password" in response_content.lower()
         assert 'Email' in response_content
 
         # Invalid email

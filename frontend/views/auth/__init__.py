@@ -127,7 +127,7 @@ def razorpay_webhook(request):
 def forgot_password_form(request):
     return TandoraForm(ForgotPassword, ForgotPasswordForm, 'create', 'staff_v2/form.html',
                        "/login") \
-        .get_form(request, success_message=PASSWORD_RESET_INITIATED, title="Initiate password reset")
+        .get_form(request, success_message=PASSWORD_RESET_INITIATED, title="Reset your Password")
 
 
 @transaction.atomic

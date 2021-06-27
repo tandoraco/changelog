@@ -10,7 +10,7 @@ from django.utils.text import slugify
 from v1.accounts.constants import CHANGELOG_TERMINOLOGY, MAX_EMAIL_LENGTH, USE_CASE_CHOICES
 from v1.accounts.signals import post_new_affiliate_signup_to_slack, notify_new_company_signup_in_slack
 from v1.accounts.utils import UserManager
-from v1.notifications import email as notification_email
+from v1.notifications.email import signals as email_signals
 from v1.utils import prettify_json, random_uuid
 
 CHANGELOG_TESTING_LIMIT = 5
@@ -275,7 +275,7 @@ class CustomDomain(models.Model):
         return f'{self.domain_name} -> {self.tandora_url}'
 
 
-post_save.connect(notification_email.send_forgot_password_mail, sender=ForgotPassword)
-post_save.connect(notification_email.send_user_verification_email, sender=User)
+post_save.connect(email_signals.send_forgot_password_mail, sender=ForgotPassword)
+post_save.connect(email_signals.send_user_verification_email, sender=User)
 post_save.connect(post_new_affiliate_signup_to_slack, sender=Affiliate)
 post_save.connect(notify_new_company_signup_in_slack, sender=Company)

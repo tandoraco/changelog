@@ -1,4 +1,4 @@
-# Tandora Development Setup
+# Tandora Changelog Development Setup
 
 Developed using Python, Django and Django Rest Framework
 
@@ -20,8 +20,7 @@ Developed using Python, Django and Django Rest Framework
     - `docker exec -it tandora-backend_web_1 /bin/sh`
     - `python manage.py migrate`
     - `python manage.py dev_setup`
-    - `python manage.py dev_setup_static_site`
-        - Closely watch the output of terminal logs. There will be a line containing Click this (some url) to verify your url.
+        - Closely watch the output of terminal logs. There will be a line containing Click this (some url) to verify your account.
         - Copy that verification url and paste in browser to activate your user account.
 - Now visit [http://localhost:8000](http://localhost:8000) in browser.
 - For credentials to login refer this file tandoramaster/management/commands/dev_setup.py
@@ -38,7 +37,7 @@ Run the following commands to run test suite.
 - `pytest`
 
 ## Activating admin
--  If you hit http://localhost:8000/admin/ without performing the steps, the default credentials would not take you
+-  If you hit http://localhost:8000/admin/ without performing the following steps, the default credentials would not take you
 to admin page. You should make yourselves a super user to access admin.
 - Perform the following
     - `docker exec -it tandora-backend_web_1 /bin/sh`
@@ -64,6 +63,10 @@ to admin page. You should make yourselves a super user to access admin.
 - Flake8 is used as a linter and pre-commit hooks.
 - Add flake8 as a pre-commit hook so that code is checked for pep8 conventions. If this is not followed, the code may fail the style check test in pipeline.
 - `flake8 --install-hook git`
+
+## Payanpaadu package
+
+- To reuse code across multiple repositories, we have developed our own python package called payanpaadu. To know more read this [wiki](https://bitbucket.org/tandoraco/payanpaadu/wiki/Home).
 
 ## Other useful links
 

@@ -1,6 +1,7 @@
 # Register your models here.
 from datetime import datetime
 
+from background_task.models import Task, CompletedTask
 from django.apps import apps
 from django.contrib import admin
 from django.contrib.admin import AdminSite
@@ -184,3 +185,5 @@ admin_site.register(apps.get_model('v1', 'Embed'), EmbedWidgetAdmin)
 admin_site.register(PublicPage)
 admin_site.register(audit_models.AuditLog, ReadOnlyModelAdmin)
 admin_site.register(UserVisit, ReadOnlyModelAdmin)
+admin_site.register(Task)
+admin_site.register(CompletedTask)
