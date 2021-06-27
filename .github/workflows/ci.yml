@@ -1,0 +1,88 @@
+name: CI
+on:
+  pull_request:
+    branches:
+      - 'master'
+      - 'testing'
+      - 'staging'
+      - 'production'
+
+jobs:
+  test-group-1:
+    name: Run tests - Group 1
+    runs-on: ubuntu-latest
+    env:
+      SECRET_KEY: 46eb9750-d717-11eb-a45c-acde48001122
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install Requirements
+        run: |
+          pip install -r requirements_dev.txt
+
+      - name: Run Tests
+        run: |
+          export PARALLEL_STEPS=4; export STEP_NO=1; make run-tests
+
+  test-group-2:
+    name: Run tests - Group 2
+    runs-on: ubuntu-latest
+    env:
+      SECRET_KEY: 46eb9750-d717-11eb-a45c-acde48001122
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install Requirements
+        run: |
+          pip install -r requirements_dev.txt
+
+      - name: Run Tests
+        run: |
+          export PARALLEL_STEPS=4; export STEP_NO=2; make run-tests
+  
+  test-group-3:
+    name: Run tests - Group 3
+    runs-on: ubuntu-latest
+    env:
+      SECRET_KEY: 46eb9750-d717-11eb-a45c-acde48001122
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install Requirements
+        run: |
+          pip install -r requirements_dev.txt
+
+      - name: Run Tests
+        run: |
+          export PARALLEL_STEPS=4; export STEP_NO=3; make run-tests
+  
+  test-group-4:
+    name: Run tests - Group 4
+    runs-on: ubuntu-latest
+    env:
+      SECRET_KEY: 46eb9750-d717-11eb-a45c-acde48001122
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install Requirements
+        run: |
+          pip install -r requirements_dev.txt
+
+      - name: Run Tests
+        run: |
+          export PARALLEL_STEPS=4; export STEP_NO=4; make run-tests
+  
+  linter:
+    name: Style Checks
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install Requirements
+        run: |
+          pip install flake8
+
+      - name: Run flake8 checker
+        run: |
+          flake8
