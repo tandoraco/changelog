@@ -10,18 +10,18 @@
             <div class="container">
                 <div class="row">
                     <div class="col-12 col-sm-12 col-md-12 col-lg-12">
-                        <div class="doctorparoma-details">
+                        <div class="doctorparoma-details" style="background-color:#F7F7F7;">
                             <div class="doctorparoma-top">
                                 <a style="color: white; background-color: {{ changelog.category.color }};" href="#">{{ changelog.category.name }}</a>
                                 <span id="changelog-view-count">Views: {{ changelog.view_count }}</span>
                                 <span>Created: {{ changelog.created_at|naturaltime }}</span>
                             </div>
-                            <div class="doctorparoma-message">
+                        </div>
+                        <div class="doctorparoma-message">
                                 {{ changelog.content|safe }}
-                            </div>
-                            <br><div>
-                                <h4><a href="/staff/edit-changelog/{{ changelog.id }}" style="color:blue;text-decoration:underline;">Edit</a></h4>
-                            </div>
+                        </div>
+                        <br><div>
+                            <h4><a href="/staff/edit-changelog/{{ changelog.id }}" style="color:blue;text-decoration:underline;">Edit</a></h4>
                         </div>
                     </div>
                 </div>
