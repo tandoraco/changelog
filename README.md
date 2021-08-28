@@ -20,10 +20,10 @@ Developed using Python, Django and Django Rest Framework
     - `docker exec -it changelog_web_1 /bin/sh`
     - `python manage.py migrate`
     - `python manage.py dev_setup`
-        - Closely watch the output of terminal logs. There will be a line containing Click this (some url) to verify your url.
+        - Closely watch the output of terminal logs. There will be a line containing Click this (some url) to verify your account.
         - Copy that verification url and paste in browser to activate your user account.
 - Now visit [http://localhost:8000](http://localhost:8000) in browser.
-- For credentials to login refer this file tandoramaster/management/commands/dev_setup.py
+- For credentials to login refer this file `tandoramaster/management/commands/dev_setup.py`
 
 
 ## Running locally after setup
