@@ -1,6 +1,7 @@
 from rest_framework import status
 
-from v1.integrations.handlers import IntegrationSettingsHandlerBase, IntegrationHandlerBase
+from v1.integrations.handlers import IntegrationSettingsHandlerBase, IntegrationHandlerBase, BackgroundJobHandlerBase
+from v1.integrations.webhooks.client import WebhookClient
 from v1.integrations.webhooks.models import Webhooks
 from v1.integrations.webhooks.serializers import WebhooksSerializer
 
@@ -27,3 +28,14 @@ class WebhooksHandler(IntegrationHandlerBase):
 
     def trigger_test(self, request):
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class WebhookBackgroundJobHandler(BackgroundJobHandlerBase):
+
+    def execute(self, **kwargs):
+        client = WebhookClient(self.integration_object, self.changelog)
+
+        if kwargs.get('created') and self.integration_object.trigger_when_created:
+            client.post_webhook()
+        elif self.integration_object.trigger_when_published and self.changelog.published:
+            client.post_webhook()
