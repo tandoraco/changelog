@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 import os
 from datetime import timedelta
 
+from django.core.exceptions import DisallowedHost
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -31,7 +32,7 @@ SECRET_KEY = '4r&ns-8mjg_s_^fh9z&7*up8n3w1jgbvj(yc(z12cay12&$+(i'
 DEBUG = bool(os.environ.get("DEBUG", False))
 TESTING = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*').split(',')
 
 
 # Application definition
@@ -72,7 +73,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'frontend.custom.middlewares.CustomDomainMiddleware',
+    # 'frontend.custom.middlewares.CustomDomainMiddleware',
     'user_visit.middleware.UserVisitMiddleware',
 ]
 
@@ -188,9 +189,22 @@ if not DEBUG:
     import sentry_sdk
     from sentry_sdk.integrations.django import DjangoIntegration
 
+    def before_send(event, hint):
+        if 'log_record' in hint:
+            if hint['log_record'].name == 'django.security.DisallowedHost':
+                return None
+
+        return event
+
     sentry_sdk.init(
         dsn=os.environ.get('SENTRY_DSN', ''),
-        integrations=[DjangoIntegration()]
+        integrations=[DjangoIntegration()],
+        traces_sample_rate=1.0,
+        # If you wish to associate users to errors (assuming you are using
+        # django.contrib.auth) you may enable sending PII data.
+        send_default_pii=True,
+        ignore_errors=[DisallowedHost, ],
+        before_send=before_send
     )
 
 

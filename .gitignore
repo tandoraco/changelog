@@ -431,3 +431,8 @@ config/
 staging.yml
 prod.yml
 newrelic.ini
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
