@@ -4,7 +4,7 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.core.management import call_command
 from django.db import transaction
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from frontend.constants import PASSWORD_DOES_NOT_MATCH, EMAIL_EXISTS_ERROR, WEBSITE_EXISTS_ERROR, INVALID_REFERRAL_CODE
 from v1.accounts.constants import MAX_EMAIL_LENGTH, PASSWORD_INCORRECT_ERROR, EMAIL_NOT_FOUND_ERROR, \

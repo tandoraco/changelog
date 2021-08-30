@@ -1,4 +1,4 @@
-# Tandora Development Setup
+# Tandora Changelog Development Setup
 
 Developed using Python, Django and Django Rest Framework
 
@@ -9,39 +9,38 @@ Developed using Python, Django and Django Rest Framework
 ## Setup
 
 - Clone this repo
-    `git clone https://tandora@bitbucket.org/tandoraco/tandora-backend.git`
+    `git clone https://github.com/tandoraco/changelog.git`
 - cd to this repo in terminal
-    - `cd tandora-backend`
+    - `cd changelog`
 - Copy the contents of file sample.env to .env
     - `cp sample.env .env`
 - Start the service by using the following command
     - `docker-compose -f dev.yml up`
 - After the server starts, type the following commands to run migrations and populate initial data
-    - `docker exec -it tandora-backend_web_1 /bin/sh`
+    - `docker exec -it changelog_web_1 /bin/sh`
     - `python manage.py migrate`
     - `python manage.py dev_setup`
-    - `python manage.py dev_setup_static_site`
-        - Closely watch the output of terminal logs. There will be a line containing Click this (some url) to verify your url.
+        - Closely watch the output of terminal logs. There will be a line containing Click this (some url) to verify your account.
         - Copy that verification url and paste in browser to activate your user account.
 - Now visit [http://localhost:8000](http://localhost:8000) in browser.
-- For credentials to login refer this file tandoramaster/management/commands/dev_setup.py
+- For credentials to login refer this file `tandoramaster/management/commands/dev_setup.py`
 
 
 ## Running locally after setup
 - Issue this command in terminal at the root of repo
-    - `docker-compose -f dev.yml up`
+    - `docker-compose -f dev.yml up -d`
 
 ## Running tests locally
 
 Run the following commands to run test suite.
-- `docker exec -it tandora-backend_web_1 /bin/sh`
+- `docker exec -it changelog_web_1 /bin/sh`
 - `pytest`
 
 ## Activating admin
--  If you hit http://localhost:8000/admin/ without performing the steps, the default credentials would not take you
+-  If you hit http://localhost:8000/admin/ without performing the following steps, the default credentials would not take you
 to admin page. You should make yourselves a super user to access admin.
 - Perform the following
-    - `docker exec -it tandora-backend_web_1 /bin/sh`
+    - `docker exec -it changelog_web_1 /bin/sh`
     - `python manage.py shell`
     ```python
     In [1]: from v1.accounts.models import User
@@ -54,10 +53,9 @@ to admin page. You should make yourselves a super user to access admin.
 
 ## Debugging in dev
 
-- When you up the container using `docker-compose -f dev.yml up` ipdb cannot be used. So stop the container using `docker-compose -f dev.yml stop`
-- Then start the container using the following command to use ipdb and other debuggers.
-    - `docker-compose -f dev.yml run --service-ports web`
-    - Bash shell of container cannot be used in this mode.
+- When you up the container using `docker-compose -f dev.yml up` ipdb cannot be used. So stop the container using `docker-compose -f dev.yml stop` and then start the containers in detached mode. `docker-compose -f dev.yml up -d`
+- Now attach to the web container. `docker attach changelog_web_1`
+- Now ipdb can be used in the attached container.
 
 ## Setup GIT Hooks
 
@@ -65,10 +63,11 @@ to admin page. You should make yourselves a super user to access admin.
 - Add flake8 as a pre-commit hook so that code is checked for pep8 conventions. If this is not followed, the code may fail the style check test in pipeline.
 - `flake8 --install-hook git`
 
+## Payanpaadu package
+
+- To reuse code across multiple repositories, we have developed our own python package called payanpaadu. To know more read this [wiki](https://bitbucket.org/tandoraco/payanpaadu/wiki/Home).
+
 ## Other useful links
 
-- [Writing DB migrations](https://bitbucket.org/tandoraco/tandora-backend/wiki/DB%20migrations)
-- [Coding conventions](https://bitbucket.org/tandoraco/tandora-backend/wiki/Coding%20conventions)
-- [Writing tests](https://bitbucket.org/tandoraco/tandora-backend/wiki/Writing%20tests)
-- [App workflow](https://bitbucket.org/tandoraco/tandora-backend/wiki/Workflow%20of%20app)
-- [Adding a new integration](https://bitbucket.org/tandoraco/tandora-backend/wiki/New%20Integration%20Guidelines)
+- [Writing DB migrations](https://github.com/tandoraco/changelog/wiki/DB-Migrations)
+- [Adding a new integration](https://github.com/tandoraco/changelog/wiki/How-to-add-a-new-Integration-%3F)

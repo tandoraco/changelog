@@ -70,8 +70,10 @@ class TestWidgetViews:
         response = self.client.get(url)
 
         assert response.status_code == status.HTTP_200_OK
-        response_content = response.content.decode('utf-8')
-        assert 'create embed' in response_content.lower()
+        response_content = response.content.decode('utf-8').lower()
+        response_content = response_content.lower()
+        assert 'create' in response_content
+        assert 'embed' in response_content
 
     @pytest.mark.django_db
     def test_manage_widget_shows_widget_edit_form_when_company_has_widget(self, company, active_user, widget):
@@ -81,4 +83,6 @@ class TestWidgetViews:
 
         assert response.status_code == status.HTTP_200_OK
         response_content = response.content.decode('utf-8')
-        assert 'edit embed' in response_content.lower()
+        response_content = response_content.lower()
+        assert 'edit' in response_content.lower()
+        assert 'embed' in response_content
