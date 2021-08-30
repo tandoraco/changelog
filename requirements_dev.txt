@@ -13,3 +13,5 @@ django-debug-toolbar==3.2.1
 django-querycount==0.7.0
 pytest-sugar
 pytest-picked
+pytest-xdist==2.3.0
+pytest-test-groups==1.0.3
