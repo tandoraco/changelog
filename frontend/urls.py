@@ -6,6 +6,7 @@ from django.views.generic import RedirectView
 from frontend.sitemaps import SITEMAPS
 from frontend.views import auth, app, categories, widget, static_site, integrations, settings, admin_actions, billing
 from frontend.views.core import changelog
+from frontend.views.rss import PublicChangelogFeed
 
 urlpatterns = [
     path('', RedirectView.as_view(url='staff'), name="frontend-index"),
@@ -62,6 +63,7 @@ urlpatterns = [
     # and hard-coding the production users widget url for backwards compatibility
     path('<str:company>/<str:changelog_terminology>/widget/1', widget.legacy_widget, name="frontend-legacy-widget"),
     path('widget/<str:company>', widget.public_widget, name="frontend-public-widget"),
+    path('<str:company>/<str:changelog_terminology>/rss', PublicChangelogFeed(), name='public-rss-feed'),
     path('<str:company>/<str:changelog_terminology>/<slug:slug>', app.view_changelog_as_public,
          name="frontend-view-changelog-as-public"),
     path('<str:company>/<str:changelog_terminology>', app.public_index, name="frontend-public-index"),
