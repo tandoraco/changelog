@@ -7,6 +7,7 @@ from django.template import Template, RequestContext
 
 from frontend.forms.auth.utils import get_plan_features
 from frontend.forms.static_site import FONT_CHOICES
+from v1.settings.public_page.models import PublicPage
 
 
 def get_context_and_template_name(company, changelog=False):
@@ -39,6 +40,18 @@ def get_context_and_template_name(company, changelog=False):
         }
 
     context.update({'plan_features': get_plan_features(company.id, company=company)})
+    try:
+        banner_title = company.publicpage.banner_title or company.company_name.title()
+        banner_tagline = company.publicpage.banner_tag_line or company.changelog_terminology.title()
+        context.update({
+            'banner_title': banner_title,
+            'banner_tagline': banner_tagline
+        })
+    except PublicPage.DoesNotExist:
+        context.update({
+            'banner_title': company.company_name.title(),
+            'banner_tagline': company.changelog_terminology.title()
+        })
 
     return context, template
 
