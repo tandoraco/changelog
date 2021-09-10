@@ -9,7 +9,7 @@ class ChangelogForm(forms.ModelForm):
 
     class Meta:
         model = Changelog
-        fields = ('title', 'content', 'category')
+        fields = ('title', 'content', 'category', 'featured_image', 'published', )
 
     def __init__(self, *args, **kwargs):
         super(ChangelogForm, self).__init__(*args, **kwargs)

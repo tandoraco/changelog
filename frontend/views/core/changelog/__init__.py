@@ -1,61 +1,49 @@
-from django.contrib import messages
-from django.http import HttpResponseRedirect, Http404
-from django.shortcuts import render
+from django.http import Http404
 
 from frontend.constants import CHANGELOG_DOES_NOT_EXIST_ERROR, CHANGELOG_CREATED_OR_EDITED_SUCCESSFULLY, \
     CHANGELOG_DELETED_SUCCESSFULLY
 from frontend.custom.decorators import is_authenticated, is_allowed
+from frontend.custom.forms import TandoraForm
 from frontend.custom.utils import delete_model
 from frontend.forms.core.changelog import ChangelogForm
-from v1.audit.actions import AuditLogAction
 from v1.core.models import Changelog
-from v1.core.serializers import ChangelogSerializer
+
+
+def changelog_form(request, action, instance=None):
+    if request.method == 'POST':
+        post_data = request.POST.copy()
+        post_data['company'] = request.user.company.id
+    else:
+        post_data = None
+    data = {'request': request}
+    post_commit_data = {
+        'created_by_id': request.user.id,
+        'last_edited_by_id': request.user.id
+    }
+    if action != 'create':
+        post_commit_data.pop('created_by_id')
+    return TandoraForm(Changelog, ChangelogForm, action, 'staff_v2/postlogin_form.html',
+                       '/', initial=data) \
+        .get_form(request, success_message=CHANGELOG_CREATED_OR_EDITED_SUCCESSFULLY,
+                  error_message=CHANGELOG_DOES_NOT_EXIST_ERROR, post_data=post_data, is_multipart_form=True,
+                  post_commit_data=post_commit_data, instance=instance)
 
 
 @is_authenticated
 @is_allowed('changelogs')
-def changelog_form(request):
-    data = {'request': request}
-    return _changelog_form(request, ChangelogForm(initial=data), "create")
-
-
-@is_authenticated
 def edit_changelog(request, id):
     try:
         company_id = request.session["company-id"]
         changelog = Changelog.objects.get(company__id=company_id, pk=id, deleted=False)
-        data = {'published': changelog.published, 'request': request}
-        form = ChangelogForm(instance=changelog, initial=data)
-        return _changelog_form(request, form, "edit", changelog_id=id, instance=changelog)
+        return changelog_form(request, 'edit', instance=changelog)
     except Changelog.DoesNotExist:
-        messages.error(request, message=CHANGELOG_DOES_NOT_EXIST_ERROR)
         raise Http404
 
 
-def _changelog_form(request, form, action, changelog_id=None, instance=None):
-    if request.method == "POST":
-        initial = {'request': request}
-        form = ChangelogForm(request.POST, initial=initial) if not instance else ChangelogForm(request.POST, instance,
-                                                                                               initial=initial)
-        data = request.POST.copy()
-        data["company"] = request.session["company-id"]
-        if not instance:
-            data["created_by"] = request.session["user-id"]
-        else:
-            data["created_by"] = instance.created_by.id
-
-        data["last_edited_by"] = request.session["user-id"]
-
-        serializer = ChangelogSerializer(data=data) if not instance else ChangelogSerializer(instance, data=data)
-        if serializer.is_valid():
-            instance = serializer.save()
-            messages.success(request, message=CHANGELOG_CREATED_OR_EDITED_SUCCESSFULLY.format(f"{action}"))
-            AuditLogAction(request, instance, 'ui').set_audit_log(action=action)
-            return HttpResponseRedirect("/staff")
-    changelog_id = f"/{str(changelog_id)}" if changelog_id else ""
-
-    return render(request, 'staff_v2/changelogs/form.html',
-                  {'form': form, 'action': f'/staff/{action}-changelog{changelog_id}', 'title': action.title()})
+@is_authenticated
+@is_allowed('changelogs')
+def create_changelog(request):
+    return changelog_form(request, 'create')
 
 
 @is_authenticated

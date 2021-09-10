@@ -8,7 +8,11 @@
         <div class="row">
             <div class="col-lg-6 col-xl-7">
                 <h2 class="heading title">Latest</h2>
+                {% if latest_changelog.featured_image %}
+                <img src="{{ latest_changelog.featured_image.url }}" alt="Image">
+                {% else %}
                 <img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/692x392.png" alt="Image">
+                {% endif %}
             </div>
             <div class="col-lg-6 col-xl-5">
                 <div class="blog-content">
@@ -34,7 +38,11 @@
             {% for changelog in changelogs|slice:changelog_limit %}
             <div class="col-md-6 col-lg-4">
                 <div class="blog-card">
+                    {% if changelog.featured_image %}
+                    <img src="{{ changelog.featured_image.url }}" alt="Image">
+                    {% else %}
                     <img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/360x237.png" class="blog-img" alt="Blog">
+                    {% endif %}
                     <div class="content">
                         <h6>{{ changelog.created_at|naturaltime }}</h6>
                         <h2>{{ changelog.title|truncatechars:30 }}</h2>

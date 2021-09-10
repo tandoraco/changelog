@@ -42,3 +42,9 @@ def validate_logo(file):
     max_file_size = int(0.5 * 1024 * 1024)  # 500 Kb
     if file and file.size > max_file_size:
         raise ValidationError(_('File too large. Size should not exceed 500 kb.'))
+
+
+def validate_image_size(file):
+    max_file_size = int(2 * 1024 * 1024)
+    if file and file.size > max_file_size:
+        raise ValidationError(_('File too large. Size should not exceed 2 MB.'))
