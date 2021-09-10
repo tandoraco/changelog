@@ -4,21 +4,22 @@
 <div class="blog-details">
     <div class="container">
         <div class="blog-details-card">
+            {% if changelog.featured_image %}
             <img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/images/blog.png" class="blog-img" alt="Blog">
+            {% endif %}
             <div class="content">
                 <div class="blog-profile">
-                    <div class="icon">
+                    <!--div class="icon">
                         <img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/images/profile.png" alt="Profile">
-                    </div>
+                    </div-->
                     <div class="designation">
-                        <h5>Donna M. Englund</h5>
-                        <h6>27 August 2021</h6>
+                        <h5>{{ changelog.title }}</h5>
+                        <h6>{{ changelog.created_at|naturaltime }}</h6>
                     </div>
                 </div>
                 <div class="blog-btn">
-                    <p class="eye"><img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/images/eye.svg" alt="Eye">321</p>
-                    <a href="javascript:void(0)" class="feature-btn">feature</a>
-                    <a href="javascript:void(0)" class="feature-btn impr">improvement</a>
+                    <p class="eye"><img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/images/eye.svg" alt="Eye"><span id="changelog-view-count">{{ changelog.view_count }}</span></p>
+                    <a href='#' class="feature-btn" style="color: {{ changelog.category.color }}; border: 1px solid {{ changelog.category.color }};">{{ changelog.category }}</a>
                 </div>
             </div>
         </div>
@@ -26,47 +27,23 @@
 </div>
 <div class="blog-details-list section-gap">
     <div class="container">
-        <div class="row mb-4 mb-md-5">
-            <div class="col-md-6">
-                <img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/images/blog-details1.png" alt="">
-            </div>
-            <div class="col-md-6">
-                <div class="content">
-                    <h2>Lorem Ipsum is simply</h2>
-                    <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum.</p>
-                </div>
-            </div>
-        </div>
-        <div class="row mb-4 mb-md-5">
-            <div class="col-md-6 order-2 order-md-1">
-                <div class="content">
-                    <h2>Contrary to popular belief</h2>
-                    <p>Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature.</p>
-                </div>
-            </div>
-            <div class="col-md-6 order-1 order-md-2 ">
-                <img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/images/blog-details2.png" alt="">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/images/blog-details3.png" alt="">
-            </div>
-            <div class="col-md-6">
-                <div class="content">
-                    <h2>There are many variations</h2>
-                    <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum.</p>
-                </div>
-            </div>
-        </div>
-        <div class="popular">
-            <h2>Contrary to popular belief</h2>
-            <p>Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature.</p>
-        </div>
-        <div class="links">
+        {{ changelog.content|safe }}
+        <!--div class="links">
             <a href="javascript:void(0)" class="prev"> <img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/images/read.svg" alt="Arrow"> Fully customizable themes and site deployments</a>
             <a href="javascript:void(0)" class="next">Linked Content Blocks <img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/images/read.svg" alt="arrow"></a>
-        </div>
+        </div-->
     </div>
 </div>
+<script defer>
+    window.addEventListener("load", function() {
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', '/api/v1/view-count/' + {{ changelog.id }} + '/', true)
+        xhr.onload = function() {
+            let changeViewCountElement = document.getElementById('changelog-view-count');
+            let response = JSON.parse(this.responseText);
+            changeViewCountElement.innerHTML = response.view_count;
+        }
+        xhr.send({});
+    });
+</script>
 {% endblock %}

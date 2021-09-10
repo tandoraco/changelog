@@ -129,6 +129,7 @@ def public_index(request, company, changelog_terminology):
 
         context, template = get_context_and_template_name(company)
         context['changelog_limit'] = get_public_changelog_limit(company)
+        context['show_company_info'] = True
 
         page = int(request.GET.get('page', 1))
 
