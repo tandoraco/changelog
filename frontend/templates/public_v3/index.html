@@ -8,9 +8,7 @@
         <div class="row">
             <div class="col-lg-6 col-xl-7">
                 <h2 class="heading title">Latest</h2>
-                {% if latest_changelog.featured_image %}
-                <img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/images/blog.png" alt="Image">
-                {% endif %}
+                <img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/692x392.png" alt="Image">
             </div>
             <div class="col-lg-6 col-xl-5">
                 <div class="blog-content">
@@ -21,7 +19,7 @@
                     <div class="content-body">
                         <h2>{{ latest_changelog.title|truncatechars:30 }}</h2>
                         <p>{{ latest_changelog.content|extract_text_and_truncate }}</p>
-                        <a href="javascript:void(0)" class="">Read <img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/images/read.svg" alt="read"> </a>
+                        <a href="/{{ company_name}}/{{ terminology }}/{{ latest_changelog.slug }}" class="">Read <img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/images/read.svg" alt="read"> </a>
                     </div>
                 </div>
             </div>
@@ -36,7 +34,7 @@
             {% for changelog in changelogs|slice:changelog_limit %}
             <div class="col-md-6 col-lg-4">
                 <div class="blog-card">
-                    <img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/images/blog1.png" class="blog-img" alt="Blog">
+                    <img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/360x237.png" class="blog-img" alt="Blog">
                     <div class="content">
                         <h6>{{ changelog.created_at|naturaltime }}</h6>
                         <h2>{{ changelog.title|truncatechars:30 }}</h2>
@@ -46,7 +44,7 @@
                         </div>
                         <p>{{ changelog.content|extract_text_and_truncate }}</p>
                         <div class="read">
-                            <a href="javascript:void(0)">Read <img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/images/read.svg" alt="Arrow"></a>
+                            <a href="/{{ company_name}}/{{ terminology }}/{{ changelog.slug }}">Read <img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/images/read.svg" alt="Arrow"></a>
                             <h5> <img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/images/eye.svg" alt="Eye"> {{ changelog.view_count }}</h5>
                         </div>
                     </div>
