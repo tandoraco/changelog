@@ -51,7 +51,6 @@ def get_changelogs_from_company_name_and_changelog_terminology(company, changelo
                                           company__changelog_terminology__iexact=changelog_terminology,
                                           deleted=False, published=True).\
         select_related('company', 'company__publicpage', 'company__subscription', 'category').order_by('-created_at')
-    print(changelogs)
     return changelogs
 
 

@@ -1,5 +1,4 @@
-from django.contrib import messages
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404
 from django.shortcuts import render
 from django.urls import reverse
 from django.utils.text import slugify
@@ -8,7 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from frontend.constants import (WIDGET_DOES_NOT_EXIST,
                                 WIDGET_CREATED_OR_EDITED_SUCCESSFULLY,
-                                WIDGET_CODE_EDIT_WARNING, NOT_ALLOWED)
+                                WIDGET_CODE_EDIT_WARNING)
 from frontend.custom.decorators import is_authenticated
 from frontend.custom.forms import TandoraForm
 from frontend.custom.utils import get_company_from_slug_and_changelog_terminology, get_public_changelog_limit
@@ -26,9 +25,6 @@ def widget_form(request):
     extra = None
 
     company = request.user.company
-    if company.is_static_site:
-        messages.info(request, NOT_ALLOWED)
-        return HttpResponseRedirect('/staff')
     try:
         embed = company.embed
         embed_exists = True
@@ -62,7 +58,7 @@ def widget_form(request):
         if embed.enabled:
             public_page_url = reverse('frontend-public-widget', kwargs={'company': slugify(company.company_name)})
             extra = f'<i><a target="_blank" style="color:blue;text-decoration:underline;" ' \
-                f'href="{public_page_url}">Click here</a> to view widget.</i>'
+                    f'href="{public_page_url}">Click here</a> to view widget.</i>'
 
     return TandoraForm(Embed, WidgetForm, action, 'staff_v2/postlogin_form.html',
                        reverse('frontend-manage-widget'), initial=initial) \

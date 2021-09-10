@@ -91,8 +91,6 @@ class Command(BaseCommand):
 
         current_path = pathlib.Path(__file__).parent
         initial_data_json = current_path / 'initial_data_for_changelog.json'
-        if use_case == 's':
-            initial_data_json = current_path / 'initial_data_for_static_site.json'
 
         with open(initial_data_json) as initial_data:
             data = json.loads(initial_data.read())

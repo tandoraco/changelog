@@ -40,7 +40,6 @@ ACCOUNT_CREATED_MESSAGE = _('Your account is created. Check your email for instr
 AFFILIATE_CREATED_SUCCESSFULLY = _('Your request is received. We will contact you shortly.')
 INVALID_REFERRAL_CODE = _('Invalid referral code.')
 
-STATIC_SITE_CONFIGURE_SUCCESS = _('Website configuration saved successfully.')
 NOT_ALLOWED = _('Not allowed for this plan.')
 THEME_SET_SUCCESS = _('Theme for Website set successfully.')
 

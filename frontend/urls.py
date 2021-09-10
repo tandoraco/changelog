@@ -4,7 +4,7 @@ from django.urls import path, re_path
 from django.views.generic import RedirectView
 
 from frontend.sitemaps import SITEMAPS
-from frontend.views import auth, app, categories, widget, static_site, integrations, settings, admin_actions, billing
+from frontend.views import auth, app, categories, widget, integrations, settings, admin_actions, billing
 from frontend.views.core import changelog
 from frontend.views.rss import PublicChangelogFeed
 
@@ -43,10 +43,6 @@ urlpatterns = [
     path('staff/manage/profile/company', auth.company_form, name="frontend-company-form"),
     path('staff/manage/profile/myself', auth.profile_form, name="frontend-profile-form"),
     path('staff/manage/widget', widget.widget_form, name="frontend-manage-widget"),
-    path('staff/web-builder/setup/stage/<int:stage_id>', static_site.setup_web_builder,
-         name='frontend-setup-web-builder'),
-    path('staff/manage/theme', static_site.theme_form, name="frontend-manage-theme"),
-    path('staff/manage/static-site', static_site.static_site_form, name="frontend-manage-static-site"),
     path('staff/manage/public-page', settings.manage_public_page, name="frontend-manage-public-page"),
     path('staff/admin/actions/delete-company/<str:company_name>', admin_actions.delete_company,
          name='admin-delete-company'),

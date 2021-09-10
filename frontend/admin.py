@@ -17,7 +17,6 @@ from frontend.views.billing.utils import generate_inr_invoice
 from v1.accounts import models as v1_account_models
 from v1.accounts.utils import hash_password
 from v1.settings.public_page.models import PublicPage
-from v1.static_site import models as v1_static_site_models
 
 
 class SyntaxHighlighterMixin:
@@ -174,9 +173,6 @@ admin_site.register(v1_account_models.Affiliate, CreateReadModelAdmin)
 admin_site.register(v1_account_models.Referral, ReferralAdmin)
 admin_site.register(v1_account_models.PendingInvoice, PendingInvoiceAdmin)
 admin_site.register(v1_account_models.CustomDomain)
-admin_site.register(v1_static_site_models.StaticSiteTheme, ModelAdminWithSyntaxHighlighter)
-admin_site.register(v1_static_site_models.StaticSiteField, CreateUpdateModelAdmin)
-admin_site.register(v1_static_site_models.StaticSiteThemeConfig, CreateUpdateModelAdmin)
 admin_site.register(apps.get_model('v1', 'Zapier'), ReadOnlyModelAdmin)
 admin_site.register(apps.get_model('v1', 'ZapierWebhookTrigger'), ReadOnlyModelAdmin)
 admin_site.register(apps.get_model('v1', 'Webhooks'))
