@@ -130,8 +130,17 @@ def public_index(request, company, changelog_terminology):
         context, template = get_context_and_template_name(company)
         context['changelog_limit'] = get_public_changelog_limit(company)
 
-        paginator = Paginator(changelogs_list, context['changelog_limit'])
         page = request.GET.get('page', 1)
+
+        if page == 1 and changelogs_list:
+            latest_changelog = changelogs_list[0]
+            changelogs_list = changelogs_list[1:]
+        else:
+            latest_changelog = None
+        context['latest_changelog'] = latest_changelog
+
+        paginator = Paginator(changelogs_list, context['changelog_limit'])
+
         try:
             changelogs = paginator.page(page)
         except PageNotAnInteger:

@@ -27,7 +27,7 @@ def extract_text_and_truncate(value):
     html_2_text = HTML2Text()
     html_2_text.feed(value)
 
-    return html_2_text.text.strip()[:280]
+    return html_2_text.text.strip()[:30]
 
 
 @register.filter
