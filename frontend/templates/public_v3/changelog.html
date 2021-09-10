@@ -5,7 +5,7 @@
     <div class="container">
         <div class="blog-details-card">
             {% if changelog.featured_image %}
-            <img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/images/blog.png" class="blog-img" alt="Blog">
+            <img src="{{ changelog.featured_image.url }}" class="blog-img" alt="Blog">
             {% endif %}
             <div class="content">
                 <div class="blog-profile">
