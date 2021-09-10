@@ -71,7 +71,7 @@
                 </div>
                 <div class="col-md-5 col-xl-3  text-center text-md-right">
                     <div class="subscribe-btn">
-                        <a href="javascript:void(0)"> <img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/images/mail.svg" alt="Icon"> Subscribe to Updates</a>
+                        <a href="{% url 'public-rss-feed' company=company_name changelog_terminology=terminology%}" target="_blank"> <img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/images/mail.svg" alt="Icon"> Subscribe to Updates</a>
                     </div>
                 </div>
             </div>
@@ -85,7 +85,7 @@
         <div class="main-footer">
             <a href="javascript:void(0)" class="logo"><img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/images/logo.svg" alt="Logo"></a>
             <div class="subscribe-btn">
-                <a href="javascript:void(0)"> <img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/images/mail.svg" alt="Icon"> Subscribe to Updates</a>
+                <a  href="{% url 'public-rss-feed' company=company_name changelog_terminology=terminology%}" target="_blank"> <img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/images/mail.svg" alt="Icon"> Subscribe to Updates</a>
             </div>
         </div>
     </div>
@@ -93,13 +93,13 @@
     <div class="sub-footer">
         <div class="container">
             <div class="Copyright">
-                <p>Copyright © 2021 by Tandora, Inc.</p>
+                <p>Copyright © 2021 by <a href="https://tandora.co">Tandora</a>, Inc.</p>
                 <ul>
-                    <li><a href="javascript:void(0)"><img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/images/facebook.svg" alt="Facebook"></a></li>
-                    <li><a href="javascript:void(0)"><img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/images/instagram.svg" alt="Instagram"></a></li>
-                    <li><a href="javascript:void(0)"><img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/images/twitter.svg" alt="Twitter"></a></li>
-                    <li><a href="javascript:void(0)"><img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/images/github.svg" alt="Github"></a></li>
-                    <li><a href="javascript:void(0)"><img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/images/linkedin.svg" alt="Linkedin"></a></li>
+                    <li><a href="https://facebook.com/tandoraco"><img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/images/facebook.svg" alt="Facebook"></a></li>
+                    <li><a href="https://instagram.com/tandoraco"><img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/images/instagram.svg" alt="Instagram"></a></li>
+                    <li><a href="https://twitter.com/tandoraco"><img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/images/twitter.svg" alt="Twitter"></a></li>
+                    <li><a href="https://github.com/tandoraco"><img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/images/github.svg" alt="Github"></a></li>
+                    <li><a href="https://linkedin.com/company/tandora"><img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/images/linkedin.svg" alt="Linkedin"></a></li>
                 </ul>
             </div>
         </div>

@@ -54,16 +54,18 @@
         </div>
         <div class="blog-pagination">
             <ul>
-                <li><a href="javascript:void(0)" class="prev"> <img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/images/pagi-arrow.svg" alt="Arrow"> Prev</a></li>
-                <li><a href="javascript:void(0)" class="num">1</a></li>
-                <li><a href="javascript:void(0)" class="num active">2</a></li>
-                <li><a href="javascript:void(0)" class="num">3</a></li>
-                <li><a href="javascript:void(0)" class="num">4</a></li>
-                <li><a href="javascript:void(0)" class="num d-none d-md-block">.....</a></li>
-                <li><a href="javascript:void(0)" class="num d-none d-md-block">10</a></li>
+                {% if changelogs.has_previous %}
+                <li><a href="?page={{ changelogs.previous_page_number }}" class="prev"> <img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/images/pagi-arrow.svg" alt="Arrow"> Prev</a></li>
+                {% endif %}
+                <!--li><a href="javascript:void(0)" class="num">1</a></li-->
+                <li><a href="javascript:void(0)" class="num active">{{ changelogs.number }}</a></li>
+                <li><a href="#" class="num d-none d-md-block">...</a></li>
+                <!--li><a href="javascript:void(0)" class="num d-none d-md-block">10</a></li>
                 <li><a href="javascript:void(0)" class="num d-none d-md-block">11</a></li>
-                <li><a href="javascript:void(0)" class="num d-none d-md-block">12</a></li>
-                <li><a href="javascript:void(0)" class="next active"> Next <img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/images/pagi-arrow.svg" alt="Arrow"> </a></li>
+                <li><a href="javascript:void(0)" class="num d-none d-md-block">12</a></li-->
+                {% if changelogs.has_next %}
+                <li><a href="?page={{ changelogs.next_page_number }}" class="next active"> Next <img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/images/pagi-arrow.svg" alt="Arrow"> </a></li>
+                {% endif %}
             </ul>
         </div>
     </div>
