@@ -21,7 +21,7 @@ class WebhookClient:
                                    hash=self.hash)
 
     def post_webhook(self):
-        payload = model_to_dict(self.changelog, exclude=['company', ])
+        payload = model_to_dict(self.changelog, exclude=['company', 'featured_image', ])
         if self.webhook_obj.active:
             response = requests.post(self.webhook_obj.url, data=payload, headers={'TANDORA_HASH': self.hash})
             self.create_webhook_log(payload, response)

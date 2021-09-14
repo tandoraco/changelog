@@ -37,7 +37,8 @@ class TandoraForm:
 
     def get_form(self, request, success_message=None, error_message=None, id=None, extra=None,
                  title=None, post_data=None, instance=None, is_multipart_form=False,
-                 update_file_in_company_settings=None, post_commit_data=None):
+                 update_file_in_company_settings=None, post_commit_data=None,
+                 post_save_callback=None):
         form = self.form() if not self.initial else self.form(initial=self.initial)
 
         if not success_message:
@@ -96,6 +97,10 @@ class TandoraForm:
                     request.user.company.settings = company_settings
                     request.user.company.save()
 
+                if post_save_callback:
+                    callback_kwargs = dict()
+                    callback_kwargs['created'] = True if self.action == ACTION_CREATE else False
+                    post_save_callback(request.session['company-id'], obj.id, **callback_kwargs)
                 messages.success(request, message=success_message.format(self.action, str(obj)))
                 return HttpResponseRedirect(self.response_redirect_path)
 

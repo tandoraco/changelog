@@ -1,6 +1,7 @@
 import logging
 from logging import Logger
 
+from django import forms
 from django.conf import settings
 from django.contrib import messages
 from django.db import transaction
@@ -15,6 +16,13 @@ from slack_sdk.oauth.state_store import OAuthStateStore
 from frontend.constants import SLACK_INSTALLATION_FAILED, SLACK_INSTALLATION_SUCCESS
 from frontend.custom.decorators import is_authenticated
 from v1.integrations.slack.models import SlackState, Slack
+
+
+def get_channels_list():
+    return [
+        ('#random', '#random'),
+        ('#general', '#general'),
+    ]
 
 
 class ModelStateStore(OAuthStateStore):
@@ -37,9 +45,19 @@ class ModelStateStore(OAuthStateStore):
         return logging.getLogger('integrations')
 
 
-@require_GET
-@is_authenticated
-def oauth_start(request):
+class SlackForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        '''if self.instance:
+            self.fields['channels_to_post'] = forms.ChoiceField(choices=self.instance.get_channels_list)'''
+
+    class Meta:
+        model = Slack
+        fields = ('channel_to_post', 'trigger_when_created', 'trigger_when_published', 'active',)
+
+
+def oauth_start_helper(request):
     state_store = ModelStateStore()
     state = state_store.issue(request=request)
     authorized_url_generator = AuthorizeUrlGenerator(
@@ -48,13 +66,17 @@ def oauth_start(request):
         user_scopes=[],
     )
     url = authorized_url_generator.generate(state)
-    return HttpResponse(
-        f'<a href="{url}">'
-        f'<img alt=""Add to Slack"" height="40" width="139"'
-        f'src="https://platform.slack-edge.com/img/add_to_slack.png" '
-        f'srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, '
-        f'https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" /></a>'
-    )
+    return f'<a href="{url}">' \
+           f'<img alt=""Add to Slack"" height="40" width="139"' \
+           'src="https://platform.slack-edge.com/img/add_to_slack.png" ' \
+           'srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, ' \
+           'https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" /></a>'
+
+
+@require_GET
+@is_authenticated
+def oauth_start(request):
+    return HttpResponse(oauth_start_helper(request))
 
 
 @transaction.atomic
@@ -73,7 +95,7 @@ def oauth_callback(request):
         slack.oauth_response = oauth_response.data
         slack.save()
         messages.success(request, message=SLACK_INSTALLATION_SUCCESS)
+        return redirect(reverse_lazy('frontend-edit-integrations', kwargs={'integration': 'slack'}))
     else:
         messages.error(request, message=SLACK_INSTALLATION_FAILED)
-
-    return redirect(reverse_lazy('frontend-view-integrations'))
+        return redirect(reverse_lazy('frontend-view-integrations'))
