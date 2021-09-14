@@ -265,3 +265,10 @@ DEFAULT_FROM_EMAIL = 'no-reply-changelog@mg.tandora.co'
 AZURE_STORAGE_ACCOUNT_NAME = os.environ.get('AZURE_STORAGE_ACCOUNT_NAME')
 AZURE_STORAGE_ACCOUNT_KEY = os.environ.get('AZURE_STORAGE_ACCOUNT_KEY')
 BACKGROUND_JOB_AUTH_KEY = os.environ.get('BACKGROUND_JOB_AUTH_KEY')
+
+SLACK_SIGNING_SECRET = os.environ['SLACK_SIGNING_SECRET']
+SLACK_BOT_TOKEN = os.environ['SLACK_BOT_TOKEN']
+SLACK_CLIENT_SECRET = os.environ['SLACK_CLIENT_SECRET']
+SLACK_CLIENT_ID = os.environ['SLACK_CLIENT_ID']
+SLACK_REDIRECT_URI = 'https://e53d-2401-4900-4dd0-1c4e-e807-9605-8eac-b787.ngrok.io' \
+                     '/api/v1/slack/oauth/callback/'
