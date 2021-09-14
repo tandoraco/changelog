@@ -2,13 +2,17 @@ import logging
 from logging import Logger
 
 from django.conf import settings
+from django.contrib import messages
 from django.db import transaction
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse
+from django.shortcuts import redirect
+from django.urls import reverse_lazy
 from django.views.decorators.http import require_GET
 from slack_sdk import WebClient
 from slack_sdk.oauth import AuthorizeUrlGenerator
 from slack_sdk.oauth.state_store import OAuthStateStore
 
+from frontend.constants import SLACK_INSTALLATION_FAILED, SLACK_INSTALLATION_SUCCESS
 from frontend.custom.decorators import is_authenticated
 from v1.integrations.slack.models import SlackState, Slack
 
@@ -35,7 +39,7 @@ class ModelStateStore(OAuthStateStore):
 
 @require_GET
 @is_authenticated
-def slack_oauth_start(request):
+def oauth_start(request):
     state_store = ModelStateStore()
     state = state_store.issue(request=request)
     authorized_url_generator = AuthorizeUrlGenerator(
@@ -53,7 +57,8 @@ def slack_oauth_start(request):
     )
 
 
-def slack_oauth_callback(request):
+@transaction.atomic
+def oauth_callback(request):
     state_store = ModelStateStore()
     code = request.GET['code']
     if state_store.consume(request.GET['state']):
@@ -67,7 +72,8 @@ def slack_oauth_callback(request):
         slack, _ = Slack.objects.get_or_create(company=slack_state.company)
         slack.oauth_response = oauth_response.data
         slack.save()
-        return HttpResponseRedirect('/')
+        messages.success(request, message=SLACK_INSTALLATION_SUCCESS)
     else:
-        print('invalid')
-        return HttpResponseRedirect('/')
+        messages.error(request, message=SLACK_INSTALLATION_FAILED)
+
+    return redirect(reverse_lazy('frontend-view-integrations'))
