@@ -5,6 +5,7 @@ from django.views.generic import RedirectView
 
 from frontend.sitemaps import SITEMAPS
 from frontend.views import auth, app, categories, widget, integrations, settings, admin_actions, billing
+from frontend.views.integrations import slack
 from frontend.views.core import changelog
 from frontend.views.rss import PublicChangelogFeed
 
@@ -40,6 +41,8 @@ urlpatterns = [
          name="frontend-edit-integrations"),
     path('staff/manage/integrations/<str:integration>/embed', integrations.embed_details,
          name="frontend-integrations-embed"),
+    path('staff/slack/oauth/start', slack.oauth_start, name='slack-oauth-start'),
+    path('slack/oauth/callback', slack.oauth_callback, name='slack-oauth-callback'),
     path('staff/manage/profile/company', auth.company_form, name="frontend-company-form"),
     path('staff/manage/profile/myself', auth.profile_form, name="frontend-profile-form"),
     path('staff/manage/widget', widget.widget_form, name="frontend-manage-widget"),

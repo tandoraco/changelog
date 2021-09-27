@@ -66,3 +66,7 @@ WEB_BUILDER_SETUP_COMPLETED_PREVIEW_WEBSITE_MESSAGE = _(
     'href="url">here</a> to view preview of website.')
 
 PUBLIC_PAGE_CHANGELOG_10_MULTIPLE_ERROR = _('This value should be a multiple of 10.')
+
+
+SLACK_INSTALLATION_SUCCESS = _('Slack was installed successfully.')
+SLACK_INSTALLATION_FAILED = _('Unable to install Slack. Please try again.')

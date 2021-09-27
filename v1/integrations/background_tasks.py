@@ -1,6 +1,7 @@
 from background_task import background
 from django.apps import apps
 
+from v1.integrations.slack.handlers import SlackBackgroundJobHandler
 from v1.integrations.twitter.handlers import TwitterBackgroundJobHandler
 from v1.integrations.webhooks.handlers import WebhookBackgroundJobHandler
 from v1.integrations.zapier.handlers import ZapierBackgroundJobHandler
@@ -10,6 +11,7 @@ INTEGRATION_BACKGROUND_JOB_HANDLER_MAP = {
     'Zapier': ZapierBackgroundJobHandler,
     'Webhooks': WebhookBackgroundJobHandler,
     'Twitter': TwitterBackgroundJobHandler,
+    'Slack': SlackBackgroundJobHandler,
 }
 
 

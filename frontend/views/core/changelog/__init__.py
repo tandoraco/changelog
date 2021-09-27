@@ -7,6 +7,7 @@ from frontend.custom.forms import TandoraForm
 from frontend.custom.utils import delete_model
 from frontend.forms.core.changelog import ChangelogForm
 from v1.core.models import Changelog
+from v1.integrations.background_tasks import trigger_integration_background_tasks
 
 
 def changelog_form(request, action, instance=None):
@@ -26,7 +27,8 @@ def changelog_form(request, action, instance=None):
                        '/', initial=data) \
         .get_form(request, success_message=CHANGELOG_CREATED_OR_EDITED_SUCCESSFULLY,
                   error_message=CHANGELOG_DOES_NOT_EXIST_ERROR, post_data=post_data, is_multipart_form=True,
-                  post_commit_data=post_commit_data, instance=instance)
+                  post_commit_data=post_commit_data, instance=instance,
+                  post_save_callback=trigger_integration_background_tasks)
 
 
 @is_authenticated
