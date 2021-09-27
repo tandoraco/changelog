@@ -86,18 +86,3 @@ jobs:
       - name: Run flake8 checker
         run: |
           flake8
-
-  coverage:
-    name: Test Coverage
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v2
-      - name: Install Requirements
-        run: |
-          pip install -r requirements.txt
-      - name: Build coverage file
-        run: |
-          pytest --cache-clear --cov > pytest-coverage.txt
-      - name: Comment coverage
-        uses: coroo/pytest-coverage-commentator@v1.0.2
