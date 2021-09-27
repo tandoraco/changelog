@@ -1,44 +1,35 @@
-import datetime
 from html import unescape
 
-from django.http import Http404, HttpResponse
+from django.http import HttpResponse
 from django.shortcuts import render
 from django.template import Template, RequestContext
 
 from frontend.forms.auth.utils import get_plan_features
-from frontend.forms.static_site import FONT_CHOICES
+from v1.settings.public_page.models import PublicPage
 
 
 def get_context_and_template_name(company, changelog=False):
-    if company.is_static_site:
-        template = 'public/static-site.html'
-
-        try:
-            config = company.settings['static_site_config']
-        except KeyError:
-            raise Http404
-
-        font_name = ''
-        for font_link, font in FONT_CHOICES:
-            if config['font'] == font_link:
-                font_name = font
-
-        context = {
-            'config': config,
-            'company': company,
-            'year': datetime.datetime.now().year,
-            'font_name': font_name
-        }
-    else:
-        template = 'public_v2/index.html' if not changelog else 'public_v2/changelog.html'
-        context = {
-            'company': company,
-            'company_name': company.company_name,
-            'terminology': company.changelog_terminology,
-            'hide_tandora_logo': True
-        }
+    template = 'public_v3/index.html' if not changelog else 'public_v3/changelog.html'
+    context = {
+        'company': company,
+        'company_name': company.company_name,
+        'terminology': company.changelog_terminology,
+        'hide_tandora_logo': True
+    }
 
     context.update({'plan_features': get_plan_features(company.id, company=company)})
+    try:
+        banner_title = company.publicpage.banner_title or company.company_name.title()
+        banner_tagline = company.publicpage.banner_tag_line or company.changelog_terminology.title()
+        context.update({
+            'banner_title': banner_title,
+            'banner_tagline': banner_tagline
+        })
+    except PublicPage.DoesNotExist:
+        context.update({
+            'banner_title': company.company_name.title(),
+            'banner_tagline': company.changelog_terminology.title()
+        })
 
     return context, template
 

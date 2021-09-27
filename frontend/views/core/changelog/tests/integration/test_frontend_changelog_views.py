@@ -29,7 +29,7 @@ class TestFrontEndChangelogViews:
             model_name='Changelog',
             urls=urls,
             fields=['title', 'content', 'category'],
-            view_exclude_fields={'category'},
+            view_exclude_fields={'category', 'content'},
             user=active_user,
             company=company,
             queryset=changelogs,

@@ -20,7 +20,7 @@
                 <div class="col-12 col-sm-12 col-md-12 col-lg-6">
                     <div class="signin-form">
                         <div class="account-content">
-                            <form class="form" method="post" action="{{ action }}">
+                            <form class="form" method="post" action="{{ action }}" enctype='multipart/form-data'>
                                 {% csrf_token %}
                                 {{ form|crispy }}
                                 <div class="theme-button">

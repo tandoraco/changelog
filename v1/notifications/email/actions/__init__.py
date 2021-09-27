@@ -1,6 +1,5 @@
 from django.conf import settings
 from django.core.mail import send_mail
-from django.template.loader import render_to_string
 
 
 class EmailActionBase:
@@ -17,9 +16,11 @@ class EmailActionBase:
         subject = context.get('subject')
         to = context.pop('to')
 
-        if not settings.DEBUG:
+        '''if not settings.DEBUG:
             message = context.get('body')
         else:
-            message = render_to_string('email/generic_email_template.html', context)
+            message = render_to_string('email/generic_email_template.html', context)'''
+        message = context.get('body')
 
-        send_mail(subject, message, from_email, to, html_message=message)
+        # send_mail(subject, message, from_email, to, html_message=message)
+        send_mail(subject, message, from_email, to)
