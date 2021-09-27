@@ -233,7 +233,7 @@ if DEBUG:
 else:
     EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND')
     DEFAULT_FILE_STORAGE = os.environ.get('DEFAULT_FILE_STORAGE')
-EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND')
+
 AWS_SES_ACCESS_KEY_ID = os.environ.get('AWS_SES_ACCESS_KEY_ID')
 AWS_SES_SECRET_ACCESS_KEY = os.environ.get('AWS_SES_SECRET_ACCESS_KEY')
 
