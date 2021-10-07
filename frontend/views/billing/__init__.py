@@ -40,7 +40,8 @@ def billing_page(request):
             'billing_name': company.admin.name,
             'billing_email': company.admin.email,
             'billing_address': billing_address,
-            'invoice': invoice
+            'invoice': invoice,
+            'title': 'Billing',
         }
 
         try:

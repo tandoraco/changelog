@@ -96,6 +96,11 @@ def uuid_form_value(self, value):
 class IntegrationList(custom_views.TandoraAdminListViewMixin):
     template_name = 'staff_v2/integrations/index.html'
 
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['title'] = 'Manage Integrations'
+        return context
+
     def get_queryset(self):
         return INTEGRATION_FRONTEND_META_DICT.keys()
 

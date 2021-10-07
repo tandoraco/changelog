@@ -73,6 +73,7 @@ def signup(request):
 
     return render(request, 'staff_v2/signup.html', {
         'form': form,
+        'page_title': 'Signup for free trial | Tandora Changelog',
         'title': 'Signup for 7 day free trial (No credit card required)'
     })
 
