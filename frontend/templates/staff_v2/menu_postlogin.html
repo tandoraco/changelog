@@ -10,55 +10,55 @@
         <div class="collapse navbar-menu navbar-collapse" id="basicExampleNav13">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a id='menu-dashboard' href="/" class="nav-link active">Dashboard</a>
+                    <a style="color:black;" id='menu-dashboard' href="/" class="nav-link active">Dashboard</a>
                 </li>
                 <li class="nav-item">
-                    <a id='menu-create-changelog' href="/staff/create-changelog" class="nav-link">New Changelog</a>
+                    <a style="color:black;" id='menu-create-changelog' href="/staff/create-changelog" class="nav-link">New Changelog</a>
                 </li>
                 <li  class="nav-item dropdown">
-                    <a id='menu-profile' class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <a style="color:black;" id='menu-profile' class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Profile
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="/staff/manage/profile/myself">Me</a>
-                        <a class="dropdown-item" href="/staff/manage/profile/company">Company</a>
+                        <a style="color:black;" class="dropdown-item" href="/staff/manage/profile/myself">Me</a>
+                        <a style="color:black;" class="dropdown-item" href="/staff/manage/profile/company">Company</a>
                     </div>
                 </li>
                 <li class="nav-item dropdown">
-                    <a id='menu-manage' class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <a style="color:black;" id='menu-manage' class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Manage
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         {% if request.user.company.admin == request.user %}
-                        <a class="dropdown-item" href="/staff/manage/users">Users</a>
+                        <a style="color:black;" class="dropdown-item" href="/staff/manage/users">Users</a>
                         {% endif %}
-                        <a class="dropdown-item" href="/staff/manage/categories">Categories</a>
+                        <a style="color:black;"  class="dropdown-item" href="/staff/manage/categories">Categories</a>
                         {% if request.user.company.admin == request.user %}
                         {% if request.user.company.use_case == 'c' %}
-                        <a class="dropdown-item" href="/staff/manage/integrations">Integrations</a>
+                        <a style="color:black;" class="dropdown-item" href="/staff/manage/integrations">Integrations</a>
                         {% endif %}
                         {% endif %}
                         {% if request.user.company.use_case == 'c' %}
-                        <a class="dropdown-item" href="/staff/manage/widget">Widget</a>
-                        <a class="dropdown-item" href="/staff/manage/public-page">Public page</a>
+                        <a style="color:black;" class="dropdown-item" href="/staff/manage/widget">Widget</a>
+                        <a style="color:black;" class="dropdown-item" href="/staff/manage/public-page">Public page</a>
                         {% endif %}
                     </div>
                 </li>
                 <li class="nav-item">
                     {% if request.user.company.use_case == 'c' %}
-                    <a class="nav-link" target="_blank" href="{% public_page_url %}">View Public page</a>
+                    <a style="color:black;" class="nav-link" target="_blank" href="{% public_page_url %}">View Public page</a>
                     {% endif %}
                     {% if request.user.company.use_case == 's' %}
-                    <a class="nav-link" target="_blank" href="{% public_page_url %}">View Website</a>
+                    <a style="color:black;" class="nav-link" target="_blank" href="{% public_page_url %}">View Website</a>
                     {% endif %}
                 </li>
                 {% if request.user.company.admin == request.user %}
                 <li class="nav-item">
-                    <a id='menu-billing' class="nav-link" href="/staff/billing">Billing</a>
+                    <a style="color:black;" id='menu-billing' class="nav-link" href="/staff/billing">Billing</a>
                 </li>
                 {% endif %}
                 <li class="nav-item">
-                    <a class="nav-link" href="/logout">Logout</a>
+                    <a style="color:red;" class="nav-link" href="/logout">Logout</a>
                 </li>
             </ul>
         </div>
