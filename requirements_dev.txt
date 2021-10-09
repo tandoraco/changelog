@@ -9,7 +9,9 @@ pytest-django==3.9.0
 python-language-server==0.23.2
 autoflake==1.2
 pytest-cov==2.6.1
-django-debug-toolbar==3.1.1
+django-debug-toolbar==3.2.1
 django-querycount==0.7.0
 pytest-sugar
 pytest-picked
+pytest-xdist==2.3.0
+pytest-test-groups==1.0.3

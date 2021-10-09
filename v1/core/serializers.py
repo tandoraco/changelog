@@ -5,6 +5,7 @@ from django.utils.text import slugify
 from rest_framework import serializers
 
 from v1.core.models import Changelog, InlineImageAttachment
+from v1.integrations.background_tasks import trigger_integration_background_tasks
 from v1.utils import html_2_text, extract_all_image_src_urls
 
 
@@ -27,6 +28,16 @@ class ChangelogSerializer(serializers.ModelSerializer):
                 error_message = '%s: %s' % (field_name.title(), field_error)
                 errors_messages.append(error_message)  # append error message to 'errors_messages'
         return '\n'.join(errors_messages)
+
+    def create(self, validated_data):
+        changelog = super(ChangelogSerializer, self).create(validated_data)
+        trigger_integration_background_tasks(changelog.company.id, changelog.id, **{'created': True})
+        return changelog
+
+    def update(self, instance, validated_data):
+        changelog = super(ChangelogSerializer, self).update(instance, validated_data)
+        trigger_integration_background_tasks(changelog.company.id, changelog.id, **{'created': False})
+        return changelog
 
 
 class ChangelogSerializerForZapier(ChangelogSerializer):

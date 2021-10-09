@@ -44,6 +44,11 @@ def delete_category(request, id):
 class CategoryList(TandoraListViewMixin):
     template_name = 'staff_v2/categories/index.html'
 
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['title'] = 'Manage Categories'
+        return context
+
     def get_queryset(self):
         company_id = self.request.session['company-id']
         return Category.objects.filter(company__id=company_id, deleted=False)

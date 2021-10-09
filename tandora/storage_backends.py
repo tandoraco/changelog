@@ -5,3 +5,7 @@ from datetime import datetime
 class MediaStorage(S3Boto3Storage):
     location = f'user-uploads/{datetime.now().year}/{datetime.now().month}/{datetime.now().day}'
     file_overwrite = False
+
+
+class StaticFilesStorage(S3Boto3Storage):
+    bucket_name = 'assets'

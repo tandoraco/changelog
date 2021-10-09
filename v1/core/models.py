@@ -1,9 +1,10 @@
 from django.db import models
-from django.db.models.signals import pre_save, post_save
+from django.db.models.signals import pre_save
 from tinymce.models import HTMLField
 
 from v1.categories.models import Category
 from v1.core import signals as core_signals
+from v1.utils.validators import validate_image_size
 
 
 class Changelog(models.Model):
@@ -23,6 +24,7 @@ class Changelog(models.Model):
         auto_now=True)  # auto_now automatically updates time, whenever a model is saved
     last_edited_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name="last_edited_by")
     view_count = models.PositiveIntegerField(default=0)
+    featured_image = models.ImageField(null=True, blank=True, validators=[validate_image_size, ])
 
     def __str__(self):
         return f"{self.title}\n{self.id}"
@@ -38,5 +40,3 @@ class InlineImageAttachment(models.Model):
 
 
 pre_save.connect(core_signals.get_or_populate_slug_field, sender=Changelog)
-post_save.connect(core_signals.trigger_zapier_webhook, sender=Changelog)
-post_save.connect(core_signals.trigger_webhook, sender=Changelog)

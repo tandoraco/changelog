@@ -10,7 +10,7 @@ from django.utils.text import slugify
 from v1.accounts.constants import CHANGELOG_TERMINOLOGY, MAX_EMAIL_LENGTH, USE_CASE_CHOICES
 from v1.accounts.signals import post_new_affiliate_signup_to_slack, notify_new_company_signup_in_slack
 from v1.accounts.utils import UserManager
-from v1.notifications import email as notification_email
+from v1.notifications.email import signals as email_signals
 from v1.utils import prettify_json, random_uuid
 
 CHANGELOG_TESTING_LIMIT = 5
@@ -84,10 +84,6 @@ class Company(models.Model):
     def settings(self, value):
         self._settings = json.dumps(value)
 
-    @property
-    def is_static_site(self):
-        return self.use_case == 's'
-
     def settings_formatted(self):
         return prettify_json(self.settings)
 
@@ -98,33 +94,6 @@ class Company(models.Model):
     @property
     def is_first_login(self):
         return self.settings.get('is_first_login', True)
-
-    def theme_meta(self, return_fields=True):
-        from v1.static_site import models as static_site_models
-        theme_name = self.settings.get('theme', 'default')
-        theme_type = 'default'
-        theme = 'public/static-site.html'
-        fields = []
-
-        try:
-            static_site_theme = static_site_models.StaticSiteTheme.objects.filter(name__iexact=theme_name).\
-                select_related('staticsitethemeconfig')[0]
-            if static_site_theme.template_file:
-                theme_type = 'file'
-                theme = static_site_theme.template_file
-            if static_site_theme.template_content:
-                theme_type = 'content'
-                theme = static_site_theme.template_content
-            if return_fields:
-                fields = static_site_theme.staticsitethemeconfig.fields.all()
-        except (static_site_models.StaticSiteTheme.DoesNotExist, KeyError):
-            pass
-
-        return {
-            'theme_type': theme_type,
-            'theme': theme,
-            'fields': fields
-        }
 
 
 class PricePlan(models.Model):
@@ -275,7 +244,7 @@ class CustomDomain(models.Model):
         return f'{self.domain_name} -> {self.tandora_url}'
 
 
-post_save.connect(notification_email.send_forgot_password_mail, sender=ForgotPassword)
-post_save.connect(notification_email.send_user_verification_email, sender=User)
+post_save.connect(email_signals.send_forgot_password_mail, sender=ForgotPassword)
+post_save.connect(email_signals.send_user_verification_email, sender=User)
 post_save.connect(post_new_affiliate_signup_to_slack, sender=Affiliate)
 post_save.connect(notify_new_company_signup_in_slack, sender=Company)

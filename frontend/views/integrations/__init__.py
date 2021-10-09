@@ -3,17 +3,16 @@ from collections import namedtuple
 import stringcase as stringcase
 from django import forms
 from django.apps import apps
-from django.contrib import messages
-from django.http import HttpResponseRedirect, Http404
+from django.http import Http404
 from django.shortcuts import render
 from django.urls import reverse
 
-from frontend.constants import INTEGRATION_NOT_AVAILABLE_FOR_PLAN_ERROR, INTEGRATION_EDITED_SUCCESSFULLY, \
-    INTEGRATION_EDIT_FAILED_ERROR, NOT_ALLOWED
+from frontend.constants import INTEGRATION_EDITED_SUCCESSFULLY, \
+    INTEGRATION_EDIT_FAILED_ERROR
 from frontend.custom import views as custom_views
 from frontend.custom.decorators import is_authenticated, is_admin
 from frontend.custom.forms import TandoraForm
-from v1.accounts.models import Subscription
+from frontend.views.integrations import slack
 
 integration_meta = namedtuple('integration_meta', 'name logo description')
 
@@ -25,6 +24,17 @@ INTEGRATION_FORM_FIELDS_DICT = {
     'webhooks': {
         'read_only_fields': [],
         'fields': ['name', 'url', 'trigger_when_created', 'trigger_when_published', 'active', ]
+    },
+    'twitter': {
+        'read_only_fields': [],
+        'fields': ['consumer_key', 'consumer_secret', 'access_token', 'access_token_secret', 'tweet_content',
+                   'tweet_when_created', 'tweet_when_published',
+                   'active', ]
+    },
+    'slack': {
+        'read_only_fields': [],
+        'fields': ['channel_to_post', 'trigger_when_created', 'trigger_when_published', 'active', ],
+        'form': slack.SlackForm,
     }
 }
 
@@ -49,14 +59,27 @@ INTEGRATION_FRONTEND_META_DICT = {
                        'notified automatically when something new happens.'
                        'In many cases, you\'ll need to know how to use webhooks if you want to '
                        'automatically push data from one app to another.'
+    },
+    'twitter': {
+        'logo': 'https://tandora-production.s3.amazonaws.com/assets/logos/twitter-logo.png',
+        'description': 'By activating Twitter integration you can tweet changelogs in the connected Twitter account.'
+    },
+    'slack': {
+        'logo': 'https://tandora-production.s3.amazonaws.com/assets/logos/slack-logo.png',
+        'description': 'Send all your changelogs to Slack in realtime.'
     }
 }
-
 
 INTEGRATION_EMBED_DICT = {
     'zapier': {
         'title': 'Tandora Changelog Zaps',
         'embed': '<script src="https://zapier.com/apps/embed/widget.js?services=tandora-changelog&limit=10"></script>'
+    }
+}
+
+OAUTH_INTEGRATIONS = {
+    'slack': {
+        'oauth_start_helper': slack.oauth_start_helper,
     }
 }
 
@@ -73,6 +96,11 @@ def uuid_form_value(self, value):
 class IntegrationList(custom_views.TandoraAdminListViewMixin):
     template_name = 'staff_v2/integrations/index.html'
 
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['title'] = 'Manage Integrations'
+        return context
+
     def get_queryset(self):
         return INTEGRATION_FRONTEND_META_DICT.keys()
 
@@ -80,17 +108,13 @@ class IntegrationList(custom_views.TandoraAdminListViewMixin):
 @is_authenticated
 @is_admin
 def integration_form(request, integration):
-    if request.user.company.is_static_site:
-        messages.info(request, NOT_ALLOWED)
-        return HttpResponseRedirect('/staff')
-
-    try:
+    '''try:
         subscription = request.user.company.subscription
         if not subscription.all_plan_features.get(integration):
             raise Subscription.DoesNotExist
     except Subscription.DoesNotExist:
         messages.warning(request, INTEGRATION_NOT_AVAILABLE_FOR_PLAN_ERROR)
-        return HttpResponseRedirect(reverse('frontend-view-integrations'))
+        return HttpResponseRedirect(reverse('frontend-view-integrations'))'''
     model_class = apps.get_model('v1', stringcase.pascalcase(integration))
     instance, created = model_class.objects.get_or_create(company=request.user.company)
     integration_field_meta = INTEGRATION_FORM_FIELDS_DICT.get(integration, {})
@@ -114,7 +138,15 @@ def integration_form(request, integration):
             else:
                 fields = '__all__'
 
-    return TandoraForm(model_class, IntegrationModelForm, 'edit', 'staff_v2/postlogin_form.html',
+    if integration in OAUTH_INTEGRATIONS and not instance.oauth_done:
+        helper = OAUTH_INTEGRATIONS[integration]['oauth_start_helper']
+        html = helper(request)
+        return render(request, 'staff_v2/postlogin_form.html', context={
+            'extra': html
+        })
+
+    form_class = IntegrationModelForm if not integration_field_meta.get('form') else integration_field_meta['form']
+    return TandoraForm(model_class, form_class, 'edit', 'staff_v2/postlogin_form.html',
                        reverse('frontend-view-integrations')) \
         .get_form(request,
                   success_message=INTEGRATION_EDITED_SUCCESSFULLY,

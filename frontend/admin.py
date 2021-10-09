@@ -1,6 +1,7 @@
 # Register your models here.
 from datetime import datetime
 
+from background_task.models import Task, CompletedTask
 from django.apps import apps
 from django.contrib import admin
 from django.contrib.admin import AdminSite
@@ -16,17 +17,16 @@ from frontend.views.billing.utils import generate_inr_invoice
 from v1.accounts import models as v1_account_models
 from v1.accounts.utils import hash_password
 from v1.settings.public_page.models import PublicPage
-from v1.static_site import models as v1_static_site_models
 
 
 class SyntaxHighlighterMixin:
     class Media:
-        js = ('js/codemirror.js',
-              'js/codemirror-css.js',
-              'js/codemirror-js.js',
-              'js/codemirror-html-mixed.js',
-              'js/codemirror-xml.js',
-              'js/inject-syntax-highlighter.js'
+        js = ('https://tandora-changelog.s3.amazonaws.com/static/js/codemirror.js',
+              'https://tandora-changelog.s3.amazonaws.com/static/js/codemirror-css.js',
+              'https://tandora-changelog.s3.amazonaws.com/static/js/codemirror-js.js',
+              'https://tandora-changelog.s3.amazonaws.com/static/js/codemirror-html-mixed.js',
+              'https://tandora-changelog.s3.amazonaws.com/static/js/codemirror-xml.js',
+              'https://tandora-changelog.s3.amazonaws.com/static/js/inject-syntax-highlighter.js'
               )
         css = {
             'all': ('css/codemirror.css',)
@@ -173,9 +173,6 @@ admin_site.register(v1_account_models.Affiliate, CreateReadModelAdmin)
 admin_site.register(v1_account_models.Referral, ReferralAdmin)
 admin_site.register(v1_account_models.PendingInvoice, PendingInvoiceAdmin)
 admin_site.register(v1_account_models.CustomDomain)
-admin_site.register(v1_static_site_models.StaticSiteTheme, ModelAdminWithSyntaxHighlighter)
-admin_site.register(v1_static_site_models.StaticSiteField, CreateUpdateModelAdmin)
-admin_site.register(v1_static_site_models.StaticSiteThemeConfig, CreateUpdateModelAdmin)
 admin_site.register(apps.get_model('v1', 'Zapier'), ReadOnlyModelAdmin)
 admin_site.register(apps.get_model('v1', 'ZapierWebhookTrigger'), ReadOnlyModelAdmin)
 admin_site.register(apps.get_model('v1', 'Webhooks'))
@@ -184,3 +181,5 @@ admin_site.register(apps.get_model('v1', 'Embed'), EmbedWidgetAdmin)
 admin_site.register(PublicPage)
 admin_site.register(audit_models.AuditLog, ReadOnlyModelAdmin)
 admin_site.register(UserVisit, ReadOnlyModelAdmin)
+admin_site.register(Task)
+admin_site.register(CompletedTask)

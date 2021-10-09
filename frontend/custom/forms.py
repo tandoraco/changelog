@@ -37,7 +37,8 @@ class TandoraForm:
 
     def get_form(self, request, success_message=None, error_message=None, id=None, extra=None,
                  title=None, post_data=None, instance=None, is_multipart_form=False,
-                 update_file_in_company_settings=None):
+                 update_file_in_company_settings=None, post_commit_data=None,
+                 post_save_callback=None):
         form = self.form() if not self.initial else self.form(initial=self.initial)
 
         if not success_message:
@@ -47,10 +48,10 @@ class TandoraForm:
             error_message = f'{self.model.__name__.title()} does not exist.'
 
         if id:
-            form = self.form(instance=self._get_instance(id, request, error_message))
+            form = self.form(instance=self._get_instance(id, request, error_message), initial=self.initial)
         if instance:
             id = instance.id
-            form = self.form(instance=instance)
+            form = self.form(instance=instance, initial=self.initial)
 
         if not title:
             title = f'{self.action.title()} {self.model.__name__}'
@@ -58,7 +59,7 @@ class TandoraForm:
         if request.method == 'POST':
 
             if self.action == ACTION_CREATE:
-                form = self.form(post_data or request.POST, request.FILES or None)
+                form = self.form(post_data or request.POST, request.FILES or None, initial=self.initial)
 
             if self.action == ACTION_EDIT:
                 if not (id or instance):
@@ -67,7 +68,7 @@ class TandoraForm:
                 post_data = request.POST.copy()
                 post_data["id"] = id
                 form = self.form(post_data, request.FILES or None,
-                                 instance=self._get_instance(id, request, error_message))
+                                 instance=self._get_instance(id, request, error_message), initial=self.initial)
 
             if form.is_valid():
                 try:
@@ -76,6 +77,9 @@ class TandoraForm:
                     if self.action == ACTION_CREATE and hasattr(self.model, "company"):
                         setattr(obj, "company_id", request.session['company-id'])
 
+                    if post_commit_data:
+                        for col_name, value in post_commit_data.items():
+                            setattr(obj, col_name, value)
                     obj.save()
                 except TypeError:  # This happens, when the passed form is not a ModelForm
                     obj = form.save()
@@ -93,6 +97,10 @@ class TandoraForm:
                     request.user.company.settings = company_settings
                     request.user.company.save()
 
+                if post_save_callback:
+                    callback_kwargs = dict()
+                    callback_kwargs['created'] = True if self.action == ACTION_CREATE else False
+                    post_save_callback(request.session['company-id'], obj.id, **callback_kwargs)
                 messages.success(request, message=success_message.format(self.action, str(obj)))
                 return HttpResponseRedirect(self.response_redirect_path)
 

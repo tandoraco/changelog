@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.urls import reverse
 
-from frontend.constants import FREE_TRIAL_EXPIRED, NOT_ALLOWED, PLAN_LIMIT_REACHED_MESSAGE, \
+from frontend.constants import FREE_TRIAL_EXPIRED, PLAN_LIMIT_REACHED_MESSAGE, \
     ONLY_ADMIN_CAN_PERFORM_THIS_ACTION_ERROR, LOGIN_AGAIN_INFO
 from frontend.custom.utils import redirect_to_login
 from frontend.forms.auth.utils import is_valid_auth_token_and_email, is_trial_expired, DEFAULT_PLAN_FEATURES
@@ -31,14 +31,13 @@ def feature_with_integer_limits(features):
 
 
 def is_authenticated(func):
-
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
         request = args[0]
 
         company = None
         try:
-            token = ClientToken.objects.filter(token=request.session['auth-token']).\
+            token = ClientToken.objects.filter(token=request.session['auth-token']). \
                 select_related('user__company', 'user__company__subscription',
                                'user__company__subscription__plan')[0]
             company = token.user.company
@@ -59,7 +58,6 @@ def is_authenticated(func):
 
 
 def is_admin(func):
-
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
         request = args[0]
@@ -72,31 +70,9 @@ def is_admin(func):
     return wrapper
 
 
-def requires_static_site(func):
-
-    @functools.wraps(func)
-    def wrapper(*args, **kwargs):
-        request = args[0]
-
-        if not request.user.company.is_static_site:
-            messages.warning(request, NOT_ALLOWED)
-            return HttpResponseRedirect('/staff')
-
-        return func(*args, **kwargs)
-
-    return wrapper
-
-
 def requires_changelog_use_case(func):
-
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
-        request = args[0]
-
-        if request.user.company.is_static_site:
-            messages.warning(request, NOT_ALLOWED)
-            return HttpResponseRedirect('/staff')
-
         return func(*args, **kwargs)
 
     return wrapper
@@ -117,7 +93,6 @@ def is_limit_reached(feature_name, plan_features, company_id):
 
 
 def is_allowed(feature_name, redirect_to=None):
-
     def real_decorator(func):
 
         def wrapper(*args, **kwargs):

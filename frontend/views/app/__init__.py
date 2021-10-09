@@ -36,6 +36,11 @@ class ChangeLogList(custom_views.TandoraListViewMixin):
             return ['staff_v2/changelogs/index.html']
         return ['app.html']
 
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['title'] = 'Dashboard'
+        return context
+
     def get_queryset(self):
         company_id = self.request.session['company-id']
         return Changelog.objects.filter(deleted=False, company__id=company_id).select_related().order_by('-created_at')
@@ -129,9 +134,18 @@ def public_index(request, company, changelog_terminology):
 
         context, template = get_context_and_template_name(company)
         context['changelog_limit'] = get_public_changelog_limit(company)
+        context['show_company_info'] = True
+
+        page = int(request.GET.get('page', 1))
+
+        if page == 1 and changelogs_list:
+            latest_changelog = changelogs_list[0]
+        else:
+            latest_changelog = None
+        context['latest_changelog'] = latest_changelog
 
         paginator = Paginator(changelogs_list, context['changelog_limit'])
-        page = request.GET.get('page', 1)
+
         try:
             changelogs = paginator.page(page)
         except PageNotAnInteger:
@@ -152,6 +166,11 @@ def public_index(request, company, changelog_terminology):
 
 class UserList(custom_views.TandoraAdminListViewMixin):
     template_name = 'staff_v2/users/index.html'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['title'] = 'Manage Users'
+        return context
 
     def get_queryset(self):
         from v1.accounts.models import User
