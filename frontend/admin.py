@@ -21,12 +21,12 @@ from v1.settings.public_page.models import PublicPage
 
 class SyntaxHighlighterMixin:
     class Media:
-        js = ('js/codemirror.js',
-              'js/codemirror-css.js',
-              'js/codemirror-js.js',
-              'js/codemirror-html-mixed.js',
-              'js/codemirror-xml.js',
-              'js/inject-syntax-highlighter.js'
+        js = ('https://tandora-changelog.s3.amazonaws.com/static/js/codemirror.js',
+              'https://tandora-changelog.s3.amazonaws.com/static/js/codemirror-css.js',
+              'https://tandora-changelog.s3.amazonaws.com/static/js/codemirror-js.js',
+              'https://tandora-changelog.s3.amazonaws.com/static/js/codemirror-html-mixed.js',
+              'https://tandora-changelog.s3.amazonaws.com/static/js/codemirror-xml.js',
+              'https://tandora-changelog.s3.amazonaws.com/static/js/inject-syntax-highlighter.js'
               )
         css = {
             'all': ('css/codemirror.css',)
