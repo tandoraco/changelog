@@ -57,4 +57,4 @@ def billing_page(request):
     except apps.get_model('v1', 'Subscription').DoesNotExist:
         context = {key: '~' for key in billing_keys}
 
-    return render(request, 'staff/billing.html', context=context)
+    return render(request, 'staff_v2/billing.html', context=context)
