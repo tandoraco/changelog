@@ -18,12 +18,18 @@
     <meta property=og:description
           content="{{ changelog.content|meta_description }}">
     <meta name="description" content="{{ changelog.content|meta_description }}">
+    {% if changelog.featured_image %}
+        <meta name="og:image" content="{{ changelog.featured_image.url }}">
+        <meta name="og:image:alt" content="{{ changelog.title }}">
+        <meta name="twitter:image" content="{{ changelog.featured_image.url }}">
+        <meta name="twitter:image:alt" content="{{ changelog.title }}">
+    {% endif %}
     {% else %}
     <title>{{ company_name|title }} - {{ terminology }}</title>
     <meta property=og:title content="{{ company_name|title }} - {{ terminology }}">
     <meta property=og:description
           content="Recent updates, announcements, release notes, improvements from {{ company_name|title }}">
-    <meta name="description" content="Recent updates, announcements, release notes, improvements from {{ company_name|title }}">
+    <meta name="description" content="Recent updates, announcements, release notes, improvements, changelogs from {{ company_name|title }}">
     {% endif %}
     <meta name=twitter:card content=summary_large_image>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
