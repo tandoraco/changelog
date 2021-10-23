@@ -1,10 +1,12 @@
 # Register your models here.
+import csv
 from datetime import datetime
 
 from background_task.models import Task, CompletedTask
 from django.apps import apps
 from django.contrib import admin
 from django.contrib.admin import AdminSite
+from django.http import HttpResponse
 from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.text import slugify
@@ -118,8 +120,20 @@ class SubscriptionAdmin(SyntaxHighlighterMixin, admin.ModelAdmin):
     readonly_fields = ('razorpay_data',)
 
 
+def generate_referral_code_csv(modeladmin, request, queryset):
+    codes = queryset.filter(is_used=False).values_list('referral_code', flat=True)
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="Tandora Changelog referral codes.csv"'
+    writer = csv.writer(response)
+    for code in codes:
+        writer.writerow([code])
+    return response
+
+
 class ReferralAdmin(admin.ModelAdmin):
     readonly_fields = ('conversion_count', 'company_ids',)
+    actions = [generate_referral_code_csv, ]
+    search_fields = ('referral_code', )
 
 
 class ChangelogAdmin(admin.ModelAdmin):
