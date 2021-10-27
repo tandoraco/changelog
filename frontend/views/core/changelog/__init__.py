@@ -1,3 +1,4 @@
+from django.apps import apps
 from django.http import Http404
 
 from frontend.constants import CHANGELOG_DOES_NOT_EXIST_ERROR, CHANGELOG_CREATED_OR_EDITED_SUCCESSFULLY, \
@@ -5,7 +6,7 @@ from frontend.constants import CHANGELOG_DOES_NOT_EXIST_ERROR, CHANGELOG_CREATED
 from frontend.custom.decorators import is_authenticated, is_allowed
 from frontend.custom.forms import TandoraForm
 from frontend.custom.utils import delete_model
-from frontend.forms.core.changelog import ChangelogForm
+from frontend.forms.core.changelog import ChangelogForm, PinnedChangelogForm
 from v1.core.models import Changelog
 from v1.integrations.background_tasks import trigger_integration_background_tasks
 
@@ -52,3 +53,16 @@ def create_changelog(request):
 def delete_changelog(request, id):
     return delete_model(request, Changelog, id, '/', '/', CHANGELOG_DELETED_SUCCESSFULLY,
                         CHANGELOG_DOES_NOT_EXIST_ERROR)
+
+
+@is_authenticated
+def manage_pinned_changelog(request):
+    pinned_changelog_model = apps.get_model('v1', 'PinnedChangelog')
+    pinned_changelog, _ = pinned_changelog_model.objects.get_or_create(company=request.user.company)
+    title = 'Managed Pinned Changelog'
+    initial = {
+        'request': request
+    }
+    return TandoraForm(pinned_changelog_model, PinnedChangelogForm, 'edit', 'staff_v2/postlogin_form.html',
+                       '/', initial=initial) \
+        .get_form(request, instance=pinned_changelog, is_multipart_form=True, title=title)
