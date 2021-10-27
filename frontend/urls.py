@@ -25,6 +25,7 @@ urlpatterns = [
     path('staff/edit-changelog/<int:id>', changelog.edit_changelog, name="frontend-edit-changelog"),
     path('staff/delete-changelog/<int:id>', changelog.delete_changelog, name="frontend-delete-changelog"),
     path('staff/changelog/<slug:slug>', app.view_changelog, name="frontend-view-changelog"),
+    path('staff/manage/pinned-changelog', changelog.manage_pinned_changelog, name='frontend-manage-pinned-changelog'),
     path('staff/manage/users', app.UserList.as_view(), name="frontend-view-users"),
     path('staff/manage/users/create-user', app.create_user, name="frontend-create-user"),
     path('staff/manage/users/edit-user/<int:id>', app.edit_user, name="frontend-edit-user"),

@@ -92,4 +92,12 @@
             errorElements[i].style.display = 'block';
         }
 </script>
+<script>
+        if(window.location.href.indexOf('staff/manage/pinned-changelog') > 0) {
+            let changelogDiv = document.getElementById('div_id_changelog');
+            if(changelogDiv) {
+                changelogDiv.classList.add('dropdown_box');
+            }
+        }
+</script>
 {% endblock %}
