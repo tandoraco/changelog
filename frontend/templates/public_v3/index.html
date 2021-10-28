@@ -23,7 +23,7 @@
                         <div class="content-body">
                             <h2>{{ company.pinnedchangelog.changelog.title|truncatechars:30 }}</h2>
                             <p>{{ company.pinnedchangelog.changelog.content|extract_text_and_truncate }}</p>
-                            <a href="/{{ company_name}}/{{ terminology }}/{{ latest_changelog.slug }}" class="">Read <img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/images/read.svg" alt="read"> </a>
+                            <a href="/{{ company_name|slugify }}/{{ terminology|slugify }}/{{ latest_changelog.slug }}" class="">Read <img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/images/read.svg" alt="read"> </a>
                         </div>
                     </div>
             </div>
@@ -51,7 +51,7 @@
                         </div>
                         <p>{{ changelog.content|extract_text_and_truncate }}</p>
                         <div class="read">
-                            <a href="/{{ company_name}}/{{ terminology }}/{{ changelog.slug }}">Read <img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/images/read.svg" alt="Arrow"></a>
+                            <a href="/{{ company_name|slugify }}/{{ terminology|slugify }}/{{ changelog.slug }}">Read <img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/images/read.svg" alt="Arrow"></a>
                             <h5> <img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/images/eye.svg" alt="Eye"> {{ changelog.view_count }}</h5>
                         </div>
                     </div>
