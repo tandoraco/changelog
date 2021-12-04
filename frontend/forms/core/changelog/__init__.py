@@ -1,7 +1,7 @@
 from django import forms
 
 from v1.categories.models import Category
-from v1.core.models import Changelog
+from v1.core.models import Changelog, PinnedChangelog
 
 
 class ChangelogForm(forms.ModelForm):
@@ -9,7 +9,7 @@ class ChangelogForm(forms.ModelForm):
 
     class Meta:
         model = Changelog
-        fields = ('title', 'content', 'category', 'featured_image', 'published', )
+        fields = ('title', 'content', 'category', 'featured_image', 'published',)
 
     def __init__(self, *args, **kwargs):
         super(ChangelogForm, self).__init__(*args, **kwargs)
@@ -18,3 +18,19 @@ class ChangelogForm(forms.ModelForm):
         company_id = request.session['company-id']
         self.fields['category'] = forms.ModelChoiceField(queryset=Category.objects.filter(company__id=company_id,
                                                                                           deleted=False))
+
+
+class PinnedChangelogForm(forms.ModelForm):
+
+    class Meta:
+        model = PinnedChangelog
+        fields = ('changelog',)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        initial = kwargs.get('initial')
+        request = initial['request']
+        company_id = request.session['company-id']
+        self.fields['changelog'] = forms.ModelChoiceField(
+            queryset=Changelog.objects.filter(company__id=company_id,
+                                              published=True, deleted=False).order_by('-created_at'))

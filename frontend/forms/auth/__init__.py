@@ -101,7 +101,7 @@ class CompanySignupForm(BasicUserForm):
 
         if referral_code:
             try:
-                Referral.objects.get(referral_code=referral_code)
+                Referral.objects.get(referral_code=referral_code, is_used=False)
             except Referral.DoesNotExist:
                 raise forms.ValidationError(INVALID_REFERRAL_CODE)
 
@@ -120,6 +120,10 @@ class CompanySignupForm(BasicUserForm):
                      f'--changelog_terminology={data.get("changelog_terminology", "Changelog")}',
                      f'--referral_code={data.get("referral_code", None)}'
                      )
+        if data.get('referral_code'):
+            referral = Referral.objects.get(referral_code=data['referral_code'])
+            referral.is_used = True
+            referral.save()
 
 
 class ForgotPasswordForm(forms.ModelForm):

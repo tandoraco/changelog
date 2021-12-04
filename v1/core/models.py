@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models.signals import pre_save
+from django.db.models.signals import pre_save, post_save, post_delete
 from tinymce.models import HTMLField
 
 from v1.categories.models import Category
@@ -27,7 +27,7 @@ class Changelog(models.Model):
     featured_image = models.ImageField(null=True, blank=True, validators=[validate_image_size, ])
 
     def __str__(self):
-        return f"{self.title}\n{self.id}"
+        return f"{self.title}"
 
 
 class InlineImageAttachment(models.Model):
@@ -39,4 +39,16 @@ class InlineImageAttachment(models.Model):
         return self.file.name
 
 
+class PinnedChangelog(models.Model):
+    company = models.OneToOneField('Company', on_delete=models.CASCADE)
+    changelog = models.OneToOneField('Changelog', null=True, on_delete=models.SET_NULL)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.company} - {self.changelog}'
+
+
 pre_save.connect(core_signals.get_or_populate_slug_field, sender=Changelog)
+post_save.connect(core_signals.update_pinned_changelog, sender=Changelog)
+post_delete.connect(core_signals.remove_pinned_changelog, sender=Changelog)

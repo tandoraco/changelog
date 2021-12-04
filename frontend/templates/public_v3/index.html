@@ -2,30 +2,30 @@
 {% load humanize %}
 {% load frontend_tags %}
 {% block content %}
-{% if latest_changelog %}
+{% if company.pinnedchangelog.changelog %}
 <div class="letest-blog section-gap">
     <div class="container">
         <div class="row">
             <div class="col-lg-6 col-xl-7">
-                <h2 class="heading title">Latest</h2>
-                {% if latest_changelog.featured_image %}
-                <img src="{{ latest_changelog.featured_image.url }}" alt="Image">
+                <h2 class="heading title">Pinned</h2>
+                {% if company.pinnedchangelog.changelog.featured_image %}
+                    <img src="{{ company.pinnedchangelog.changelog.featured_image.url }}" alt="Image">
                 {% else %}
-                <img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/692x392.png" alt="Image">
+                    <img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/692x392.png" alt="Image">
                 {% endif %}
             </div>
             <div class="col-lg-6 col-xl-5">
-                <div class="blog-content">
-                    <div class="content-header">
-                        <h6>{{ latest_changelog.created_at|naturaltime }}</h6>
-                        <a href="javascript:void(0)" class="feature-btn" style="color: {{ latest_changelog.category.color }}; border: 1px solid {{ latest_changelog.category.color }};">{{ latest_changelog.category }}</a>
+                    <div class="blog-content">
+                        <div class="content-header">
+                            <h6>{{ company.pinnedchangelog.changelog.created_at|naturaltime }}</h6>
+                            <a href="javascript:void(0)" class="feature-btn" style="color: {{ latest_changelog.category.color }}; border: 1px solid {{ latest_changelog.category.color }};">{{ company.pinnedchangelog.changelog.category }}</a>
+                        </div>
+                        <div class="content-body">
+                            <h2>{{ company.pinnedchangelog.changelog.title|truncatechars:30 }}</h2>
+                            <p>{{ company.pinnedchangelog.changelog.content|extract_text_and_truncate }}</p>
+                            <a href="/{{ company_name|slugify }}/{{ terminology|slugify }}/{{ latest_changelog.slug }}" class="">Read <img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/images/read.svg" alt="read"> </a>
+                        </div>
                     </div>
-                    <div class="content-body">
-                        <h2>{{ latest_changelog.title|truncatechars:30 }}</h2>
-                        <p>{{ latest_changelog.content|extract_text_and_truncate }}</p>
-                        <a href="/{{ company_name}}/{{ terminology }}/{{ latest_changelog.slug }}" class="">Read <img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/images/read.svg" alt="read"> </a>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -33,7 +33,6 @@
 {% endif %}
 <div class="recent-blog section-gap">
     <div class="container">
-        <h2 class="heading title">Recent</h2>
         <div class="row">
             {% for changelog in changelogs|slice:changelog_limit %}
             <div class="col-md-6 col-lg-4">
@@ -52,7 +51,7 @@
                         </div>
                         <p>{{ changelog.content|extract_text_and_truncate }}</p>
                         <div class="read">
-                            <a href="/{{ company_name}}/{{ terminology }}/{{ changelog.slug }}">Read <img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/images/read.svg" alt="Arrow"></a>
+                            <a href="/{{ company_name|slugify }}/{{ terminology|slugify }}/{{ changelog.slug }}">Read <img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/images/read.svg" alt="Arrow"></a>
                             <h5> <img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/images/eye.svg" alt="Eye"> {{ changelog.view_count }}</h5>
                         </div>
                     </div>

@@ -214,9 +214,11 @@ class Affiliate(models.Model):
 
 
 class Referral(models.Model):
-    referrer = models.OneToOneField(Affiliate, on_delete=models.DO_NOTHING, blank=False, null=False)
+    referrer = models.OneToOneField(Affiliate, on_delete=models.DO_NOTHING, blank=True, null=True)
     referral_code = models.CharField(max_length=50, unique=True, db_index=True)
+    reference_name = models.CharField(default='', max_length=50)
     conversion_count = models.PositiveIntegerField(default=0)
+    is_used = models.PositiveIntegerField(default=False)
     company_ids = models.TextField(default='{}')
 
     def add_signup(self, value):
@@ -229,7 +231,7 @@ class Referral(models.Model):
         self.save()
 
     def __str__(self):
-        return self.referrer.name
+        return self.referrer.name if self.referrer else self.reference_name
 
 
 class CustomDomain(models.Model):

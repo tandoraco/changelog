@@ -40,7 +40,10 @@ class TwitterBackgroundJobHandler(BackgroundJobHandlerBase):
         return self.changelog.category.name
 
     def get_link(self):
-        link = urljoin(settings.HOST, f'{slugify(self.company.company_name)}/{self.changelog.slug}')
+        link = urljoin(settings.HOST,
+                       f'{slugify(self.company.company_name)}/'
+                       f'{slugify(self.company.changelog_terminology)}/'
+                       f'{self.changelog.slug}')
         return link
 
     def substitute_tweet(self):

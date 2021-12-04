@@ -18,6 +18,25 @@ class CompanySiteMap(Sitemap):
         })
 
 
+class ChangelogSiteMap(Sitemap):
+    changefreq = 'daily'
+    priority = 0.7
+
+    def items(self):
+        return apps.get_model('v1', 'Changelog').objects.filter(
+            company__publicpage__hide_from_crawlers=False,
+            published=True,
+            deleted=False).order_by('company__company_name')
+
+    def location(self, obj):
+        return reverse('frontend-view-changelog-as-public', kwargs={
+            'company': slugify(obj.company.company_name),
+            'changelog_terminology': slugify(obj.company.changelog_terminology),
+            'slug': obj.slug,
+        })
+
+
 SITEMAPS = {
-    'companies': CompanySiteMap
+    'companies': CompanySiteMap,
+    'changelogs': ChangelogSiteMap
 }
