@@ -5,11 +5,13 @@ from v1.integrations.twitter import handlers as twitter_handler
 INTEGRATION_MAP = {
     'zapier': zapier_handler.ZapierHandler,
     'webhooks': webhooks_handler.WebhooksHandler,
+    'incoming_webhook': webhooks_handler.IncomingWebhookHandler,
     'twitter': twitter_handler.TwitterHandler,
 }
 
 INTEGRATION_SETTINGS_MAP = {
     'zapier': zapier_handler.ZapierSettingsHandler,
     'webhooks': webhooks_handler.WebhookSettingsHandler,
+    'incoming_webhook': webhooks_handler.IncomingWebhookSettingsHandler,
     'twitter': twitter_handler.TwitterSettingsHandler,
 }

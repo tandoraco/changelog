@@ -4,10 +4,10 @@ run-tests:
 
 dev-up:
 	docker compose -f dev.yml up -d
-	docker attach $(shell basename $(CURDIR))_web_1
+	docker attach $(shell basename $(CURDIR))-web-1
 
 dev-bash:
-	docker exec -it  $(shell basename $(CURDIR))_web_1 /bin/sh
+	docker exec -it  $(shell basename $(CURDIR))-web-1 /bin/sh
 
 run-migration:
 	python manage.py makemigrations

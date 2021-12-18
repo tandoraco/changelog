@@ -1,6 +1,6 @@
 from rest_framework.serializers import ModelSerializer
 
-from v1.integrations.webhooks.models import WebhookLogs, Webhooks
+from v1.integrations.webhooks.models import WebhookLogs, Webhooks, IncomingWebhook
 
 
 class WebhooksSerializer(ModelSerializer):
@@ -15,3 +15,10 @@ class WebhookLogsSerializer(ModelSerializer):
     class Meta:
         model = WebhookLogs
         fields = '__all__'
+
+
+class IncomingWebhookSerializer(ModelSerializer):
+
+    class Meta:
+        model = IncomingWebhook
+        exclude = ('company', )
