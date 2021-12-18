@@ -36,3 +36,10 @@ class IncomingWebhook(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class IncomingWebhookLog(WebhookLog):
+    incoming_webhook = models.ForeignKey('IncomingWebhook', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.incoming_webhook.company} - {self.status_code}'
