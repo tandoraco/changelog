@@ -1,18 +1,31 @@
+import json
+import urllib.request
 from collections import namedtuple
+from datetime import datetime
+from json import JSONDecodeError
 
 import stringcase as stringcase
 from django import forms
 from django.apps import apps
-from django.http import Http404
+from django.conf import settings
+from django.contrib import messages
+from django.core.files import File
+from django.core.files.temp import NamedTemporaryFile
+from django.http import Http404, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+from rest_framework import status
 
 from frontend.constants import INTEGRATION_EDITED_SUCCESSFULLY, \
-    INTEGRATION_EDIT_FAILED_ERROR
+    INTEGRATION_EDIT_FAILED_ERROR, INTEGRATION_NOT_AVAILABLE_FOR_PLAN_ERROR
 from frontend.custom import views as custom_views
 from frontend.custom.decorators import is_authenticated, is_admin
 from frontend.custom.forms import TandoraForm
 from frontend.views.integrations import slack
+from v1.accounts.models import Subscription
+from v1.integrations.webhooks.models import IncomingWebhook
 
 integration_meta = namedtuple('integration_meta', 'name logo description')
 
@@ -35,6 +48,10 @@ INTEGRATION_FORM_FIELDS_DICT = {
         'read_only_fields': [],
         'fields': ['channel_to_post', 'trigger_when_created', 'trigger_when_published', 'active', ],
         'form': slack.SlackForm,
+    },
+    'incoming_webhook': {
+        'read_only_fields': [],
+        'exclude': ['company', 'hash', ]
     }
 }
 
@@ -67,6 +84,11 @@ INTEGRATION_FRONTEND_META_DICT = {
     'slack': {
         'logo': 'https://tandora-production.s3.amazonaws.com/assets/logos/slack-logo.png',
         'description': 'Send all your changelogs to Slack in realtime.'
+    },
+    'incoming_webhook': {
+        'logo': 'https://tandora-production.s3.amazonaws.com/assets/logos/webhooks-logo.png',
+        'description': 'A incoming webhook will enable you to send data from external system to Tandora Changelog.'
+                       'Whenever a incoming webhook is received in our end, a new changelog will be created.'
     }
 }
 
@@ -108,13 +130,14 @@ class IntegrationList(custom_views.TandoraAdminListViewMixin):
 @is_authenticated
 @is_admin
 def integration_form(request, integration):
-    '''try:
-        subscription = request.user.company.subscription
-        if not subscription.all_plan_features.get(integration):
-            raise Subscription.DoesNotExist
-    except Subscription.DoesNotExist:
-        messages.warning(request, INTEGRATION_NOT_AVAILABLE_FOR_PLAN_ERROR)
-        return HttpResponseRedirect(reverse('frontend-view-integrations'))'''
+    if not settings.DEBUG:
+        try:
+            subscription = request.user.company.subscription
+            if not subscription.all_plan_features.get(integration):
+                raise Subscription.DoesNotExist
+        except Subscription.DoesNotExist:
+            messages.warning(request, INTEGRATION_NOT_AVAILABLE_FOR_PLAN_ERROR)
+            return HttpResponseRedirect(reverse('frontend-view-integrations'))
     model_class = apps.get_model('v1', stringcase.pascalcase(integration))
     instance, created = model_class.objects.get_or_create(company=request.user.company)
     integration_field_meta = INTEGRATION_FORM_FIELDS_DICT.get(integration, {})
@@ -128,6 +151,11 @@ def integration_form(request, integration):
 
             for field in integration_field_meta.get('read_only_fields', []):
                 self.fields[field].disabled = True
+
+            if 'category' in self.fields:
+                from v1.categories.models import Category
+                self.fields['category'].required = True
+                self.fields['category'].queryset = Category.objects.filter(company=request.user.company, deleted=False)
 
         class Meta:
             model = model_class
@@ -161,3 +189,59 @@ def embed_details(request, integration):
         return render(request, 'staff/integration-embed.html', context=context)
     except KeyError:
         raise Http404
+
+
+@require_POST
+@csrf_exempt
+def incoming_webhook_handler(request, hash_value):
+    try:
+        incoming_webhook = IncomingWebhook.objects.get(hash=hash_value)
+        admin = incoming_webhook.company.admin_id
+        request_data = json.loads(request.body)
+        data = {
+            'title': request_data.get(incoming_webhook.title_mapping),
+            'content': request_data.get(incoming_webhook.content_mapping),
+            'published': request_data.get(incoming_webhook.published_mapping) or incoming_webhook.published_value,
+            'featured_image': request_data.get(incoming_webhook.featured_image_mapping),
+            'category': incoming_webhook.category_id,
+            'company': incoming_webhook.company_id,
+            'created_by': admin,
+            'last_edited_by': admin
+        }
+        from v1.core.serializers import ChangelogSerializer
+        featured_image = data.pop('featured_image')
+        serializer = ChangelogSerializer(data=data)
+        if serializer.is_valid():
+            changelog = serializer.save()
+
+            try:
+                if featured_image:
+                    temp_img = NamedTemporaryFile(delete=True)
+                    temp_img.write(urllib.request.urlopen(featured_image).read())
+                    temp_img.flush()
+                    changelog.featured_image.save(str(datetime.now().timestamp()), File(temp_img))
+            except Exception as e:
+                return JsonResponse({
+                    'id': changelog.id,
+                    'description': 'Changelog is created successfully but an expected error '
+                                   'occurred while processing featured image.',
+                    incoming_webhook.featured_image_mapping: e.__repr__(),
+                })
+
+            return JsonResponse({
+                'id': changelog.id
+            })
+
+        errors = dict()
+        if 'title' in serializer.errors:
+            errors[incoming_webhook.title_mapping] = serializer.errors['title']
+        if 'content' in serializer.errors:
+            errors[incoming_webhook.content_mapping] = serializer.errors['content']
+
+        return JsonResponse(errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+    except IncomingWebhook.DoesNotExist:
+        raise Http404
+    except JSONDecodeError:
+        return JsonResponse({
+            'error': 'Malformed JSON. Check post body.'
+        }, status=status.HTTP_400_BAD_REQUEST)

@@ -51,6 +51,8 @@ urlpatterns = [
     path('staff/admin/actions/delete-company/<str:company_name>', admin_actions.delete_company,
          name='admin-delete-company'),
     path('sitemap.xml', sitemap, {'sitemaps': SITEMAPS}, name='django.contrib.sitemaps.views.sitemap'),
+    path('integrations/incoming-webhook/<uuid:hash_value>', integrations.incoming_webhook_handler,
+         name='incoming-webhook-handler'),
     path('<str:company>', app.company_public_index, name="frontend-company-public-index"),
     # Removing previous widget url because, widget url was dependant on company name and terminology
     # if terminology changes the widget url will also change, this wont be feasible in the long run

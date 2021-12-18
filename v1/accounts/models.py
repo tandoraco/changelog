@@ -246,6 +246,14 @@ class CustomDomain(models.Model):
         return f'{self.domain_name} -> {self.tandora_url}'
 
 
+class SitemapDomain(models.Model):
+    company = models.OneToOneField('Company', on_delete=models.CASCADE)
+    domain = models.URLField(unique=True)
+
+    def __str__(self):
+        return self.domain
+
+
 post_save.connect(email_signals.send_forgot_password_mail, sender=ForgotPassword)
 post_save.connect(email_signals.send_user_verification_email, sender=User)
 post_save.connect(post_new_affiliate_signup_to_slack, sender=Affiliate)

@@ -34,3 +34,8 @@ class PinnedChangelogForm(forms.ModelForm):
         self.fields['changelog'] = forms.ModelChoiceField(
             queryset=Changelog.objects.filter(company__id=company_id,
                                               published=True, deleted=False).order_by('-created_at'))
+
+
+class IncomingWebhookForm(forms.Form):
+    title = forms.CharField(required=True, max_length=200)
+    content = forms.CharField(widget=forms.TextInput)

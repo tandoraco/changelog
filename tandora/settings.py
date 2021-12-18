@@ -108,7 +108,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': os.environ.get('DB_NAME', 'postgres'),
         'USER': os.environ.get('DB_USER', 'postgres'),
-        'HOST': os.environ.get('DB_HOST', 'tandora-backend_db_1'),
+        'HOST': os.environ.get('DB_HOST', 'tandora-backend-db-1'),
         'PASSWORD': os.environ.get('DB_PASSWORD'),
         'PORT': 5432,
     }
