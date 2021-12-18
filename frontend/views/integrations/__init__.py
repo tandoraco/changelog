@@ -1,15 +1,22 @@
+import json
+import urllib.request
 from collections import namedtuple
+from datetime import datetime
+from json import JSONDecodeError
 
 import stringcase as stringcase
 from django import forms
 from django.apps import apps
 from django.conf import settings
 from django.contrib import messages
-from django.http import Http404, HttpResponseRedirect, HttpResponse
+from django.core.files import File
+from django.core.files.temp import NamedTemporaryFile
+from django.http import Http404, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+from rest_framework import status
 
 from frontend.constants import INTEGRATION_EDITED_SUCCESSFULLY, \
     INTEGRATION_EDIT_FAILED_ERROR, INTEGRATION_NOT_AVAILABLE_FOR_PLAN_ERROR
@@ -188,8 +195,53 @@ def embed_details(request, integration):
 @csrf_exempt
 def incoming_webhook_handler(request, hash_value):
     try:
-        _ = IncomingWebhook.objects.get(hash=hash_value)
+        incoming_webhook = IncomingWebhook.objects.get(hash=hash_value)
+        admin = incoming_webhook.company.admin_id
+        request_data = json.loads(request.body)
+        data = {
+            'title': request_data.get(incoming_webhook.title_mapping),
+            'content': request_data.get(incoming_webhook.content_mapping),
+            'published': request_data.get(incoming_webhook.published_mapping) or incoming_webhook.published_value,
+            'featured_image': request_data.get(incoming_webhook.featured_image_mapping),
+            'category': incoming_webhook.category_id,
+            'company': incoming_webhook.company_id,
+            'created_by': admin,
+            'last_edited_by': admin
+        }
+        from v1.core.serializers import ChangelogSerializer
+        featured_image = data.pop('featured_image')
+        serializer = ChangelogSerializer(data=data)
+        if serializer.is_valid():
+            changelog = serializer.save()
+
+            try:
+                if featured_image:
+                    temp_img = NamedTemporaryFile(delete=True)
+                    temp_img.write(urllib.request.urlopen(featured_image).read())
+                    temp_img.flush()
+                    changelog.featured_image.save(str(datetime.now().timestamp()), File(temp_img))
+            except Exception as e:
+                return JsonResponse({
+                    'id': changelog.id,
+                    'description': 'Changelog is created successfully but an expected error '
+                                   'occurred while processing featured image.',
+                    incoming_webhook.featured_image_mapping: e.__repr__(),
+                })
+
+            return JsonResponse({
+                'id': changelog.id
+            })
+
+        errors = dict()
+        if 'title' in serializer.errors:
+            errors[incoming_webhook.title_mapping] = serializer.errors['title']
+        if 'content' in serializer.errors:
+            errors[incoming_webhook.content_mapping] = serializer.errors['content']
+
+        return JsonResponse(errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
     except IncomingWebhook.DoesNotExist:
         raise Http404
-    else:
-        return HttpResponse('OK')
+    except JSONDecodeError:
+        return JsonResponse({
+            'error': 'Malformed JSON. Check post body.'
+        }, status=status.HTTP_400_BAD_REQUEST)
