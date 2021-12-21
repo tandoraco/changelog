@@ -183,8 +183,6 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-SITE_ID = 1
-
 if not DEBUG:
     import sentry_sdk
     from sentry_sdk.integrations.django import DjangoIntegration
@@ -249,7 +247,7 @@ AWS_DEFAULT_ACL = 'public-read'
 
 HOST = "http://localhost:8000/" if DEBUG else os.environ.get('HOST')
 
-SITE_ID = 1
+# SITE_ID = 1
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_URLS_REGEX = r'.?widget.?'

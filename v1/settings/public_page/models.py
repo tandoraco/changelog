@@ -20,6 +20,9 @@ class PublicPage(SettingsMixin, models.Model):
                                     help_text=_('(Optional) If not provided, company name will be used.'))
     banner_tag_line = models.CharField(blank=True, null=True, max_length=200,
                                        help_text=_('(Optional) If not provided, changelog terminology will be used.'))
+    seo_title = models.CharField(blank=True, null=True, max_length=200,
+                                 help_text=_('(Optional) This will used to inform search engines about the '
+                                             'content and keywords of your public page.'))
     font = models.TextField(blank=True, null=True)
     logo = models.ImageField(null=True, blank=True, validators=[validate_logo, ],
                              help_text=_('Max file size: 500 kb'))
