@@ -6,6 +6,7 @@ from background_task.models import Task, CompletedTask
 from django.apps import apps
 from django.contrib import admin
 from django.contrib.admin import AdminSite
+from django.contrib.sites.models import Site
 from django.http import HttpResponse
 from django.urls import reverse
 from django.utils.html import format_html
@@ -199,3 +200,4 @@ admin_site.register(audit_models.AuditLog, ReadOnlyModelAdmin)
 admin_site.register(UserVisit, ReadOnlyModelAdmin)
 admin_site.register(Task)
 admin_site.register(CompletedTask)
+admin_site.register(Site)
