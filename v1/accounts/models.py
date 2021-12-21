@@ -65,6 +65,7 @@ class Company(models.Model):
     is_trial_account = models.BooleanField(blank=False, default=True)
     use_case = models.CharField(max_length=1, choices=USE_CASE_CHOICES, default='c')
     created_time = models.DateTimeField(auto_now_add=True)
+    custom_sitemap = models.BooleanField(default=False)
     _settings = models.TextField(blank=True, null=True, db_column='settings')
 
     def __str__(self):

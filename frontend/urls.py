@@ -64,6 +64,7 @@ urlpatterns = [
     path('<str:company>/<str:changelog_terminology>/rss', PublicChangelogFeed(), name='public-rss-feed'),
     path('<str:company>/<str:changelog_terminology>/<slug:slug>', app.view_changelog_as_public,
          name="frontend-view-changelog-as-public"),
+    path('<str:company_name>/sitemap.xml', app.company_sitemap, name='company-specific-sitemap'),
     path('<str:company>/<str:changelog_terminology>', app.public_index, name="frontend-public-index"),
 ]
 

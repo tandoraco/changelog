@@ -18,6 +18,19 @@ class CompanySiteMap(Sitemap):
         })
 
 
+class CustomSiteMap(Sitemap):
+    changefreq = 'daily'
+    priority = 1
+
+    def items(self):
+        return (apps.get_model('v1', 'Company')).objects.filter(custom_sitemap=True).values_list('company_name')
+
+    def location(self, obj):
+        return reverse('company-specific-sitemap', kwargs={
+            'company_name': slugify(obj[0])
+        })
+
+
 class ChangelogSiteMap(Sitemap):
     changefreq = 'daily'
     priority = 0.7
@@ -38,5 +51,6 @@ class ChangelogSiteMap(Sitemap):
 
 SITEMAPS = {
     'companies': CompanySiteMap,
+    'custom_sitemaps': CustomSiteMap,
     'changelogs': ChangelogSiteMap
 }

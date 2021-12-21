@@ -1,5 +1,6 @@
 import uuid
-from urllib.parse import unquote
+from calendar import timegm
+from urllib.parse import unquote, urljoin
 
 from django.contrib import messages
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
@@ -7,6 +8,7 @@ from django.db import transaction
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
+from django.utils.http import http_date
 from django.utils.text import slugify
 
 from frontend import constants as frontend_constants
@@ -238,3 +240,31 @@ def reset_password(request, id):
         messages.success(request, PASSWORD_RESET_INITIATED.replace('You', str(user)))
 
     return HttpResponseRedirect(reverse('frontend-view-users'))
+
+
+def company_sitemap(request, company_name):
+    company_name = unquote(company_name.replace('-', ' ')).lower()
+    company = get_object_or_404(Company, company_name__iexact=company_name, custom_sitemap=True)
+    changelogs = Changelog.objects.filter(company=company, published=True, deleted=False). \
+        order_by('-created_at')
+
+    host = company.website
+    priority = 0.9
+    changefreq = 'daily'
+    terminology = slugify(company.changelog_terminology)
+
+    urls = []
+    for changelog in changelogs:
+        urls.append({
+            'item': changelog,
+            'location': urljoin(host, f'/{terminology}/{changelog.slug}'),
+            'lastmod': None,
+            'changefreq': changefreq,
+            'priority': priority,
+            'alternates': []
+        })
+
+    response = render(request, 'sitemap.xml', context={'urlset': urls}, content_type='application/xml')
+    if changelogs:
+        response['Last-Modified'] = http_date(timegm(changelogs[0].created_at.utctimetuple()))
+    return response
