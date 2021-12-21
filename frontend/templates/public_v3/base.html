@@ -13,8 +13,8 @@
     <meta name="author" content="{{ company_name|title }}">
     <meta name=theme-color content="#24262A" />
     {% if changelog %}
-    <title>{{ changelog.title|title }} | {{ company_name|title }}</title>
-    <meta property=og:title content="{{ changelog.title }} | {{ company_name|title }}">
+    <title>{{ changelog.title|title }} | {{ seo_title }}</title>
+    <meta property=og:title content="{{ changelog.title }} | {{ seo_title }}">
     <meta property=og:description
           content="{{ changelog.content|meta_description }}">
     <meta name="description" content="{{ changelog.content|meta_description }}">
@@ -25,8 +25,8 @@
         <meta name="twitter:image:alt" content="{{ changelog.title }}">
     {% endif %}
     {% else %}
-    <title>{{ company_name|title }} - {{ terminology }}</title>
-    <meta property=og:title content="{{ company_name|title }} - {{ terminology }}">
+    <title>{{ seo_title }}</title>
+    <meta property=og:title content="{{ seo_title }}">
     <meta property=og:description
           content="Recent updates, announcements, release notes, improvements from {{ company_name|title }}">
     <meta name="description" content="Recent updates, announcements, release notes, improvements, changelogs from {{ company_name|title }}">

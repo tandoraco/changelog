@@ -21,14 +21,17 @@ def get_context_and_template_name(company, changelog=False):
     try:
         banner_title = company.publicpage.banner_title or company.company_name.title()
         banner_tagline = company.publicpage.banner_tag_line or company.changelog_terminology.title()
+        seo_title = company.publicpage.seo_title or company.company_name.title()
         context.update({
             'banner_title': banner_title,
-            'banner_tagline': banner_tagline
+            'banner_tagline': banner_tagline,
+            'seo_title': seo_title
         })
     except PublicPage.DoesNotExist:
         context.update({
             'banner_title': company.company_name.title(),
-            'banner_tagline': company.changelog_terminology.title()
+            'banner_tagline': company.changelog_terminology.title(),
+            'seo_title': company.company_name.title()
         })
 
     return context, template
