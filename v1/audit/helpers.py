@@ -5,7 +5,7 @@ from v1.audit.models import PublicPageView, PublicPageViewAudit
 
 
 def audit_public_page_request(request, company_name, slug=''):
-    path = f'/{slugify(company_name)}/{slug}'
+    path = f'/{slugify(company_name)}/{slug}'.rstrip('/')
     page_view, _ = PublicPageView.objects.get_or_create(path=path)
     page_view.count += 1
     page_view.save()
