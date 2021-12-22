@@ -1,5 +1,6 @@
 import json
 
+import requests
 from django.conf import settings
 
 from v1.utils import send_to_slack
@@ -21,3 +22,18 @@ def notify_new_company_signup_in_slack(sender, instance, created, **kwargs):
         if 'test.com' not in data['admin_email_id']:
             data = json.dumps(data, indent=4)
             send_to_slack(f'New company signup notification\n ```{data}```')
+
+
+def create_custom_domain_in_user_custom_domain(sender, instance, created, **kwargs):
+    headers = {
+        'Authorization': f'Bearer {settings.USER_CUSTOM_DOMAIN_TOKEN}'
+    }
+    data = {
+        'domain': instance.domain_name
+    }
+    if created and not settings.DEBUG:
+        response = requests.post(url=settings.USER_CUSTOM_DOMAIN_URL, json=data, headers=headers)
+        if not response.ok:
+            raise RuntimeError('Unable to create a custom domain.. Please try again later.')
+    else:
+        print(data)
