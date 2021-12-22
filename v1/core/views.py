@@ -7,6 +7,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from v1.accounts.authentication import FrontEndTokenAuthentication
+from v1.audit.helpers import audit_public_page_request
 from v1.core.models import Changelog
 from v1.core.serializers import ChangelogSerializer, InlineImageAttachmentSerializer
 from v1.utils import serializer_error_response
@@ -49,6 +50,8 @@ def increase_view_count(request, pk):
     changelog.save()
 
     changelog.refresh_from_db()
+
+    audit_public_page_request(request, changelog.company.company_name, slug=changelog.slug)
 
     return Response(status=status.HTTP_200_OK, data={
         'view_count': changelog.view_count

@@ -3,6 +3,7 @@ from django.urls import path
 
 urlpatterns = [
     path(r'', include('v1.accounts.urls')),
+    path(r'', include('v1.audit.urls')),
     path(r'', include('v1.categories.urls')),
     path(r'', include('v1.core.urls')),
     path(r'', include('v1.settings.urls')),
