@@ -178,6 +178,12 @@ class PendingInvoiceAdmin(CreateDeleteModelAdmin):
         return super(PendingInvoiceAdmin, self).save_model(request, obj, form, change)
 
 
+class PublicPageViewAdmin(ReadOnlyModelAdmin):
+    list_display = ('path', 'count')
+    list_filter = ('path', 'count', )
+    search_fields = ('path', )
+
+
 admin_site = TandoraLoginAdminSite()
 admin_site.register(v1_account_models.Company, CompanyAdmin)
 admin_site.register(v1_account_models.User, UserAdmin)
@@ -197,6 +203,8 @@ admin_site.register(apps.get_model('v1', 'IncomingWebhook'))
 admin_site.register(apps.get_model('v1', 'IncomingWebhookLog'))
 admin_site.register(PublicPage)
 admin_site.register(audit_models.AuditLog, ReadOnlyModelAdmin)
+admin_site.register(audit_models.PublicPageView, PublicPageViewAdmin)
+admin_site.register(audit_models.PublicPageViewAudit, ReadOnlyModelAdmin)
 admin_site.register(UserVisit, ReadOnlyModelAdmin)
 admin_site.register(Task)
 admin_site.register(CompletedTask)

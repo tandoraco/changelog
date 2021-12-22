@@ -16,3 +16,20 @@ class AuditLog(models.Model):
 
     def __str__(self):
         return f'{self.action} {self.resource_name} by {self.performed_by}'
+
+
+class PublicPageView(models.Model):
+    path = models.CharField(max_length=500, unique=True)
+    count = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return f'{self.path} - {self.count}'
+
+
+class PublicPageViewAudit(models.Model):
+    public_page_view = models.ForeignKey('PublicPageView', on_delete=models.DO_NOTHING)
+    user_agent = models.CharField(max_length=250, null=True, blank=True)
+    ip_address = models.GenericIPAddressField(null=True, blank=True)
+
+    def __str__(self):
+        return f'{self.public_page_view} - {self.user_agent} - {self.ip_address}'
