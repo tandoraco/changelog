@@ -47,10 +47,13 @@
         <div class="header-inner">
             <div class="logo">
                 {% if company.settings.company_logo %}
-                <a href="{{ company.website }}"><img src="{{ company.settings.company_logo }}" alt="Logo" width="36" height="38"></a>
+                <a href="{{ company.website }}"><img src="{{ company.settings.company_logo }}" alt="Logo" width="72" height="38"></a>
                 {% else %}
-                <a href="{{ company.website }}"><img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/images/logo.svg" alt="Logo" width="36" height="38"></a>
+                <a href="{{ company.website }}"><img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/images/logo.svg" alt="Logo" width="72" height="38"></a>
                 {% endif %}
+            </div>
+            <div class="justify-content-between align-items-center">
+                <div class="title"><h3>{{ banner_title }} {{ banner_tagline }}</h3></div>
             </div>
             <div class="right">
                 {% if search_enabled %}
@@ -80,18 +83,6 @@
     </div>
 </header>
 <div class="main-wrapper">
-    <div class="page-banner">
-        <div class="container">
-            <div class="row justify-content-between align-items-center">
-                <div class="col-md-7 col-xl-8">
-                    <div class="title">
-                        <h2>{{ banner_title }}</h2>
-                        <p>{{ banner_tagline }}</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
     {% block content %}
     {% endblock %}
 </div>
@@ -99,9 +90,9 @@
     <div class="container">
         <div class="main-footer">
             {% if company.settings.company_logo %}
-            <a href="{{ company.website }}" class="logo"><img src="{{ company.settings.company_logo }}" alt="Logo" width="145" height="38"></a>
+            <a href="{{ company.website }}" class="logo"><img src="{{ company.settings.company_logo }}" alt="Logo" width="72" height="38"></a>
             {% else %}
-            <a href="{{ company.website }}" class="logo"><img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/images/logo.svg" alt="Logo"></a>
+            <a href="{{ company.website }}" class="logo"><img src="https://tandora-production.s3.amazonaws.com/assets/assets/public_v3/images/logo.svg" alt="Logo" width="72" height="38"></a>
             {% endif %}
             <div class="subscribe-btn">
                 <a  href="{% url 'public-rss-feed' company=company_name changelog_terminology=terminology%}" target="_blank">Subscribe to RSS Feed</a>
