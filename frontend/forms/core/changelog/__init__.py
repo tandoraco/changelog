@@ -1,7 +1,7 @@
 from django import forms
 
 from v1.categories.models import Category
-from v1.core.models import Changelog, PinnedChangelog
+from v1.core.models import Changelog, PinnedChangelog, ChangelogSettings
 
 
 class ChangelogForm(forms.ModelForm):
@@ -21,7 +21,6 @@ class ChangelogForm(forms.ModelForm):
 
 
 class PinnedChangelogForm(forms.ModelForm):
-
     class Meta:
         model = PinnedChangelog
         fields = ('changelog',)
@@ -34,6 +33,13 @@ class PinnedChangelogForm(forms.ModelForm):
         self.fields['changelog'] = forms.ModelChoiceField(
             queryset=Changelog.objects.filter(company__id=company_id,
                                               published=True, deleted=False).order_by('-created_at'))
+
+
+class ChangelogSettingsForm(forms.ModelForm):
+
+    class Meta:
+        model = ChangelogSettings
+        fields = ('auto_append_content',)
 
 
 class IncomingWebhookForm(forms.Form):

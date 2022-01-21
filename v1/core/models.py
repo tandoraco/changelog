@@ -6,7 +6,8 @@ from v1.categories.models import Category
 from v1.core import signals as core_signals
 from v1.utils.validators import validate_image_size
 
-AUTO_APPEND_CONTENT_HELP_TEXT = 'This content will be automatically added to the end of each changelog you create.'
+AUTO_APPEND_CONTENT_HELP_TEXT = 'This content will be automatically added to the end of each changelog you create.' \
+                                'This content will be visible only in public changelog details page.'
 
 
 class Changelog(models.Model):
