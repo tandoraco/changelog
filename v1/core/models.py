@@ -6,6 +6,8 @@ from v1.categories.models import Category
 from v1.core import signals as core_signals
 from v1.utils.validators import validate_image_size
 
+AUTO_APPEND_CONTENT_HELP_TEXT = 'This content will be automatically added to the end of each changelog you create.'
+
 
 class Changelog(models.Model):
     from v1.accounts.models import User, Company
@@ -47,6 +49,19 @@ class PinnedChangelog(models.Model):
 
     def __str__(self):
         return f'{self.company} - {self.changelog}'
+
+
+class ChangelogSettings(models.Model):
+    company = models.OneToOneField('Company', on_delete=models.CASCADE)
+    auto_append_content = HTMLField(blank=True, help_text=AUTO_APPEND_CONTENT_HELP_TEXT)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.company} - {self.auto_append_content}'
+
+    class Meta:
+        verbose_name_plural = 'Changelog Settings'
 
 
 pre_save.connect(core_signals.get_or_populate_slug_field, sender=Changelog)
