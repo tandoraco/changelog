@@ -5,6 +5,7 @@ from django.shortcuts import render
 from django.template import Template, RequestContext
 
 from frontend.forms.auth.utils import get_plan_features
+from v1.core.models import ChangelogSettings
 from v1.settings.public_page.models import PublicPage
 
 
@@ -33,6 +34,14 @@ def get_context_and_template_name(company, changelog=False):
             'banner_tagline': company.changelog_terminology.title(),
             'seo_title': company.company_name.title()
         })
+
+    if changelog:
+        try:
+            context['changelog_settings'] = company.changelogsettings
+        except ChangelogSettings.DoesNotExist:
+            context['changelog_settings'] = {
+                'auto_append_content': ''
+            }
 
     return context, template
 

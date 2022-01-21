@@ -6,7 +6,7 @@ from frontend.constants import CHANGELOG_DOES_NOT_EXIST_ERROR, CHANGELOG_CREATED
 from frontend.custom.decorators import is_authenticated, is_allowed
 from frontend.custom.forms import TandoraForm
 from frontend.custom.utils import delete_model
-from frontend.forms.core.changelog import ChangelogForm, PinnedChangelogForm
+from frontend.forms.core.changelog import ChangelogForm, PinnedChangelogForm, ChangelogSettingsForm
 from v1.core.models import Changelog
 from v1.integrations.background_tasks import trigger_integration_background_tasks
 
@@ -66,3 +66,16 @@ def manage_pinned_changelog(request):
     return TandoraForm(pinned_changelog_model, PinnedChangelogForm, 'edit', 'staff_v2/postlogin_form.html',
                        '/', initial=initial) \
         .get_form(request, instance=pinned_changelog, is_multipart_form=True, title=title)
+
+
+@is_authenticated
+def manage_changelog_settings(request):
+    changelog_settings_model = apps.get_model('v1', 'ChangelogSettings')
+    changelog_settings, _ = changelog_settings_model.objects.get_or_create(company=request.user.company)
+    title = 'Manage Changelog Settings'
+    initial = {
+        'request': request
+    }
+    return TandoraForm(changelog_settings_model, ChangelogSettingsForm, 'edit', 'staff_v2/postlogin_form.html',
+                       '/', initial=initial) \
+        .get_form(request, instance=changelog_settings, is_multipart_form=True, title=title)

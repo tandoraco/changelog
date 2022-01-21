@@ -137,25 +137,10 @@ class ReferralAdmin(admin.ModelAdmin):
     search_fields = ('referral_code', )
 
 
-class ChangelogAdmin(admin.ModelAdmin):
-    readonly_fields = (
-        'company',
-        'title',
-        'slug',
-        'content',
-        'category',
-        'published',
-        'created_by',
-        'last_edited_at',
-        'last_edited_by',
-        'view_count',
-        'deleted'
-    )
-    fields = ('created_at',)
-    search_fields = ('pk', 'id', 'title', 'content')
-    list_per_page = 25
-    list_display = ('id', 'company', 'title',)
-    list_filter = ('company', 'deleted', 'created_at', 'view_count',)
+class ChangelogAdmin(ReadOnlyModelAdmin):
+    list_display = ('company', 'title', 'view_count')
+    list_filter = ('company', 'title', 'published', )
+    search_fields = ('title', 'content', )
 
 
 class EmbedWidgetAdmin(ModelAdminWithSyntaxHighlighter):
@@ -194,6 +179,8 @@ admin_site.register(v1_account_models.Affiliate, CreateReadModelAdmin)
 admin_site.register(v1_account_models.Referral, ReferralAdmin)
 admin_site.register(v1_account_models.PendingInvoice, PendingInvoiceAdmin)
 admin_site.register(v1_account_models.CustomDomain)
+admin_site.register(apps.get_model('v1', 'Changelog'), ChangelogAdmin)
+admin_site.register(apps.get_model('v1', 'ChangelogSettings'))
 admin_site.register(apps.get_model('v1', 'Zapier'), ReadOnlyModelAdmin)
 admin_site.register(apps.get_model('v1', 'ZapierWebhookTrigger'), ReadOnlyModelAdmin)
 admin_site.register(apps.get_model('v1', 'Webhooks'))

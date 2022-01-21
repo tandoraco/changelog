@@ -46,11 +46,14 @@ class ChangelogSerializerForZapier(ChangelogSerializer):
         all_images = extract_all_image_src_urls(instance.content)
         company_name = slugify(instance.company.company_name)
         terminology = slugify(instance.company.changelog_terminology)
+        auto_append_content = instance.auto_append_content
         return {
             'id': instance.id,
             'title': instance.title,
             'content': instance.content,
             'content_text': html_2_text(instance.content),
+            'auto_append_content': auto_append_content,
+            'auto_append_content_text': html_2_text(auto_append_content),
             'images': all_images,
             'random_image': random.choice(all_images) if all_images else '',
             'featured_image': instance.featured_image.url if instance.featured_image else None,
