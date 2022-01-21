@@ -32,6 +32,13 @@ class Changelog(models.Model):
     def __str__(self):
         return f"{self.title}"
 
+    @property
+    def auto_append_content(self):
+        try:
+            return self.company.changelogsettings.auto_append_content
+        except ChangelogSettings.DoesNotExist:
+            return ''
+
 
 class InlineImageAttachment(models.Model):
     company = models.ForeignKey('Company', null=False, on_delete=models.CASCADE)
