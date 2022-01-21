@@ -53,6 +53,7 @@ class ChangelogSerializerForZapier(ChangelogSerializer):
             'content_text': html_2_text(instance.content),
             'images': all_images,
             'random_image': random.choice(all_images) if all_images else '',
+            'featured_image': instance.featured_image.url if instance.featured_image else None,
             'view_url': f'{settings.HOST}{company_name}/{terminology}/{instance.slug}',
             'created_at': instance.created_at,
             'last_edited_at': instance.last_edited_at
