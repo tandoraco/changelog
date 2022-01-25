@@ -145,6 +145,11 @@ class ForgotPasswordForm(forms.ModelForm):
 
         return email
 
+    def save(self, commit=True):
+        email = self.cleaned_data['email']
+        ForgotPassword.objects.filter(email=email).delete()
+        return super().save(commit=commit)
+
 
 class ResetPasswordForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput, validators=[form_password_validator])

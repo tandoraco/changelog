@@ -134,7 +134,7 @@ def forgot_password_form(request):
 @transaction.atomic
 def reset_password_form(request, token):
     try:
-        ForgotPassword.objects.get(token=token)
+        forgot_password_token = ForgotPassword.objects.get(token=token)
 
         if request.method == "POST":
             form = ResetPasswordForm(request.POST)
@@ -151,6 +151,8 @@ def reset_password_form(request, token):
                 # The above will be always true, since we have already form validated the password
                 # and we are using token from valid forgot password object
                 serializer.save()
+
+                forgot_password_token.delete()
 
                 messages.success(request, message=PASSWORD_RESET_SUCCESS)
                 return HttpResponseRedirect('/login')
