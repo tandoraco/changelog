@@ -2,7 +2,7 @@ import json
 
 from sentry_sdk.integrations.wsgi import get_client_ip
 
-from v1.audit.models import AuditLog
+from v1.audit.models import AuditLog, LoginAuditLog
 
 ACTION_MAP = {
     'get': 'read',
@@ -20,7 +20,7 @@ class AuditLogAction:
         self.resource = resource
         self.source = source
 
-    def set_audit_log(self, action=None):
+    def set_audit_log(self, action=None, **kwargs):
         if self.request.method.lower() in {'post', 'patch'}:
             if hasattr(self.request, 'data'):
                 request_data = json.dumps(self.request.data)
@@ -45,3 +45,16 @@ class AuditLogAction:
             'user_agent': self.request.META.get('HTTP_USER_AGENT')
         }
         AuditLog.objects.create(**data)
+
+
+class LoginAuditLogAction(AuditLogAction):
+
+    def set_audit_log(self, action=None, **kwargs):
+        data = {
+            'source': self.source,
+            'ip_address': get_client_ip(self.request.META),
+            'user_agent': self.request.META.get('HTTP_USER_AGENT'),
+        }
+        data.update(kwargs)
+        data.pop('action', None)
+        LoginAuditLog.objects.create(**data)

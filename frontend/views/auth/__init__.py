@@ -19,6 +19,7 @@ from frontend.forms.auth.utils import clear_request_session, create_session
 from frontend.views.auth.utils import save_subscription_details
 from v1.accounts.models import User, ClientToken, Company, ForgotPassword, Affiliate, PendingUser
 from v1.accounts.serializers import ResetPasswordSerializer
+from v1.audit.actions import LoginAuditLogAction
 
 
 def redirect_to_login_with_message(level, request, message):
@@ -33,6 +34,7 @@ def login(request):
         form = LoginForm(request.POST)
         if form.is_valid():
             create_session(form.data['email'], request)
+            LoginAuditLogAction(request, None, 'ui').set_audit_log(action='login', email=form.data['email'])
 
             if request.user.company.use_case == 's' and request.user.company.is_first_login:
                 return HttpResponseRedirect(reverse('frontend-setup-web-builder', args=(1,)))

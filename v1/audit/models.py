@@ -18,6 +18,17 @@ class AuditLog(models.Model):
         return f'{self.action} {self.resource_name} by {self.performed_by}'
 
 
+class LoginAuditLog(models.Model):
+    source = models.CharField(max_length=10)
+    ip_address = models.GenericIPAddressField(null=True, blank=True)
+    user_agent = models.CharField(max_length=250, null=True, blank=True)
+    created_time = models.DateTimeField(auto_now_add=True)
+    email = models.EmailField(blank=False, null=False)
+
+    def __str__(self):
+        return self.email
+
+
 class PublicPageView(models.Model):
     path = models.CharField(max_length=500, unique=True)
     count = models.PositiveIntegerField(default=0)
