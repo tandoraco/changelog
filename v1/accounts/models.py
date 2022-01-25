@@ -169,9 +169,6 @@ class ForgotPassword(models.Model):
     def __str__(self):
         return f"{self.email}, {self.token}"
 
-    class Meta:
-        unique_together = ('email', 'created_date')
-
 
 class PendingUser(models.Model):
     uuid = models.UUIDField(db_index=True, default=random_uuid)

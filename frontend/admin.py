@@ -72,6 +72,11 @@ class ReadOnlyModelAdmin(admin.ModelAdmin):
         return False
 
 
+class ReadDeleteModelAdmin(ReadOnlyModelAdmin):
+    def has_delete_permission(self, request, obj=None):
+        return True
+
+
 class CreateReadModelAdmin(ReadOnlyModelAdmin):
 
     def has_add_permission(self, request):
@@ -134,13 +139,13 @@ def generate_referral_code_csv(modeladmin, request, queryset):
 class ReferralAdmin(admin.ModelAdmin):
     readonly_fields = ('conversion_count', 'company_ids',)
     actions = [generate_referral_code_csv, ]
-    search_fields = ('referral_code', )
+    search_fields = ('referral_code',)
 
 
 class ChangelogAdmin(ReadOnlyModelAdmin):
     list_display = ('company', 'title', 'view_count')
-    list_filter = ('company', 'title', 'published', )
-    search_fields = ('title', 'content', )
+    list_filter = ('company', 'title', 'published',)
+    search_fields = ('title', 'content',)
 
 
 class EmbedWidgetAdmin(ModelAdminWithSyntaxHighlighter):
@@ -165,8 +170,8 @@ class PendingInvoiceAdmin(CreateDeleteModelAdmin):
 
 class PublicPageViewAdmin(ReadOnlyModelAdmin):
     list_display = ('path', 'count')
-    list_filter = ('path', 'count', )
-    search_fields = ('path', )
+    list_filter = ('path', 'count',)
+    search_fields = ('path',)
 
 
 admin_site = TandoraLoginAdminSite()
@@ -196,3 +201,4 @@ admin_site.register(UserVisit, ReadOnlyModelAdmin)
 admin_site.register(Task)
 admin_site.register(CompletedTask)
 admin_site.register(Site)
+admin_site.register(v1_account_models.ForgotPassword, ReadDeleteModelAdmin)
