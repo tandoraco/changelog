@@ -5,3 +5,4 @@ from v1.widget.models import *
 from v1.integrations.zapier.models import *
 from v1.integrations.twitter.models import *
 from v1.integrations.slack.models import *
+from v1.links.models import *
