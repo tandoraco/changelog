@@ -10,6 +10,11 @@ CATEGORY_CREATED_OR_EDITED_SUCCESSFULLY = _('Successfully {} category: {}')
 CATEGORY_DELETED_SUCCESSFULLY = _('Category delete success.')
 CATEGORY_DOES_NOT_EXIST = _('Category does not exist.')
 
+LINK_CREATED_SUCCESSFULLY = _("Link created successfully.")
+LINK_DELETED_SUCCESSFULLY = _('Link deleted successfully.')
+LINK_DOES_NOT_EXIST = _('Link not found.')
+
+
 COMPANY_CREATED_OR_EDITED_SUCCESSFULLY = _(
     'Successfully {} company: {}. As a security measure, you should log in again..')
 COMPANY_DOES_NOT_EXIST = _('Company does not exist')
