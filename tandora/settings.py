@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'background_task',
     'user_visit',
+    'django_user_agents',
     'v1',
     'frontend',
     'tandoramaster',
@@ -74,6 +75,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # 'frontend.custom.middlewares.CustomDomainMiddleware',
+    'django_user_agents.middleware.UserAgentMiddleware',
     'user_visit.middleware.UserVisitMiddleware',
 ]
 

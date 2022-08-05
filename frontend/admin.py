@@ -174,6 +174,11 @@ class PublicPageViewAdmin(ReadOnlyModelAdmin):
     search_fields = ('path',)
 
 
+class LinkLensAdmin(ReadOnlyModelAdmin):
+    list_display = ('link',)
+    list_filter = ('link',)
+
+
 admin_site = TandoraLoginAdminSite()
 admin_site.register(v1_account_models.Company, CompanyAdmin)
 admin_site.register(v1_account_models.User, UserAdmin)
@@ -194,6 +199,7 @@ admin_site.register(apps.get_model('v1', 'Embed'), EmbedWidgetAdmin)
 admin_site.register(apps.get_model('v1', 'IncomingWebhook'))
 admin_site.register(apps.get_model('v1', 'IncomingWebhookLog'))
 admin_site.register(apps.get_model('v1', 'Link'))
+admin_site.register(apps.get_model('v1', 'LinkLens'), LinkLensAdmin)
 admin_site.register(PublicPage)
 admin_site.register(audit_models.AuditLog, ReadOnlyModelAdmin)
 admin_site.register(audit_models.LoginAuditLog, ReadOnlyModelAdmin)

@@ -1,5 +1,12 @@
 from django.db import models
 
+DEVICE_TYPE_CHOICES = (
+    ('mo', 'Mobile'),
+    ('tb', 'Tablet'),
+    ('pc', 'Laptop/Desktop/Personal Computer'),
+    ('bo', 'Bot')
+)
+
 
 class Link(models.Model):
     company = models.ForeignKey('Company', on_delete=models.DO_NOTHING)
@@ -14,3 +21,12 @@ class Link(models.Model):
 
     def __str__(self):
         return f'{self.title} - {self.url}'
+
+
+class LinkLens(models.Model):
+    link = models.ForeignKey('Link', on_delete=models.DO_NOTHING)
+    ip_address = models.GenericIPAddressField(null=True, blank=True)
+    user_agent = models.CharField(max_length=250, null=True, blank=True)
+    device_type = models.CharField(max_length=2, choices=DEVICE_TYPE_CHOICES, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)

@@ -1,11 +1,18 @@
 {% extends "public_v3/base.html" %}
 {% load humanize %}
 {% block content %}
+<script>
+    function trackClick(id) {
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', '/api/v1/track-link-click/' + id  + '/', true)
+        xhr.send({});
+    }
+</script>
 <div class="container">
     <div style="margin-top: 80px;"></div>
     {% for link in all_links %}
         <div class="row" style="margin-top: 20px; margin-left: 5px; margin-right: 5px;">
-            <a href="{{ link.url }}" target="_blank" role="button" class="btn btn-dark btn-lg btn-block active">{{ link.title }}</a>
+            <a href="{{ link.url }}" onclick="trackClick({{ link.id }});" target="_blank" role="button" class="btn btn-dark btn-lg btn-block active">{{ link.title }}</a>
         </div>
     {% empty %}
         <h3>{{ company_name }} has not added any links. </h3>
