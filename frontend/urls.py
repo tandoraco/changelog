@@ -4,7 +4,7 @@ from django.urls import path, re_path
 from django.views.generic import RedirectView
 
 from frontend.sitemaps import SITEMAPS
-from frontend.views import auth, app, categories, widget, integrations, settings, admin_actions, billing
+from frontend.views import auth, app, categories, widget, integrations, settings, admin_actions, billing, links
 from frontend.views.integrations import slack
 from frontend.views.core import changelog
 from frontend.views.rss import PublicChangelogFeed
@@ -39,6 +39,11 @@ urlpatterns = [
     path('staff/manage/categories/edit-category/<int:id>', categories.edit_category, name="frontend-edit-category"),
     path('staff/manage/categories/delete-category/<int:id>', categories.delete_category,
          name="frontend-delete-category"),
+    path('staff/manage/links', links.LinksList.as_view(), name="frontend-view-links"),
+    path('staff/manage/links/create-link', links.link_form, name="frontend-create-link"),
+    path('staff/manage/links/edit-link/<int:id>', links.edit_link, name="frontend-edit-link"),
+    path('staff/manage/links/delete-link/<int:id>', links.delete_link,
+         name="frontend-delete-link"),
     path('staff/manage/integrations', integrations.IntegrationList.as_view(), name="frontend-view-integrations"),
     path('staff/manage/integrations/<str:integration>', integrations.integration_form,
          name="frontend-edit-integrations"),

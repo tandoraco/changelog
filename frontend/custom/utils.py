@@ -12,13 +12,13 @@ from v1.core.models import Changelog
 def delete_model(request, model, id, success_redirect_path, error_redirect_path, success_message, error_message):
     try:
         instance = model.objects.get(id=id)
+        AuditLogAction(request, instance, 'ui').set_audit_log('delete')
+
         if hasattr(instance, 'deleted'):
             setattr(instance, 'deleted', True)
             instance.save()
         else:
             instance.delete()
-
-        AuditLogAction(request, instance, 'ui').set_audit_log('delete')
 
         msgs.success(request, message=success_message)
     except model.DoesNotExist:
@@ -49,7 +49,7 @@ def get_changelogs_from_company_name_and_changelog_terminology(company, changelo
     company = company.replace("-", " ")
     changelogs = Changelog.objects.filter(company__company_name__iexact=company,
                                           company__changelog_terminology__iexact=changelog_terminology,
-                                          deleted=False, published=True).\
+                                          deleted=False, published=True). \
         select_related('company', 'company__publicpage', 'company__subscription', 'category').order_by('-created_at')
     return changelogs
 

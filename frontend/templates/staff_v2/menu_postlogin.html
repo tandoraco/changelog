@@ -29,6 +29,7 @@
                         Manage
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a style="color:black;" class="dropdown-item" href="/staff/manage/links">Links</a>
                         <a style="color:black;" class="dropdown-item" href="/staff/manage/pinned-changelog">Pinned Changelog</a>
                         <a style="color:black;" class="dropdown-item" href="{% url 'frontend-manage-changelog-settings' %}">Changelog Settings</a>
                         {% if request.user.company.admin == request.user %}

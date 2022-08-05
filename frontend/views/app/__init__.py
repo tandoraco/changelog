@@ -23,6 +23,7 @@ from frontend.views.app.public_helpers import get_context_and_template_name, ren
 from v1.accounts.constants import INACTIVE_USER_ADMIN_ERROR
 from v1.accounts.models import Company, User, ForgotPassword
 from v1.core.models import Changelog
+from v1.links.models import Link
 
 
 def index(request):
@@ -62,8 +63,12 @@ def view_changelog(request, slug):
 def company_public_index(request, company):
     company = unquote(company.replace('-', ' '))
     company_object = get_object_or_404(Company, company_name__iexact=company)
-    company = company.lower()
-    return HttpResponseRedirect(f'/{slugify(company)}/{company_object.changelog_terminology.lower().replace(" ", "-")}')
+    context, _ = get_context_and_template_name(company_object)
+    context.update({
+        'show_banner_tagline': False,
+        'all_links': Link.objects.filter(company=company_object).order_by('created_at')
+    })
+    return render(request, 'public_v3/links.html', context=context)
 
 
 @transaction.atomic

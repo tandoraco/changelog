@@ -86,7 +86,9 @@
                 <div class="col-md-7 col-xl-8">
                     <div class="title">
                         <h2>{{ banner_title }}</h2>
-                        <p>{{ banner_tagline }}</p>
+                        {% if show_banner_tagline %}
+                            <p>{{ banner_tagline }}</p>
+                        {% endif %}
                     </div>
                 </div>
             </div>
