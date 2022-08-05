@@ -1,0 +1,14 @@
+{% extends "public_v3/base.html" %}
+{% load humanize %}
+{% block content %}
+<div class="container">
+    <div style="margin-top: 80px;"></div>
+    {% for link in all_links %}
+        <div class="row" style="margin-top: 20px; margin-left: 5px; margin-right: 5px;">
+            <a href="{{ link.url }}" target="_blank" role="button" class="btn btn-dark btn-lg btn-block active">{{ link.title }}</a>
+        </div>
+    {% empty %}
+        <h3>{{ company_name }} has not added any links. </h3>
+    {% endfor %}
+</div>
+{% endblock %}
