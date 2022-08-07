@@ -7,9 +7,9 @@ TEMPLATES = {
         'body': 'Click the below link or copy paste in a browser to reset your password. \n {link}'
     },
     events.EVENT_USER_VERIFICATION: {
-        'subject': 'Please verify your Tandora Changelog account',
+        'subject': 'Please verify your Tandora Byo Link account',
         'title': 'Verify your account',
-        'body': 'Your Tandora Changelog account is created. Click <a href="{link}">here</a> to verify your email'
-                'and start using Tandora Changelog.'
+        'body': 'Your Tandora Byo Link account is created. Click or copy/paste the following link to verify '
+                'your email {link}'
     }
 }
