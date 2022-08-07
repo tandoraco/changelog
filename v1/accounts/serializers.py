@@ -2,7 +2,6 @@ from django.http import Http404
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 from rest_framework.serializers import ValidationError
-from rest_framework.validators import UniqueValidator
 
 from v1.accounts import models as account_models
 from v1.accounts.constants import PASSWORD_INCORRECT_ERROR, CHANGELOG_TERMINOLOGY, EMAIL_NOT_FOUND_ERROR, \
@@ -31,15 +30,12 @@ class CompanySerializer(UserSerializer):
     company_name = serializers.CharField(max_length=100, required=True, validators=[no_symbols_validator,
                                                                                     black_listed_company_name_validator
                                                                                     ])
-    website = serializers.URLField(max_length=200, required=True, validators=[
-        UniqueValidator(account_models.Company.objects.all())
-    ])
     changelog_terminology = serializers.CharField(max_length=50, required=False, validators=[no_symbols_validator])
     use_case = serializers.ChoiceField(choices=USE_CASE_CHOICES, default='c')
 
     def create(self, validated_data):
         company_name = validated_data.pop("company_name")
-        website = validated_data.pop("website")
+        website = validated_data.pop("website", None)
         changelog_terminology = validated_data.pop("changelog_terminology", CHANGELOG_TERMINOLOGY)
         use_case = validated_data.pop("use_case")
         user = super(CompanySerializer, self).create(validated_data)

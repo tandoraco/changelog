@@ -71,12 +71,21 @@ def signup(request):
             messages.success(request, message=ACCOUNT_CREATED_MESSAGE)
             return HttpResponseRedirect('/login')
     else:
-        form = CompanySignupForm()
+        get_params = dict(request.GET.lists())
+        link = ""
+        if 'link' in get_params and isinstance(get_params['link'], list) and len(get_params['link']) == 1:
+            link = get_params['link'][0]
+
+        initial = {
+            'company_name': link
+        }
+
+        form = CompanySignupForm(initial=initial)
 
     return render(request, 'staff_v2/signup.html', {
         'form': form,
-        'page_title': 'Signup for free trial | Tandora Changelog',
-        'title': 'Signup for 7 day free trial (No credit card required)'
+        'page_title': 'Claim your free Bio Link | Tandora Links',
+        'title': 'Claim your free Bio Link'
     })
 
 

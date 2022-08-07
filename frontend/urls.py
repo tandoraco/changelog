@@ -10,7 +10,7 @@ from frontend.views.core import changelog
 from frontend.views.rss import PublicChangelogFeed
 
 urlpatterns = [
-    path('', RedirectView.as_view(url='staff'), name="frontend-index"),
+    path('', RedirectView.as_view(url='staff/manage/links'), name="frontend-index"),
     re_path(r'^login', auth.login, name="frontend-login"),
     re_path(r'^logout', auth.logout, name="frontend-logout"),
     re_path(r'^signup', auth.signup, name="frontend-signup"),

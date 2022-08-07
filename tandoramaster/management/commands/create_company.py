@@ -45,7 +45,7 @@ class Command(BaseCommand):
         name = options.get('name')
         password = options.get('password')
         company_name = options.get('company_name')
-        website = options.get('website')
+        # website = options.get('website')
         terminology = options.get('changelog_terminology', CHANGELOG_TERMINOLOGY)
         referral_code = options.get('referral_code')
         use_case = options.get('use_case')
@@ -58,7 +58,6 @@ class Command(BaseCommand):
             name,
             password,
             company_name,
-            website,
             terminology,
             use_case,
         ]
@@ -70,7 +69,7 @@ class Command(BaseCommand):
 
         data = {
             'company_name': company_name,
-            'website': website,
+            # 'website': website,
             'changelog_terminology': terminology,
             'use_case': use_case,
             'email': email,

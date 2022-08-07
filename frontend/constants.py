@@ -14,7 +14,6 @@ LINK_CREATED_SUCCESSFULLY = _("Link created successfully.")
 LINK_DELETED_SUCCESSFULLY = _('Link deleted successfully.')
 LINK_DOES_NOT_EXIST = _('Link not found.')
 
-
 COMPANY_CREATED_OR_EDITED_SUCCESSFULLY = _(
     'Successfully {} company: {}. As a security measure, you should log in again..')
 COMPANY_DOES_NOT_EXIST = _('Company does not exist')
@@ -40,8 +39,10 @@ PASSWORD_RESET_TOKEN_INVALID = _('Reset password link is expired or does not exi
 
 EMAIL_EXISTS_ERROR = _('Email is already present in our records. Please enter a different email.')
 WEBSITE_EXISTS_ERROR = _('Website is already present in our records. Please enter a different website.')
+LINK_EXISTS_ERROR = _('A link with this name already exists. Please try again with a different name.')
 
-ACCOUNT_CREATED_MESSAGE = _('Your account is created. Check your email for instructions to verify your account.')
+ACCOUNT_CREATED_MESSAGE = _(
+    'Your account is created. You can login now.')
 AFFILIATE_CREATED_SUCCESSFULLY = _('Your request is received. We will contact you shortly.')
 INVALID_REFERRAL_CODE = _('Invalid referral code.')
 
@@ -71,7 +72,6 @@ WEB_BUILDER_SETUP_COMPLETED_PREVIEW_WEBSITE_MESSAGE = _(
     'href="url">here</a> to view preview of website.')
 
 PUBLIC_PAGE_CHANGELOG_10_MULTIPLE_ERROR = _('This value should be a multiple of 10.')
-
 
 SLACK_INSTALLATION_SUCCESS = _('Slack was installed successfully.')
 SLACK_INSTALLATION_FAILED = _('Unable to install Slack. Please try again.')

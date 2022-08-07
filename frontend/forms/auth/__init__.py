@@ -6,7 +6,9 @@ from django.core.management import call_command
 from django.db import transaction
 from django.utils.translation import gettext as _
 
-from frontend.constants import PASSWORD_DOES_NOT_MATCH, EMAIL_EXISTS_ERROR, WEBSITE_EXISTS_ERROR, INVALID_REFERRAL_CODE
+from frontend.constants import (PASSWORD_DOES_NOT_MATCH, EMAIL_EXISTS_ERROR, WEBSITE_EXISTS_ERROR,
+                                INVALID_REFERRAL_CODE,
+                                LINK_EXISTS_ERROR)
 from v1.accounts.constants import MAX_EMAIL_LENGTH, PASSWORD_INCORRECT_ERROR, EMAIL_NOT_FOUND_ERROR, \
     MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH, INACTIVE_USER_ERROR
 from v1.accounts.models import User, Company, ForgotPassword, Affiliate, Referral
@@ -46,7 +48,7 @@ class LoginForm(forms.Form):
 
 
 class BasicUserForm(forms.Form):
-    name = forms.CharField(max_length=100)
+    name = forms.CharField(max_length=100, label='Your Name')
     email = forms.EmailField(required=True)
     password = forms.CharField(widget=forms.PasswordInput, min_length=MIN_PASSWORD_LENGTH,
                                max_length=MAX_PASSWORD_LENGTH)
@@ -75,10 +77,11 @@ class StaffNewUserForm(BasicUserForm):
 
 
 class CompanySignupForm(BasicUserForm):
-    website = forms.URLField(max_length=200, required=True)
+    # website = forms.URLField(max_length=200, required=True)
     use_case = forms.CharField(widget=forms.HiddenInput, initial='c', required=False)
-    company_name = forms.CharField(max_length=100)
-    referral_code = forms.CharField(max_length=50, required=False, label=REFERRAL_CODE)
+    company_name = forms.CharField(max_length=50, label='byol.ink/')
+
+    # referral_code = forms.CharField(max_length=50, required=False, label=REFERRAL_CODE)
     # changelog_terminology = forms.CharField(max_length=50, initial='', required=False)
 
     def clean_website(self):
@@ -94,6 +97,10 @@ class CompanySignupForm(BasicUserForm):
         company_name = self.data.get('company_name')
         form_no_symbols_validator(company_name)
         form_black_listed_company_name_validator(company_name)
+
+        if Company.objects.filter(company_name=company_name).exists():
+            raise forms.ValidationError(LINK_EXISTS_ERROR)
+
         return company_name
 
     def clean_referral_code(self):
@@ -115,7 +122,7 @@ class CompanySignupForm(BasicUserForm):
                      f'--name={data["name"]}',
                      f'--password={data["password"]}',
                      f'--company_name={data["company_name"]}',
-                     f'--website={data["website"]}',
+                     f'--website={data.get("website")}',
                      f'--use_case={data["use_case"]}',
                      f'--changelog_terminology={data.get("changelog_terminology", "Changelog")}',
                      f'--referral_code={data.get("referral_code", None)}'

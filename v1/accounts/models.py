@@ -36,7 +36,8 @@ class User(AbstractBaseUser):
     created_time = models.DateTimeField(auto_now_add=True)
     is_admin = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+    is_email_verified = models.BooleanField(default=False)
 
     REQUIRED_FIELDS = ["name"]
     USERNAME_FIELD = 'email'
@@ -60,7 +61,7 @@ class User(AbstractBaseUser):
 
 class Company(models.Model):
     admin = models.OneToOneField(User, on_delete=models.DO_NOTHING, related_name='company_admin')
-    website = models.URLField(max_length=200, blank=False, unique=True)
+    website = models.URLField(max_length=200, blank=True, null=True)
     company_name = models.CharField(max_length=100, unique=True)
     changelog_terminology = models.CharField(max_length=50, default=CHANGELOG_TERMINOLOGY)
     is_trial_account = models.BooleanField(blank=False, default=True)

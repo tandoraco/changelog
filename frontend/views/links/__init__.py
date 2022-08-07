@@ -1,4 +1,6 @@
+from django.contrib import messages
 from django.urls import reverse
+from django.utils.text import slugify
 
 from frontend.constants import LINK_CREATED_SUCCESSFULLY, LINK_DOES_NOT_EXIST, LINK_DELETED_SUCCESSFULLY
 from frontend.custom.decorators import is_authenticated
@@ -12,9 +14,22 @@ from v1.links.models import Link
 class LinksList(TandoraListViewMixin):
     template_name = 'staff_v2/links/index.html'
 
+    def _add_messages(self):
+        messages.add_message(self.request, messages.INFO,
+                             "We are revamping the product experience keeping you in mind.")
+        messages.add_message(self.request, messages.SUCCESS,
+                             "You can also use this product as a short bio link for your instagram account.")
+        company_name = slugify(self.request.user.company.company_name)
+        link = f'https://byol.ink/{company_name}'
+        messages.add_message(self.request, messages.INFO,
+                             f'Your short bio link is <a target="_blank" href="{link}">{link}</a>')
+
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context['title'] = 'Manage Links'
+
+        self._add_messages()
+
         return context
 
     def get_queryset(self):
