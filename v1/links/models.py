@@ -26,7 +26,7 @@ class Link(models.Model):
 class LinkLens(models.Model):
     link = models.ForeignKey('Link', on_delete=models.DO_NOTHING)
     ip_address = models.GenericIPAddressField(null=True, blank=True)
-    user_agent = models.CharField(max_length=250, null=True, blank=True)
+    user_agent = models.TextField(null=True, blank=True)
     device_type = models.CharField(max_length=2, choices=DEVICE_TYPE_CHOICES, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
