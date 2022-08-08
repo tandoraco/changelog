@@ -15,9 +15,13 @@ class Command(BaseCommand):
                 print('Skipping. Admin not present.')
                 continue
 
+            company_name = slugify(company.company_name)
+            company.website = f'https://byol.ink/{company_name}'
+            company.save()
+
             data = {
-                'user_name': slugify(company.company_name),
-                'company_name': slugify(company.company_name)
+                'user_name': company_name,
+                'company_name': company_name
             }
 
             url = "https://byol.ink/tc/biolink"
