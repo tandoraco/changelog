@@ -98,7 +98,7 @@ class CompanySignupForm(BasicUserForm):
         form_no_symbols_validator(company_name)
         form_black_listed_company_name_validator(company_name)
 
-        if Company.objects.filter(company_name=company_name).exists():
+        if Company.objects.filter(company_name__iexact=company_name).exists():
             raise forms.ValidationError(LINK_EXISTS_ERROR)
 
         return company_name
