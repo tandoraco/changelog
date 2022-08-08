@@ -19,6 +19,7 @@ BLACKLISTED_COMPANY_NAMES = {
     'widget',
     'webhook',
     'website',
+    'admin',
 }
 
 
