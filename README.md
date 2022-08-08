@@ -1,4 +1,4 @@
-# (byolnk) BioLink - Tandora Changelog Development Setup
+# Tandora Changelog Development Setup
 
 Developed using Python, Django and Django Rest Framework
 
