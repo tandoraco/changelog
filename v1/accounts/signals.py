@@ -2,6 +2,7 @@ import json
 
 import requests
 from django.conf import settings
+from django.utils.text import slugify
 
 from v1.utils import send_to_slack
 
@@ -37,3 +38,26 @@ def create_custom_domain_in_user_custom_domain(sender, instance, created, **kwar
             raise RuntimeError('Unable to create a custom domain.. Please try again later.')
     else:
         print(data)
+
+
+def save_bio_link(sender, instance, created, **kwargs):
+    if created:
+        instance.website = f"https://byol.ink/{slugify(instance.company_name)}"
+        instance.save()
+
+        data = {
+            'user_name': slugify(instance.company_name),
+            'company_name': slugify(instance.company_name)
+        }
+        url = "https://byol.ink/tc/biolink"
+        headers = {
+            'Authorization': f'Bearer {settings.TANDORA_CHANGELOG_KEY}'
+        }
+
+        if not settings.DEBUG:
+            resp = requests.post(url, data=data, headers=headers)
+
+            if resp:
+                print('success')
+            else:
+                print(resp.content)

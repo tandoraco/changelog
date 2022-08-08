@@ -12,6 +12,8 @@ LOWERCASE_LETTERS = set(string.ascii_lowercase)
 UPPERCASE_LETTERS = set(string.ascii_uppercase)
 NUMBERS = set(string.digits)
 SYMBOLS = set(string.punctuation)
+WHITESPACES = set(string.whitespace)
+
 BLACKLISTED_COMPANY_NAMES = {
     'tandora',
     'api',
@@ -19,6 +21,7 @@ BLACKLISTED_COMPANY_NAMES = {
     'widget',
     'webhook',
     'website',
+    'admin',
 }
 
 
@@ -48,7 +51,7 @@ def no_symbols_validator(value, form=False):
     _value = set(value)
     value_not_contains = _value.isdisjoint
 
-    if value_not_contains(SYMBOLS):
+    if value_not_contains(SYMBOLS) and value_not_contains(WHITESPACES):
         return value
 
     raise validation_error(SPECIAL_CHARACTERS_NOT_ALLOWED)
