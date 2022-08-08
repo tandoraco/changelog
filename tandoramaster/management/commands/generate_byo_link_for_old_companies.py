@@ -29,9 +29,10 @@ class Command(BaseCommand):
                 'Authorization': f'Bearer {settings.TANDORA_CHANGELOG_KEY}'
             }
 
-            resp = requests.post(url, data=data, headers=headers)
+            if not settings.DEBUG:
+                resp = requests.post(url, data=data, headers=headers)
 
-            if resp:
-                print('success')
-            else:
-                print(resp.content)
+                if resp:
+                    print('success')
+                else:
+                    print(resp.content)
