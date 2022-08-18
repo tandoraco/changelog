@@ -2,6 +2,7 @@ import uuid
 from calendar import timegm
 from urllib.parse import unquote, urljoin
 
+from django.conf import settings
 from django.contrib import messages
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db import transaction
@@ -253,10 +254,14 @@ def company_sitemap(request, company_name):
     changelogs = Changelog.objects.filter(company=company, published=True, deleted=False). \
         order_by('-created_at')
 
-    host = company.website
+    host = company.custom_domain or settings.HOST
+
     priority = 0.9
     changefreq = 'daily'
-    terminology = slugify(company.changelog_terminology)
+    if not company.custom_domain:
+        terminology = f'{slugify(company_name)}/{slugify(company.changelog_terminology)}'
+    else:
+        terminology = slugify(company.changelog_terminology)
 
     urls = []
     for changelog in changelogs:

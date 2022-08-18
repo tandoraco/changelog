@@ -41,7 +41,7 @@ class ModelAdminWithSyntaxHighlighter(SyntaxHighlighterMixin, admin.ModelAdmin):
 
 
 class CompanyAdmin(ModelAdminWithSyntaxHighlighter):
-    list_display = ('company_name', 'company_actions',)
+    list_display = ('company_name', 'company_actions', 'custom_sitemap',)
 
     def company_actions(self, obj):
         delete_action_url = reverse('admin-delete-company', args=(obj.company_name,))

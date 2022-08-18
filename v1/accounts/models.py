@@ -62,6 +62,7 @@ class User(AbstractBaseUser):
 class Company(models.Model):
     admin = models.OneToOneField(User, on_delete=models.DO_NOTHING, related_name='company_admin')
     website = models.URLField(max_length=200, blank=True, null=True)
+    custom_domain = models.URLField(blank=True, null=True)
     company_name = models.CharField(max_length=100, unique=True)
     changelog_terminology = models.CharField(max_length=50, default=CHANGELOG_TERMINOLOGY)
     is_trial_account = models.BooleanField(blank=False, default=True)
